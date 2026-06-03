@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       database: process.env.MYSQLDATABASE
     });
 
-    const [rows] = await conn.execute(
+    const [result] = await conn.execute(
       `
       UPDATE members
       SET
@@ -42,14 +42,16 @@ export default async function handler(req, res) {
     await conn.end();
 
     return res.status(200).json({
-      success: true
+      success: true,
+      affectedRows: result.affectedRows
     });
 
   } catch (err) {
 
     return res.status(500).json({
       success: false,
-      error: err.message
+      error: err.message,
+      stack: err.stack
     });
 
   }
