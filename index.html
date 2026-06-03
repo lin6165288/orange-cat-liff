@@ -5,13 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>橘貓代購會員中心</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      padding: 24px;
+      background: #fff7f0;
+      color: #2f3340;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-sizing: border-box;
+      margin-top: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      font-size: 17px;
+      border: none;
+      border-radius: 12px;
+      background: #ff8a3d;
+      color: white;
+      font-weight: bold;
+    }
+
+    .status {
+      margin-top: 16px;
+      line-height: 1.7;
+      word-break: break-all;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    a {
+      color: #ff7a1a;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>🧡 橘貓代購會員中心</h1>
-  <div id="status">載入 LINE 資料中...</div>
+  <div class="card">
+    <h1>🧡 橘貓代購會員中心</h1>
+
+    <div id="loginArea">
+      <div id="status" class="status">載入 LINE 資料中...</div>
+    </div>
+
+    <div id="bindArea" style="display:none;">
+      <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
+
+      <input
+        id="customerName"
+        type="text"
+        placeholder="例如：王小明 / 你的包裹名稱"
+      />
+
+      <div class="hint">
+        請輸入與訂單查詢系統相同的名稱。
+      </div>
+
+      <button onclick="bindLine()">立即綁定</button>
+
+      <div id="bindStatus" class="status"></div>
+    </div>
+  </div>
 
   <script>
     const LIFF_ID = "2010286756-yeXtJpY6";
+
+    let lineUserId = "";
+    let lineName = "";
 
     async function main() {
       const status = document.getElementById("status");
@@ -24,8 +113,6 @@
           withLoginOnExternalBrowser: true
         });
 
-        status.innerHTML = "初始化成功，檢查登入狀態...";
-
         if (!liff.isLoggedIn()) {
           status.innerHTML = "尚未登入 LINE，正在跳轉...";
           liff.login();
@@ -34,17 +121,61 @@
 
         const profile = await liff.getProfile();
 
+        lineUserId = profile.userId;
+        lineName = profile.displayName;
+
         status.innerHTML =
-          "<b>LINE 綁定測試成功！</b><br><br>" +
-          "LINE 名稱：" + profile.displayName + "<br>" +
-          "LINE userId：" + profile.userId + "<br><br>" +
-          "<a href='https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app'>前往訂單查詢系統</a>";
+          "LINE 登入成功<br>" +
+          "LINE 名稱：" + lineName;
+
+        document.getElementById("bindArea").style.display = "block";
 
       } catch (err) {
         status.innerHTML =
           "<b>LIFF 發生錯誤</b><br><br>" +
-          "錯誤內容：<br>" +
           JSON.stringify(err, Object.getOwnPropertyNames(err));
+      }
+    }
+
+    async function bindLine() {
+      const customerName = document.getElementById("customerName").value.trim();
+      const bindStatus = document.getElementById("bindStatus");
+
+      if (!customerName) {
+        bindStatus.innerHTML = "請先輸入包裹名稱。";
+        return;
+      }
+
+      bindStatus.innerHTML = "綁定中，請稍候...";
+
+      try {
+        const response = await fetch("/api/bind-line", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: customerName,
+            line_user_id: lineUserId,
+            line_name: lineName
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          bindStatus.innerHTML =
+            "✅ 綁定成功！<br><br>" +
+            "之後你可以用 LINE 直接進入會員中心。<br><br>" +
+            "<a href='https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app'>前往訂單查詢系統</a>";
+        } else {
+          bindStatus.innerHTML =
+            "❌ 綁定失敗，請確認名稱是否正確。";
+        }
+
+      } catch (err) {
+        bindStatus.innerHTML =
+          "❌ 系統錯誤，請稍後再試。<br>" + err.message;
       }
     }
 
