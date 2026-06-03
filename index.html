@@ -231,18 +231,33 @@
         return;
       }
     
-      const arrivedOrders = orders.filter(order => order.is_arrived && !order.is_returned);
+      const arrivedOrders = orders.filter(
+        order => order.is_arrived && !order.is_returned
+      );
+      
       const arrivedCount = arrivedOrders.length;
-      const arrivedWeight = arrivedOrders.reduce((sum, order) => {
-        return sum + Number(order.weight_kg || 0);
-      }, 0);
-    
-      let html = `
-        <div style="background:#fff3e8; padding:14px; border-radius:14px; margin-bottom:14px; line-height:1.8;">
-          <b>📦 已到貨未運回統計</b><br>
-          訂單數量：${arrivedCount} 件<br>
-          重量總計：${arrivedWeight.toFixed(2)} kg
-        </div>
+      
+      const arrivedWeight = arrivedOrders.reduce(
+        (sum, order) => sum + Number(order.weight_kg || 0),
+        0
+      );
+      
+      html = `
+      <div style="
+      background:#fff3e8;
+      padding:16px;
+      border-radius:14px;
+      margin-bottom:16px;
+      line-height:1.9;
+      ">
+      
+      <b>📦 可運回包裹統計</b><br>
+      
+      📦 包裹數量：${arrivedCount} 件<br>
+      
+      ⚖️ 總重量：${arrivedWeight.toFixed(2)} kg
+      
+      </div>
       `;
     
       orders.forEach(order => {
