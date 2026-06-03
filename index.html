@@ -5,24 +5,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>橘貓代購會員中心</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: #fff7f0;
+      color: #2f3340;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+
+    input {
+      border: 1px solid #ddd;
+    }
+
+    button {
+      border: none;
+      background: #ff8a3d;
+      color: white;
+      font-weight: bold;
+    }
+
+    .status {
+      line-height: 1.7;
+      word-break: break-all;
+    }
+
+    .order {
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #f3f3f3;
+      margin-right: 4px;
+      font-size: 13px;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>🧡 橘貓代購會員中心</h1>
-
-  <div id="status">載入中...</div>
-
-  <div id="memberArea" style="display:none;">
-    <h2>會員資料</h2>
-    <p id="memberInfo"></p>
-    <a href="https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app">前往訂單查詢系統</a>
+  <div class="card">
+    <h1>🧡 橘貓代購會員中心</h1>
+    <div id="status" class="status">載入中...</div>
   </div>
 
-  <div id="bindArea" style="display:none;">
+  <div id="memberArea" class="card" style="display:none;">
+    <h2>會員資料</h2>
+    <div id="memberInfo"></div>
+    <button onclick="loadOrders()">📦 查看我的訂單</button>
+  </div>
+
+  <div id="ordersArea" class="card" style="display:none;">
+    <h2>我的訂單</h2>
+    <div id="ordersInfo">載入中...</div>
+  </div>
+
+  <div id="bindArea" class="card" style="display:none;">
     <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
     <input id="customerName" type="text" placeholder="例如：王小明" />
     <button onclick="bindLine()">立即綁定</button>
-    <div id="bindStatus"></div>
+    <div id="bindStatus" class="status"></div>
   </div>
 
   <script>
@@ -30,27 +103,33 @@
 
     let lineUserId = "";
     let lineName = "";
+    let currentCustomerName = "";
 
     async function main() {
       const status = document.getElementById("status");
 
-      await liff.init({
-        liffId: LIFF_ID,
-        withLoginOnExternalBrowser: true
-      });
+      try {
+        await liff.init({
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: true
+        });
 
-      if (!liff.isLoggedIn()) {
-        liff.login();
-        return;
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+        lineName = profile.displayName;
+
+        status.innerHTML = "你好，" + lineName + " 🐾";
+
+        checkMember();
+
+      } catch (err) {
+        status.innerHTML = "LIFF 發生錯誤：" + err.message;
       }
-
-      const profile = await liff.getProfile();
-      lineUserId = profile.userId;
-      lineName = profile.displayName;
-
-      status.innerHTML = "LINE 登入成功：" + lineName;
-
-      checkMember();
     }
 
     async function checkMember() {
@@ -68,6 +147,7 @@
 
       if (result.success && result.bound) {
         const m = result.member;
+        currentCustomerName = m.customer_name;
 
         document.getElementById("bindArea").style.display = "none";
         document.getElementById("memberArea").style.display = "block";
@@ -115,6 +195,56 @@
       } else {
         bindStatus.innerHTML = "❌ 綁定失敗，請確認名稱是否正確。";
       }
+    }
+
+    async function loadOrders() {
+      const ordersArea = document.getElementById("ordersArea");
+      const ordersInfo = document.getElementById("ordersInfo");
+
+      ordersArea.style.display = "block";
+      ordersInfo.innerHTML = "載入訂單中...";
+
+      const res = await fetch("/api/get-orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customer_name: currentCustomerName
+        })
+      });
+
+      const result = await res.json();
+
+      if (!result.success) {
+        ordersInfo.innerHTML = "❌ 訂單讀取失敗。";
+        return;
+      }
+
+      if (result.orders.length === 0) {
+        ordersInfo.innerHTML = "目前查無訂單。";
+        return;
+      }
+
+      let html = "";
+
+      result.orders.forEach(order => {
+        const arrived = order.is_arrived ? "✔ 已到貨" : "✘ 未到貨";
+        const returned = order.is_returned ? "✔ 已運回" : "✘ 未運回";
+
+        html += `
+          <div class="order">
+            <b>${order.platform || "未填平台"}</b><br>
+            單號：${order.tracking_number || "—"}<br>
+            金額：${order.amount_rmb || 0} RMB<br>
+            重量：${order.weight_kg || 0} kg<br>
+            <span class="badge">${arrived}</span>
+            <span class="badge">${returned}</span>
+          </div>
+        `;
+      });
+
+      ordersInfo.innerHTML = html;
     }
 
     main();
