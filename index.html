@@ -5,95 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>橘貓代購會員中心</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      padding: 24px;
-      background: #fff7f0;
-      color: #2f3340;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      font-size: 26px;
-      margin-bottom: 12px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-sizing: border-box;
-      margin-top: 8px;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 16px;
-      font-size: 17px;
-      border: none;
-      border-radius: 12px;
-      background: #ff8a3d;
-      color: white;
-      font-weight: bold;
-    }
-
-    .status {
-      margin-top: 16px;
-      line-height: 1.7;
-      word-break: break-all;
-    }
-
-    .hint {
-      font-size: 14px;
-      color: #666;
-      margin-top: 8px;
-    }
-
-    a {
-      color: #ff7a1a;
-      font-weight: bold;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>🧡 橘貓代購會員中心</h1>
+  <h1>🧡 橘貓代購會員中心</h1>
 
-    <div id="loginArea">
-      <div id="status" class="status">載入 LINE 資料中...</div>
-    </div>
+  <div id="status">載入中...</div>
 
-    <div id="bindArea" style="display:none;">
-      <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
+  <div id="memberArea" style="display:none;">
+    <h2>會員資料</h2>
+    <p id="memberInfo"></p>
+    <a href="https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app">前往訂單查詢系統</a>
+  </div>
 
-      <input
-        id="customerName"
-        type="text"
-        placeholder="例如：王小明 / 你的包裹名稱"
-      />
-
-      <div class="hint">
-        請輸入與訂單查詢系統相同的名稱。
-      </div>
-
-      <button onclick="bindLine()">立即綁定</button>
-
-      <div id="bindStatus" class="status"></div>
-    </div>
+  <div id="bindArea" style="display:none;">
+    <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
+    <input id="customerName" type="text" placeholder="例如：王小明" />
+    <button onclick="bindLine()">立即綁定</button>
+    <div id="bindStatus"></div>
   </div>
 
   <script>
@@ -105,35 +34,53 @@
     async function main() {
       const status = document.getElementById("status");
 
-      try {
-        status.innerHTML = "開始初始化...";
+      await liff.init({
+        liffId: LIFF_ID,
+        withLoginOnExternalBrowser: true
+      });
 
-        await liff.init({
-          liffId: LIFF_ID,
-          withLoginOnExternalBrowser: true
-        });
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
 
-        if (!liff.isLoggedIn()) {
-          status.innerHTML = "尚未登入 LINE，正在跳轉...";
-          liff.login();
-          return;
-        }
+      const profile = await liff.getProfile();
+      lineUserId = profile.userId;
+      lineName = profile.displayName;
 
-        const profile = await liff.getProfile();
+      status.innerHTML = "LINE 登入成功：" + lineName;
 
-        lineUserId = profile.userId;
-        lineName = profile.displayName;
+      checkMember();
+    }
 
-        status.innerHTML =
-          "LINE 登入成功<br>" +
-          "LINE 名稱：" + lineName;
+    async function checkMember() {
+      const res = await fetch("/api/get-member", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          line_user_id: lineUserId
+        })
+      });
 
+      const result = await res.json();
+
+      if (result.success && result.bound) {
+        const m = result.member;
+
+        document.getElementById("bindArea").style.display = "none";
+        document.getElementById("memberArea").style.display = "block";
+
+        document.getElementById("memberInfo").innerHTML =
+          "包裹名稱：" + m.customer_name + "<br>" +
+          "會員等級：" + m.member_level + "<br>" +
+          "儲值餘額：" + m.balance + "<br>" +
+          "累積儲值：" + m.total_recharge + "<br>" +
+          "LINE 名稱：" + m.line_name;
+
+      } else {
         document.getElementById("bindArea").style.display = "block";
-
-      } catch (err) {
-        status.innerHTML =
-          "<b>LIFF 發生錯誤</b><br><br>" +
-          JSON.stringify(err, Object.getOwnPropertyNames(err));
       }
     }
 
@@ -146,38 +93,27 @@
         return;
       }
 
-      bindStatus.innerHTML = "綁定中，請稍候...";
+      bindStatus.innerHTML = "綁定中...";
 
-      try {
-        const response = await fetch("/api/bind-line", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            customer_name: customerName,
-            line_user_id: lineUserId,
-            line_name: lineName
-          })
-        });
+      const response = await fetch("/api/bind-line", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customer_name: customerName,
+          line_user_id: lineUserId,
+          line_name: lineName
+        })
+      });
 
-        const result = await response.json();
-        
-        alert(JSON.stringify(result));
+      const result = await response.json();
 
-        if (result.success) {
-          bindStatus.innerHTML =
-            "✅ 綁定成功！<br><br>" +
-            "之後你可以用 LINE 直接進入會員中心。<br><br>" +
-            "<a href='https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app'>前往訂單查詢系統</a>";
-        } else {
-          bindStatus.innerHTML =
-            "❌ 綁定失敗，請確認名稱是否正確。";
-        }
-
-      } catch (err) {
-        bindStatus.innerHTML =
-          "❌ 系統錯誤，請稍後再試。<br>" + err.message;
+      if (result.success && result.affectedRows === 1) {
+        bindStatus.innerHTML = "✅ 綁定成功，正在載入會員資料...";
+        checkMember();
+      } else {
+        bindStatus.innerHTML = "❌ 綁定失敗，請確認名稱是否正確。";
       }
     }
 
