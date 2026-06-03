@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橘貓代購會員中心</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <h1>🧡 橘貓代購會員中心</h1>
+  <div id="status">載入 LINE 資料中...</div>
+
+  <script>
+    const LIFF_ID = "2010286756-yeXtJpY6";
+
+    async function main() {
+      const status = document.getElementById("status");
+
+      try {
+        status.innerHTML = "開始初始化...";
+
+        await liff.init({
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: true
+        });
+
+        status.innerHTML = "初始化成功，檢查登入狀態...";
+
+        if (!liff.isLoggedIn()) {
+          status.innerHTML = "尚未登入 LINE，正在跳轉...";
+          liff.login();
+          return;
+        }
+
+        const profile = await liff.getProfile();
+
+        status.innerHTML =
+          "<b>LINE 綁定測試成功！</b><br><br>" +
+          "LINE 名稱：" + profile.displayName + "<br>" +
+          "LINE userId：" + profile.userId + "<br><br>" +
+          "<a href='https://jumao-check-upf47j7ylvkkgaq9u7nxoa.streamlit.app'>前往訂單查詢系統</a>";
+
+      } catch (err) {
+        status.innerHTML =
+          "<b>LIFF 發生錯誤</b><br><br>" +
+          "錯誤內容：<br>" +
+          JSON.stringify(err, Object.getOwnPropertyNames(err));
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
