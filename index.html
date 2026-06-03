@@ -83,7 +83,8 @@
   <div id="memberArea" class="card" style="display:none;">
     <h2>會員資料</h2>
     <div id="memberInfo"></div>
-    <button onclick="loadOrders()">📦 查看我的訂單</button>
+    <button onclick="loadOrders('unreturned')">📦 查看未運回訂單</button>
+    <button onclick="loadOrders('all')">📋 查看全部訂單</button>
   </div>
 
   <div id="ordersArea" class="card" style="display:none;">
@@ -155,8 +156,6 @@
         document.getElementById("memberInfo").innerHTML =
           "包裹名稱：" + m.customer_name + "<br>" +
           "會員等級：" + m.member_level + "<br>" +
-          "儲值餘額：" + m.balance + "<br>" +
-          "累積儲值：" + m.total_recharge + "<br>" +
           "LINE 名稱：" + m.line_name;
 
       } else {
@@ -197,13 +196,13 @@
       }
     }
 
-    async function loadOrders() {
+    async function loadOrders(mode) {
       const ordersArea = document.getElementById("ordersArea");
       const ordersInfo = document.getElementById("ordersInfo");
-
+    
       ordersArea.style.display = "block";
       ordersInfo.innerHTML = "載入訂單中...";
-
+    
       const res = await fetch("/api/get-orders", {
         method: "POST",
         headers: {
@@ -213,25 +212,43 @@
           customer_name: currentCustomerName
         })
       });
-
+    
       const result = await res.json();
-
+    
       if (!result.success) {
         ordersInfo.innerHTML = "❌ 訂單讀取失敗。";
         return;
       }
-
-      if (result.orders.length === 0) {
-        ordersInfo.innerHTML = "目前查無訂單。";
+    
+      let orders = result.orders;
+    
+      if (mode === "unreturned") {
+        orders = orders.filter(order => !order.is_returned);
+      }
+    
+      if (orders.length === 0) {
+        ordersInfo.innerHTML = "目前查無符合條件的訂單。";
         return;
       }
-
-      let html = "";
-
-      result.orders.forEach(order => {
+    
+      const arrivedOrders = orders.filter(order => order.is_arrived && !order.is_returned);
+      const arrivedCount = arrivedOrders.length;
+      const arrivedWeight = arrivedOrders.reduce((sum, order) => {
+        return sum + Number(order.weight_kg || 0);
+      }, 0);
+    
+      let html = `
+        <div style="background:#fff3e8; padding:14px; border-radius:14px; margin-bottom:14px; line-height:1.8;">
+          <b>📦 已到貨未運回統計</b><br>
+          訂單數量：${arrivedCount} 件<br>
+          重量總計：${arrivedWeight.toFixed(2)} kg
+        </div>
+      `;
+    
+      orders.forEach(order => {
         const arrived = order.is_arrived ? "✔ 已到貨" : "✘ 未到貨";
         const returned = order.is_returned ? "✔ 已運回" : "✘ 未運回";
-
+    
         html += `
           <div class="order">
             <b>${order.platform || "未填平台"}</b><br>
@@ -243,7 +260,7 @@
           </div>
         `;
       });
-
+    
       ordersInfo.innerHTML = html;
     }
 
