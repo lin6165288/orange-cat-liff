@@ -4,16 +4,19 @@ export default async function handler(req, res) {
 
   if (req.method !== "POST") {
     return res.status(405).json({
-      success: false,
-      message: "Method not allowed"
+      success: false
     });
   }
 
   try {
 
-    const { phone, line_user_id, line_name } = req.body;
+    const {
+      customer_name,
+      line_user_id,
+      line_name
+    } = req.body;
 
-    const connection = await mysql.createConnection({
+    const conn = await mysql.createConnection({
       host: process.env.MYSQLHOST,
       port: process.env.MYSQLPORT,
       user: process.env.MYSQLUSER,
@@ -21,7 +24,7 @@ export default async function handler(req, res) {
       database: process.env.MYSQLDATABASE
     });
 
-    await connection.execute(
+    const [rows] = await conn.execute(
       `
       UPDATE members
       SET
@@ -32,11 +35,11 @@ export default async function handler(req, res) {
       [
         line_user_id,
         line_name,
-        phone
+        customer_name
       ]
     );
 
-    await connection.end();
+    await conn.end();
 
     return res.status(200).json({
       success: true
