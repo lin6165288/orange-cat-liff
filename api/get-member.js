@@ -5,10 +5,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false });
   }
 
+  let conn;
+
   try {
     const { line_user_id } = req.body;
 
-    const conn = await mysql.createConnection({
+    conn = await mysql.createConnection({
       host: process.env.MYSQLHOST,
       port: process.env.MYSQLPORT,
       user: process.env.MYSQLUSER,
@@ -21,8 +23,6 @@ export default async function handler(req, res) {
       SELECT
         customer_name,
         member_level,
-        balance,
-        total_recharge,
         line_name
       FROM members
       WHERE line_user_id = ?
@@ -30,8 +30,6 @@ export default async function handler(req, res) {
       `,
       [line_user_id]
     );
-
-    await conn.end();
 
     if (rows.length === 0) {
       return res.status(200).json({
@@ -51,5 +49,7 @@ export default async function handler(req, res) {
       success: false,
       error: err.message
     });
+  } finally {
+    if (conn) await conn.end();
   }
 }
