@@ -1466,7 +1466,7 @@
     // UI 骨架 + 保留既有 LIFF / 會員綁定 / 訂單 API
     // =========================================================
 
-    const LIFF_ID = "2010286756-yeXtJpY6";
+    const LIFF_ID = "2010286756-vFt0pTVk";
     const PRODUCTION_HOST = "orange-cat-liff.vercel.app";
 
     let lineUserId = "";
@@ -1478,9 +1478,7 @@
 
     // Preview 分支網址不屬於目前正式 LIFF Endpoint。
     // 因此 Preview 先進入 UI 測試模式，避免自動登入跳回正式站。
-    const isPreviewMode =
-      location.hostname.endsWith(".vercel.app") &&
-      location.hostname !== PRODUCTION_HOST;
+    const isPreviewMode = false;
 
     // ---------- DOM ----------
     const topStatus = document.getElementById("topStatus");
@@ -1553,7 +1551,7 @@
 
     // ---------- Preview UI 假資料 ----------
     function enterPreviewMode() {
-      topStatus.textContent = "Preview";
+      topStatus.textContent = "測試版";
       heroName.textContent = "新版介面測試";
       heroHelper.textContent = "目前先確認 UI、底部導覽與操作流程";
 
