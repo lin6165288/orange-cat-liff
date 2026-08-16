@@ -1608,8 +1608,67 @@
       ];
     }
 
+    // ---------- 首頁公開設定 ----------
+    async function loadHomeConfig() {
+      try {
+        const res = await fetch("/api/get-home-config", {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "首頁設定讀取失敗");
+        }
+
+        const exchangeRateEl =
+          document.getElementById("exchangeRateValue");
+
+        const updatedEl =
+          document.getElementById("updatedValue");
+
+        if (
+          result.exchange_rate !== null &&
+          result.exchange_rate !== undefined &&
+          result.exchange_rate !== ""
+        ) {
+          const rate = Number(result.exchange_rate);
+
+          exchangeRateEl.textContent =
+            Number.isFinite(rate)
+              ? rate.toFixed(2)
+              : String(result.exchange_rate);
+        } else {
+          exchangeRateEl.textContent = "未設定";
+        }
+
+        if (result.orders_last_update_time) {
+          const raw = String(result.orders_last_update_time);
+
+          const match = raw.match(
+            /^(\d{4})\/(\d{2})\/(\d{2})\s+(\d{2}:\d{2})$/
+          );
+
+          updatedEl.textContent = match
+            ? `${match[2]}/${match[3]} ${match[4]}`
+            : raw;
+        } else {
+          updatedEl.textContent = "未設定";
+        }
+
+      } catch (err) {
+        console.error("loadHomeConfig error:", err);
+
+        document.getElementById("exchangeRateValue").textContent = "讀取失敗";
+        document.getElementById("updatedValue").textContent = "讀取失敗";
+      }
+    }
+
     // ---------- 正式 LIFF 初始化 ----------
     async function main() {
+      loadHomeConfig();
+
       if (isPreviewMode) {
         enterPreviewMode();
         return;
