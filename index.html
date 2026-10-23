@@ -2,1744 +2,114 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f8fa" />
-  <title>橘貓代購</title>
-
-  <!-- LINE LIFF SDK -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橘貓代購會員中心</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
-
-    :root {
-      --bg: #f7f8fa;
-      --surface: #ffffff;
-      --surface-soft: #fafafa;
-      --surface-tint: #fff7ee;
-      --surface-accent: #fff1df;
-      --line: #ececec;
-      --line-strong: #e3e3e3;
-
-      --accent: #f29a38;
-      --accent-strong: #f08300;
-      --accent-deep: #ba6800;
-
-      --text: #262626;
-      --muted: #8c8c8c;
-      --muted-deep: #666666;
-
-      --green-bg: #edf8f0;
-      --green: #35784a;
-      --red-bg: #fff0f0;
-      --red: #bd5555;
-      --gray-bg: #f4f4f4;
-      --gray: #757575;
-
-      --shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
-      --shadow-soft: 0 4px 14px rgba(17, 24, 39, 0.03);
-
-      --radius-xl: 22px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-
-      --nav-height: 70px;
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: #fff7f0;
+      color: #2f3340;
+      padding: 20px;
     }
 
-    * {
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+      margin-top: 10px;
     }
 
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "PingFang TC",
-        "Noto Sans TC",
-        "Microsoft JhengHei",
-        sans-serif;
-    }
-
-    body {
-      padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 10px);
-      background:
-        radial-gradient(circle at top right, rgba(242, 154, 56, 0.07), transparent 28%),
-        var(--bg);
-    }
-
-    button,
     input {
-      font: inherit;
+      border: 1px solid #ddd;
     }
 
     button {
-      cursor: pointer;
+      border: none;
+      background: #ff8a3d;
+      color: white;
+      font-weight: bold;
     }
 
-    .app {
-      width: 100%;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 18px 16px 28px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-      padding: 4px 2px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      min-width: 0;
-      gap: 12px;
-    }
-
-    .brand-logo,
-    .announcement-icon,
-    .mini-icon,
-    .row-icon,
-    .member-avatar,
-    .info-emoji,
-    .nav-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-strong);
-    }
-
-    .brand-logo {
-      width: 44px;
-      height: 44px;
-      flex: 0 0 44px;
-      border-radius: 14px;
-      background: #fff;
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .brand-logo svg,
-    .announcement-icon svg,
-    .mini-icon svg,
-    .row-icon svg,
-    .member-avatar svg,
-    .info-emoji svg,
-    .nav-icon svg {
-      display: block;
-    }
-
-    .brand-title {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: .02em;
-    }
-
-    .brand-subtitle {
-      margin-top: 3px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: .04em;
-    }
-
-    .top-pill {
-      flex: 0 0 auto;
-      max-width: 46%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #fff;
-      color: var(--muted-deep);
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .page {
-      display: none;
-      animation: fadeIn .22s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: .5; transform: translateY(3px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .page-title {
-      margin: 2px 2px 20px;
-    }
-
-    .page-title h1 {
-      margin: 0;
-      font-size: 28px;
-      line-height: 1.25;
-      letter-spacing: .01em;
-    }
-
-    .page-title p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 22px 2px 10px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: 17px;
-      line-height: 1.3;
-      font-weight: 800;
-    }
-
-    .section-note {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .hero-card,
-    .surface-card,
-    .bind-card,
-    .member-card,
-    .empty-state,
-    .promo-card,
-    .price-intro,
-    .coming-note {
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      overflow: hidden;
-      position: relative;
-      border-radius: var(--radius-xl);
-      padding: 18px 18px 16px;
-      background: linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
-      color: var(--text);
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      padding: 5px 9px;
-      border-radius: 999px;
-      background: var(--surface-accent);
-      color: var(--accent-deep);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .06em;
-    }
-
-    .hero-name {
-      margin-top: 10px;
-      font-size: 24px;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: .01em;
-    }
-
-    .hero-helper {
-      margin-top: 7px;
-      max-width: 92%;
-      font-size: 13px;
-      line-height: 1.65;
-      color: var(--muted);
-    }
-
-    .stats,
-    .info-grid,
-    .quick-grid,
-    .member-stats {
-      display: grid;
-      gap: 10px;
-    }
-
-    .stats {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      margin-top: 16px;
-    }
-
-    .stat-button {
-      appearance: none;
-      border: 1px solid #f1e3cf;
-      min-width: 0;
-      border-radius: 16px;
-      background: rgba(255,255,255,.9);
-      color: var(--text);
-      padding: 12px 6px 11px;
-      text-align: center;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
-    }
-
-    .stat-value {
-      display: block;
-      font-size: 20px;
-      line-height: 1.1;
-      font-weight: 800;
-    }
-
-    .stat-label {
-      display: block;
-      margin-top: 5px;
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .bind-banner {
-      margin-top: 14px;
-      border: 1px solid #f1dfc7;
-      border-radius: var(--radius-lg);
-      background: var(--surface-tint);
-      padding: 15px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .bind-banner-title {
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .bind-banner-text,
-    .announcement-desc,
-    .promo-desc,
-    .bind-desc,
-    .row-desc,
-    .empty-desc,
-    .coming-note,
-    .page-title p,
-    .sub-title p,
-    .form-status,
-    .price-intro p,
-    .order-summary {
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .bind-banner-text {
-      margin-top: 5px;
-      font-size: 12px;
-    }
-
-    .inline-btn,
-    .primary-btn {
-      appearance: none;
-      border: 1px solid var(--accent);
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 6px 16px rgba(240, 131, 0, .16);
-    }
-
-    .inline-btn {
-      width: auto;
-      margin-top: 12px;
-    }
-
-    .primary-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 13px;
-      font-size: 14px;
-    }
-
-    .announcement,
-    .menu-row {
-      width: 100%;
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      background: var(--surface);
-      color: inherit;
-      padding: 14px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      text-align: left;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .announcement {
-      align-items: center;
-    }
-
-    .announcement-icon,
-    .mini-icon,
-    .row-icon,
-    .member-avatar,
-    .info-emoji {
-      flex: 0 0 auto;
-      background: var(--surface-tint);
-      border: 1px solid #f1dfc7;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
-    }
-
-    .announcement-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-    }
-
-    .announcement-main {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .announcement-tag,
-    .promo-badge,
-    .vip-pill,
-    .badge {
-      letter-spacing: .04em;
-      font-weight: 800;
-    }
-
-    .announcement-tag {
-      color: var(--accent-strong);
-      font-size: 10px;
-    }
-
-    .announcement-title,
-    .promo-title,
-    .row-title,
-    .empty-title,
-    .sub-title h2,
-    .bind-title {
-      font-weight: 800;
-    }
-
-    .announcement-title {
-      margin-top: 4px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .announcement-desc {
-      margin-top: 4px;
-      font-size: 11px;
-    }
-
-    .chevron {
-      align-self: center;
-      color: #b3b3b3;
-      font-size: 22px;
-      line-height: 1;
-      margin-left: auto;
-    }
-
-    .info-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .info-card {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--surface);
-      padding: 14px 8px 12px;
-      text-align: center;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .info-emoji {
-      width: 36px;
-      height: 36px;
-      margin: 0 auto;
-      border-radius: 12px;
-    }
-
-    .info-label {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .info-value {
-      margin-top: 4px;
-      min-height: 17px;
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.45;
-    }
-
-    .quick-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .quick-btn {
-      appearance: none;
-      border: 1px solid var(--line);
-      min-width: 0;
-      min-height: 92px;
-      border-radius: var(--radius-lg);
-      background: var(--surface);
-      color: var(--text);
-      padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .quick-btn:active,
-    .menu-row:active,
-    .nav-btn:active,
-    .announcement:active,
-    .stat-button:active,
-    .inline-btn:active,
-    .primary-btn:active,
-    .back-btn:active,
-    .filter-chip:active {
-      transform: scale(.985);
-    }
-
-    .mini-icon,
-    .row-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      font-size: 19px;
-    }
-
-    .quick-label {
-      font-size: 12px;
-      font-weight: 750;
-    }
-
-    .promo-card {
-      background: linear-gradient(135deg, #fff7ee 0%, #ffffff 100%);
-      padding: 16px;
-      align-items: flex-start;
-    }
-
-    .promo-badge,
-    .vip-pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      background: var(--surface-accent);
-      color: var(--accent-deep);
-      padding: 5px 9px;
-      font-size: 10px;
-    }
-
-    .promo-title {
-      margin-top: 9px;
-      font-size: 16px;
-    }
-
-    .promo-desc {
-      margin-top: 5px;
-      font-size: 11px;
-    }
-
-    .surface-card {
-      border-radius: 20px;
-      background: var(--surface);
-      padding: 16px;
-    }
-
-    .menu-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .menu-row {
-      align-items: center;
-      padding: 15px;
-    }
-
-    .row-content {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .row-title {
-      font-size: 14px;
-    }
-
-    .row-desc {
-      margin-top: 3px;
-      font-size: 11px;
-    }
-
-    .member-card {
-      overflow: hidden;
-      position: relative;
-      border-radius: 22px;
-      background: linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
-      padding: 18px;
-    }
-
-    .member-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto auto 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
-    }
-
-    .member-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .member-avatar {
-      width: 58px;
-      height: 58px;
-      flex: 0 0 58px;
-      border-radius: 18px;
-      font-size: 28px;
-    }
-
-    .member-meta {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .member-name {
-      font-size: 19px;
-      font-weight: 850;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .member-stats {
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 16px;
-      border-top: 1px solid var(--line);
-      padding-top: 14px;
-    }
-
-    .member-stat {
-      text-align: center;
-    }
-
-    .member-stat + .member-stat {
-      border-left: 1px solid var(--line);
-    }
-
-    .member-stat strong {
-      display: block;
-      font-size: 20px;
-    }
-
-    .member-stat span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .bind-card {
-      border-radius: 20px;
-      background: var(--surface);
-      padding: 18px;
-    }
-
-    .bind-title {
-      font-size: 18px;
-    }
-
-    .bind-desc {
-      margin: 7px 0 14px;
-      font-size: 12px;
-    }
-
-    .text-input {
-      width: 100%;
-      appearance: none;
-      border: 1px solid var(--line-strong);
-      outline: none;
-      border-radius: 12px;
-      background: #fff;
-      color: var(--text);
-      padding: 13px 14px;
-      font-size: 15px;
-      transition: .16s ease;
-    }
-
-    .text-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(242, 154, 56, .12);
-    }
-
-    .form-status {
-      min-height: 18px;
-      margin-top: 9px;
-      font-size: 11px;
-    }
-
-    .price-intro {
-      border-radius: 20px;
-      background: linear-gradient(180deg, #fff7ee 0%, #fff 100%);
-      padding: 15px;
-      margin-bottom: 14px;
-    }
-
-    .price-intro strong {
-      font-size: 15px;
-    }
-
-    .price-intro p {
-      margin: 6px 0 0;
-      font-size: 11px;
-    }
-
-    .subpage {
-      display: none;
-    }
-
-    .subpage.active {
-      display: block;
-      animation: fadeIn .22s ease;
-    }
-
-    .sub-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .back-btn {
-      width: 38px;
-      height: 38px;
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
-      color: var(--text);
-      font-size: 21px;
-      line-height: 1;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .sub-title {
-      min-width: 0;
-    }
-
-    .sub-title h2 {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .sub-title p {
-      margin: 4px 0 0;
-      font-size: 11px;
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      margin-bottom: 12px;
-      padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-
-    .filter-row::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter-chip {
-      flex: 0 0 auto;
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #fff;
-      color: var(--muted-deep);
-      padding: 9px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .filter-chip.active {
-      border-color: #f1dfc7;
-      background: var(--surface-accent);
-      color: var(--accent-deep);
-    }
-
-    .order-summary {
-      border: 1px solid #f1dfc7;
-      border-radius: 16px;
-      background: var(--surface-tint);
-      padding: 13px 14px;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
-
-    .order-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .order-card {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      padding: 13px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .order-card-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .order-platform {
-      font-size: 15px;
-      font-weight: 850;
-    }
-
-    .order-date,
-    .order-id,
-    .order-field-label {
-      color: var(--muted);
-    }
-
-    .order-date,
-    .order-id {
-      font-size: 10px;
-      white-space: nowrap;
-    }
-
-    .order-id {
-      margin-top: 4px;
-    }
-
-    .order-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-top: 13px;
-    }
-
-    .order-field {
-      min-width: 0;
-      border: 1px solid #f1f1f1;
-      border-radius: 13px;
-      background: var(--surface-soft);
-      padding: 10px;
-    }
-
-    .order-field-label {
-      font-size: 9px;
-      font-weight: 600;
-    }
-
-    .order-field-value {
-      margin-top: 2px;
-      font-size: 11px;
-      font-weight: 750;
+    .status {
+      line-height: 1.7;
       word-break: break-all;
     }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+    .order {
+      border-top: 1px solid #eee;
+      padding-top: 12px;
       margin-top: 12px;
+      line-height: 1.7;
     }
 
     .badge {
-      display: inline-flex;
-      align-items: center;
+      display: inline-block;
+      padding: 4px 8px;
       border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 9px;
+      background: #f3f3f3;
+      margin-right: 4px;
+      font-size: 13px;
     }
-
-    .badge.orange {
-      background: var(--surface-accent);
-      color: var(--accent-deep);
-    }
-
-    .badge.green {
-      background: var(--green-bg);
-      color: var(--green);
-    }
-
-    .badge.gray {
-      background: var(--gray-bg);
-      color: var(--gray);
-    }
-
-    .badge.red {
-      background: var(--red-bg);
-      color: var(--red);
-    }
-
-    .empty-state {
-      border-radius: 20px;
-      background: #fff;
-      padding: 34px 18px;
-      text-align: center;
-    }
-
-    .empty-icon {
-      width: 54px;
-      height: 54px;
-      margin: 0 auto;
-      border-radius: 18px;
-      background: var(--surface-tint);
-      border: 1px solid #f1dfc7;
-      display: grid;
-      place-items: center;
-      color: var(--accent-strong);
-      font-size: 26px;
-    }
-
-    .empty-title {
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .empty-desc {
-      margin-top: 5px;
-      font-size: 11px;
-    }
-
-    .coming-note {
-      border: 1px dashed #e1d7ca;
-      border-radius: 16px;
-      background: #fbfbfb;
-      color: var(--muted-deep);
-      padding: 13px 14px;
-      font-size: 11px;
-    }
-
-    .toast {
-      position: fixed;
-      z-index: 2000;
-      left: 50%;
-      bottom: calc(var(--nav-height) + 18px + env(safe-area-inset-bottom));
-      transform: translate(-50%, 12px);
-      width: calc(100% - 34px);
-      max-width: 480px;
-      border-radius: 14px;
-      background: #303030;
-      color: white;
-      padding: 12px 14px;
-      font-size: 12px;
-      line-height: 1.45;
-      opacity: 0;
-      pointer-events: none;
-      transition: .18s ease;
-      box-shadow: 0 10px 28px rgba(0,0,0,.18);
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    .bottom-nav-shell {
-      position: fixed;
-      z-index: 1000;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 720px;
-      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-      background: linear-gradient(180deg, rgba(247,248,250,0) 0%, rgba(247,248,250,.95) 26%, rgba(247,248,250,.98) 100%);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .bottom-nav {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.96);
-      padding: 5px;
-      box-shadow: 0 6px 22px rgba(17, 24, 39, .06);
-    }
-
-    .nav-btn {
-      appearance: none;
-      border: 0;
-      min-width: 0;
-      min-height: 50px;
-      border-radius: 14px;
-      background: transparent;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 750;
-    }
-
-    .nav-icon {
-      width: 24px;
-      height: 24px;
-      line-height: 1;
-      color: currentColor;
-    }
-
-    .nav-btn.active {
-      background: var(--surface-accent);
-      color: var(--accent-strong);
-    }
-
-    @media (max-width: 560px) {
-      .page-title h1 {
-        font-size: 26px;
-      }
-
-      .stats,
-      .member-stats {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 420px) {
-      .app {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
-      .quick-grid,
-      .info-grid {
-        gap: 8px;
-      }
-
-      .quick-btn {
-        min-height: 88px;
-      }
-
-      .hero-name {
-        font-size: 21px;
-      }
-
-      .order-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .top-pill {
-        max-width: 42%;
-      }
-    }
-
   </style>
 </head>
 
 <body>
-  <main class="app">
-    <!-- 共用頂部 -->
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8 5 5v5a7 7 0 0 0 14 0V5l-3 3"/><path d="M9 13h.01M15 13h.01"/><path d="M10 16c1 .7 3 .7 4 0"/></svg></div>
-        <div class="brand-text">
-          <div class="brand-title">橘貓代購</div>
-          <div class="brand-subtitle">Orange Cat Select</div>
-        </div>
-      </div>
+  <div class="card">
+    <h1>🧡 橘貓代購會員中心</h1>
+    <div id="status" class="status">載入中...</div>
+  </div>
 
-      <div id="topStatus" class="top-pill">初始化中</div>
-    </header>
+  <div id="memberArea" class="card" style="display:none;">
+    <h2>會員資料</h2>
+    <div id="memberInfo"></div>
+    <button onclick="loadOrders('unreturned')">📦 查看未運回訂單</button>
+    <button onclick="loadOrders('all')">📋 查看全部訂單</button>
+  </div>
 
-    <!-- ==================== 首頁 ==================== -->
-    <section id="page-home" class="page active">
-      <div class="hero-card">
-        <div class="hero-kicker">歡迎回來</div>
-        <div id="heroName" class="hero-name">正在載入...</div>
-        <div id="heroHelper" class="hero-helper">正在確認會員狀態</div>
+  <div id="ordersArea" class="card" style="display:none;">
+    <h2>我的訂單</h2>
+    <div id="ordersInfo">載入中...</div>
+  </div>
 
-        <div class="stats">
-          <button class="stat-button" type="button" data-action="orders-unreturned">
-            <span id="homeStatProgress" class="stat-value">—</span>
-            <span class="stat-label">進行中</span>
-          </button>
-
-          <button class="stat-button" type="button" data-action="orders-arrived">
-            <span id="homeStatArrived" class="stat-value">—</span>
-            <span class="stat-label">已到貨</span>
-          </button>
-
-          <button class="stat-button" type="button" data-action="return-request">
-            <span id="homeStatReturnable" class="stat-value">—</span>
-            <span class="stat-label">可運回</span>
-          </button>
-        </div>
-      </div>
-
-      <div id="homeBindBanner" class="bind-banner hidden">
-        <div class="bind-banner-title">先完成會員綁定</div>
-        <div class="bind-banner-text">
-          綁定後就可以查看自己的訂單、包裹狀態與會員等級。
-        </div>
-        <button id="goBindButton" class="inline-btn" type="button">立即綁定</button>
-      </div>
-
-      <div class="section-head">
-        <h2>重要公告</h2>
-        <span class="section-note">最新消息</span>
-      </div>
-
-      <button class="announcement" type="button" data-action="announcements">
-        <div class="announcement-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a2 2 0 0 0 2 2h2l3 4h2l-1-4h2l7 3V6l-7 3H5a2 2 0 0 0-2 2Z"/></svg></div>
-        <div class="announcement-main">
-          <div class="announcement-tag">NOTICE</div>
-          <div class="announcement-title">公告內容之後會與後台資料連動</div>
-          <div class="announcement-desc">
-            第一版先確認首頁版型與跳轉方式，下一階段再加入後台公告管理。
-          </div>
-        </div>
-        <div class="chevron">›</div>
-      </button>
-
-      <div class="section-head">
-        <h2>今日資訊</h2>
-        <span class="section-note">即時資訊</span>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10l-3-3"/><path d="M17 17H7l3 3"/><path d="M8 12h8"/></svg></div>
-          <div class="info-label">代購匯率</div>
-          <div id="exchangeRateValue" class="info-value">—</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h18l-3 5H6l-3-5Z"/><path d="M7 14V8h10v6"/><path d="M10 8V5h4v3"/></svg></div>
-          <div class="info-label">近期船班</div>
-          <div id="shippingValue" class="info-value">—</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <div class="info-label">資料更新</div>
-          <div id="updatedValue" class="info-value">—</div>
-        </div>
-      </div>
-
-      <div class="section-head">
-        <h2>快速功能</h2>
-        <span class="section-note">常用服務</span>
-      </div>
-
-      <div class="quick-grid">
-        <button class="quick-btn" type="button" data-action="orders-unreturned">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
-          <span class="quick-label">查詢訂單</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="return-request">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
-          <span class="quick-label">運回申請</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="forward-register">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10v16H4z"/><path d="m14 14 6-6 2 2-6 6-3 1 1-3Z"/></svg></span>
-          <span class="quick-label">集運登記</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="calculator">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></span>
-          <span class="quick-label">匯率試算</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="announcements">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11v2a2 2 0 0 0 2 2h2l2 4h2l-1-4h2l7 3V6l-7 3H6a2 2 0 0 0-2 2Z"/></svg></span>
-          <span class="quick-label">最新公告</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="promotions">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h16v10H4z"/><path d="M3 7h18v3H3z"/><path d="M12 7v13"/><path d="M12 7H8.5A2.5 2.5 0 1 1 11 4.5L12 7Z"/><path d="M12 7h3.5A2.5 2.5 0 1 0 13 4.5L12 7Z"/></svg></span>
-          <span class="quick-label">優惠活動</span>
-        </button>
-      </div>
-
-      <div class="section-head">
-        <h2>優惠活動</h2>
-        <span class="section-note">查看更多</span>
-      </div>
-
-      <button class="announcement promo-card" type="button" data-action="promotions">
-        <div class="announcement-main">
-          <span class="promo-badge">PROMOTION</span>
-          <div class="promo-title">活動資訊會顯示在這裡</div>
-          <div class="promo-desc">
-            之後可放生日活動、優惠匯率、免代購費、抽獎等活動。
-          </div>
-        </div>
-        <div class="chevron">›</div>
-      </button>
-    </section>
-
-    <!-- ==================== 價目表 ==================== -->
-    <section id="page-pricing" class="page">
-      <div class="page-title">
-        <h1>價目表</h1>
-        <p>代購、集運與費用試算集中在這裡。</p>
-      </div>
-
-      <div class="price-intro">
-        <strong>費用資訊會以後台設定為準</strong>
-        <p>
-          目前先建立操作入口。之後會接上代購匯率、代付匯率、手續費、國際運費與 VIP 折扣。
-        </p>
-      </div>
-
-      <div class="menu-list">
-        <button class="menu-row" type="button" data-action="purchase-price">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 11H7L6 8Z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">代購費用</span>
-            <span class="row-desc">匯率、手續費與平台相關費用</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="forward-price">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">集運費用</span>
-            <span class="row-desc">重量級距、宅配與超材費用</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="calculator">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">費用試算</span>
-            <span class="row-desc">代購、代付、集運快速估算</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="coming-note">
-        這一版只建立價目表入口，不先寫死費率。等 UI 確認後，再接你後台實際的匯率與收費規則。
-      </div>
-    </section>
-
-    <!-- ==================== 會員中心 ==================== -->
-    <section id="page-member" class="page">
-      <div id="memberMainView">
-        <div class="page-title">
-          <h1>會員中心</h1>
-          <p>訂單、運回、集運與會員服務。</p>
-        </div>
-
-        <!-- 已綁定會員卡 -->
-        <div id="memberCard" class="member-card hidden">
-          <div class="member-top">
-            <div class="member-avatar"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9 4.5 5.5 8 7l2-1h4l2 1 3.5-1.5L18 9a7 7 0 0 1 1 3.6C19 17.2 15.9 20 12 20s-7-2.8-7-7.4A7 7 0 0 1 6 9Z"/><path d="M9.5 13h.01M14.5 13h.01"/><path d="M10 16c1 .8 3 .8 4 0"/></svg></div>
-            <div class="member-meta">
-              <div id="memberName" class="member-name">會員</div>
-              <div id="memberLevel" class="vip-pill">一般會員</div>
-            </div>
-          </div>
-
-          <div class="member-stats">
-            <div class="member-stat">
-              <strong id="memberStatProgress">—</strong>
-              <span>進行中</span>
-            </div>
-            <div class="member-stat">
-              <strong id="memberStatArrived">—</strong>
-              <span>已到貨</span>
-            </div>
-            <div class="member-stat">
-              <strong id="memberStatReturnable">—</strong>
-              <span>可運回</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 尚未綁定 -->
-        <div id="bindArea" class="bind-card hidden">
-          <div class="bind-title">綁定橘貓會員</div>
-          <div class="bind-desc">
-            請輸入之前向橘貓代購下單或登記包裹時使用的姓名。
-          </div>
-
-          <input
-            id="customerName"
-            class="text-input"
-            type="text"
-            autocomplete="name"
-            placeholder="例如：王小明"
-          />
-
-          <button id="bindButton" class="primary-btn" type="button">
-            確認綁定
-          </button>
-
-          <div id="bindStatus" class="form-status"></div>
-        </div>
-
-        <div class="section-head">
-          <h2>我的交易</h2>
-          <span></span>
-        </div>
-
-        <div class="menu-list">
-          <button class="menu-row" type="button" data-action="orders-unreturned">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">我的訂單</span>
-              <span class="row-desc">查看目前訂單與到貨狀態</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="return-request">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">運回申請</span>
-              <span class="row-desc">選擇已到貨包裹申請寄回台灣</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="forward-list">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12v10H6z"/><path d="M9 7V5h6v2"/><path d="M6 11h12"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">集運包裹</span>
-              <span class="row-desc">查看已登記的中國物流包裹</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="forward-register">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10v16H4z"/><path d="m14 14 6-6 2 2-6 6-3 1 1-3Z"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">集運登記</span>
-              <span class="row-desc">自行登記中國物流單號</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-
-        <div class="section-head">
-          <h2>會員服務</h2>
-          <span></span>
-        </div>
-
-        <div class="menu-list">
-          <button class="menu-row" type="button" data-action="coupons">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M12 7v10"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">我的優惠券</span>
-              <span class="row-desc">查看可使用、已使用與失效優惠</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="vip">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 8 4 4 4-6 4 6 4-4-2 10H6L4 8Z"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">VIP 專區</span>
-              <span class="row-desc">查看目前等級與會員權益</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="announcements">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11v2a2 2 0 0 0 2 2h2l2 4h2l-1-4h2l7 3V6l-7 3H6a2 2 0 0 0-2 2Z"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">最新公告</span>
-              <span class="row-desc">查看物流、匯率與活動公告</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-
-          <button class="menu-row" type="button" data-action="faq">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.65 2.5c-.95.63-1.75 1.24-1.75 2.5"/><path d="M12 17h.01"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">常見問題</span>
-              <span class="row-desc">快速查看常見使用問題</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 訂單子頁 -->
-      <div id="ordersSubpage" class="subpage">
-        <div class="sub-head">
-          <button id="ordersBackButton" class="back-btn" type="button">‹</button>
-          <div class="sub-title">
-            <h2>我的訂單</h2>
-            <p>目前先沿用既有訂單 API</p>
-          </div>
-        </div>
-
-        <div class="filter-row">
-          <button class="filter-chip active" type="button" data-filter="unreturned">未運回</button>
-          <button class="filter-chip" type="button" data-filter="arrived">已到貨</button>
-          <button class="filter-chip" type="button" data-filter="all">全部</button>
-        </div>
-
-        <div id="ordersInfo">
-          <div class="empty-state">
-            <div class="empty-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></div>
-            <div class="empty-title">準備載入訂單</div>
-            <div class="empty-desc">進入 LIFF 並完成會員綁定後即可讀取。</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 更多 ==================== -->
-    <section id="page-more" class="page">
-      <div class="page-title">
-        <h1>更多</h1>
-        <p>使用說明、回饋與其他服務。</p>
-      </div>
-
-      <div class="menu-list">
-        <button class="menu-row" type="button" data-action="faq">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.65 2.5c-.95.63-1.75 1.24-1.75 2.5"/><path d="M12 17h.01"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">常見問題 FAQ</span>
-            <span class="row-desc">訂單、物流、費用與使用方式</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="terms">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v15.5a.5.5 0 0 1-.5.5H6.5A2.5 2.5 0 0 0 4 22V6.5Z"/><path d="M8 4v16"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">交易須知</span>
-            <span class="row-desc">代購、物流與商品相關規則</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="feedback">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">匿名回饋</span>
-            <span class="row-desc">匿名留下建議或使用心得</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="bug-report">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.2 2.2-1.5-1.5 2.2-2.2Z"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">系統問題回報</span>
-            <span class="row-desc">頁面錯誤、資料顯示異常等問題</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="coming-note">
-        「更多」不放 LINE 客服入口。之後會在這裡完成 FAQ、交易須知、匿名回饋與系統問題回報。
-      </div>
-    </section>
-  </main>
-
-  <!-- Toast -->
-  <div id="toast" class="toast" aria-live="polite"></div>
-
-  <!-- 底部導覽 -->
-  <nav class="bottom-nav-shell" aria-label="主要導覽">
-    <div class="bottom-nav">
-      <button class="nav-btn active" type="button" data-page="home">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 10v10h14V10"/></svg></span>
-        <span>首頁</span>
-      </button>
-
-      <button class="nav-btn" type="button" data-page="pricing">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8"/><path d="M12 4v16"/><path d="M8 10h8"/><path d="M8 14h8"/></svg></span>
-        <span>價目表</span>
-      </button>
-
-      <button class="nav-btn" type="button" data-page="member">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M6 20a6 6 0 0 1 12 0"/></svg></span>
-        <span>會員中心</span>
-      </button>
-
-      <button class="nav-btn" type="button" data-page="more">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span>
-        <span>更多</span>
-      </button>
-    </div>
-  </nav>
+  <div id="bindArea" class="card" style="display:none;">
+    <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
+    <input id="customerName" type="text" placeholder="例如：王小明" />
+    <button onclick="bindLine()">立即綁定</button>
+    <div id="bindStatus" class="status"></div>
+  </div>
 
   <script>
-    // =========================================================
-    // 橘貓代購 LIFF V2 - STEP 1
-    // UI 骨架 + 保留既有 LIFF / 會員綁定 / 訂單 API
-    // =========================================================
-
-    const LIFF_ID = "2010286756-vFt0pTVk";
-    const PRODUCTION_HOST = "orange-cat-liff.vercel.app";
+    const LIFF_ID = "2010286756-yeXtJpY6";
 
     let lineUserId = "";
     let lineName = "";
     let currentCustomerName = "";
-    let currentMember = null;
-    let allOrders = [];
-    let currentPage = "home";
 
-    // Preview 分支網址不屬於目前正式 LIFF Endpoint。
-    // 因此 Preview 先進入 UI 測試模式，避免自動登入跳回正式站。
-    const isPreviewMode = false;
-
-    // ---------- DOM ----------
-    const topStatus = document.getElementById("topStatus");
-    const heroName = document.getElementById("heroName");
-    const heroHelper = document.getElementById("heroHelper");
-
-    const memberCard = document.getElementById("memberCard");
-    const bindArea = document.getElementById("bindArea");
-    const homeBindBanner = document.getElementById("homeBindBanner");
-
-    const memberNameEl = document.getElementById("memberName");
-    const memberLevelEl = document.getElementById("memberLevel");
-
-    const ordersSubpage = document.getElementById("ordersSubpage");
-    const memberMainView = document.getElementById("memberMainView");
-    const ordersInfo = document.getElementById("ordersInfo");
-
-    // ---------- 工具 ----------
-    function safeText(value, fallback = "—") {
-      if (value === null || value === undefined || value === "") return fallback;
-      return String(value);
-    }
-
-    function formatDate(value) {
-      if (!value) return "—";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleDateString("zh-TW");
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.add("show");
-
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
-    }
-
-    function scrollTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // ---------- 主頁切換 ----------
-    function showPage(pageName) {
-      currentPage = pageName;
-
-      document.querySelectorAll(".page").forEach(page => {
-        page.classList.toggle("active", page.id === "page-" + pageName);
-      });
-
-      document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.page === pageName);
-      });
-
-      if (pageName !== "member") {
-        closeOrdersSubpage(false);
-      }
-
-      scrollTop();
-    }
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        showPage(btn.dataset.page);
-      });
-    });
-
-    // ---------- Preview UI 假資料 ----------
-    function enterPreviewMode() {
-      topStatus.textContent = "測試版";
-      heroName.textContent = "新版介面測試";
-      heroHelper.textContent = "目前先確認 UI、底部導覽與操作流程";
-
-      document.getElementById("homeStatProgress").textContent = "12";
-      document.getElementById("homeStatArrived").textContent = "4";
-      document.getElementById("homeStatReturnable").textContent = "3";
-
-      document.getElementById("exchangeRateValue").textContent = "待串接";
-      document.getElementById("shippingValue").textContent = "待串接";
-      document.getElementById("updatedValue").textContent = "待串接";
-
-      memberCard.classList.remove("hidden");
-      bindArea.classList.add("hidden");
-      homeBindBanner.classList.add("hidden");
-
-      memberNameEl.textContent = "測試會員";
-      memberLevelEl.textContent = "VIP 2";
-
-      document.getElementById("memberStatProgress").textContent = "12";
-      document.getElementById("memberStatArrived").textContent = "4";
-      document.getElementById("memberStatReturnable").textContent = "3";
-
-      allOrders = [
-        {
-          order_id: "V2-TEST-001",
-          order_time: new Date().toISOString(),
-          platform: "淘寶",
-          tracking_number: "TEST123456789",
-          amount_rmb: 399,
-          weight_kg: 0.85,
-          is_arrived: 1,
-          is_returned: 0
-        },
-        {
-          order_id: "V2-TEST-002",
-          order_time: new Date(Date.now() - 86400000 * 2).toISOString(),
-          platform: "拼多多",
-          tracking_number: "TEST987654321",
-          amount_rmb: 158,
-          weight_kg: 0.42,
-          is_arrived: 0,
-          is_returned: 0
-        },
-        {
-          order_id: "V2-TEST-003",
-          order_time: new Date(Date.now() - 86400000 * 8).toISOString(),
-          platform: "閒魚",
-          tracking_number: "TEST555555555",
-          amount_rmb: 720,
-          weight_kg: 1.2,
-          is_arrived: 1,
-          is_returned: 1
-        }
-      ];
-    }
-
-    // ---------- 首頁公開設定 ----------
-    async function loadHomeConfig() {
-      try {
-        const res = await fetch("/api/get-home-config", {
-          method: "GET",
-          cache: "no-store"
-        });
-
-        const result = await res.json();
-
-        if (!result.success) {
-          throw new Error(result.error || "首頁設定讀取失敗");
-        }
-
-        const exchangeRateEl =
-          document.getElementById("exchangeRateValue");
-
-        const updatedEl =
-          document.getElementById("updatedValue");
-
-        if (
-          result.exchange_rate !== null &&
-          result.exchange_rate !== undefined &&
-          result.exchange_rate !== ""
-        ) {
-          const rate = Number(result.exchange_rate);
-
-          exchangeRateEl.textContent =
-            Number.isFinite(rate)
-              ? rate.toFixed(2)
-              : String(result.exchange_rate);
-        } else {
-          exchangeRateEl.textContent = "未設定";
-        }
-
-        if (result.orders_last_update_time) {
-          const raw = String(result.orders_last_update_time);
-
-          const match = raw.match(
-            /^(\d{4})\/(\d{2})\/(\d{2})\s+(\d{2}:\d{2})$/
-          );
-
-          updatedEl.textContent = match
-            ? `${match[2]}/${match[3]} ${match[4]}`
-            : raw;
-        } else {
-          updatedEl.textContent = "未設定";
-        }
-
-      } catch (err) {
-        console.error("loadHomeConfig error:", err);
-
-        document.getElementById("exchangeRateValue").textContent = "讀取失敗";
-        document.getElementById("updatedValue").textContent = "讀取失敗";
-      }
-    }
-
-    // ---------- 正式 LIFF 初始化 ----------
     async function main() {
-      loadHomeConfig();
-
-      if (isPreviewMode) {
-        enterPreviewMode();
-        return;
-      }
+      const status = document.getElementById("status");
 
       try {
-        topStatus.textContent = "連線中";
-
         await liff.init({
           liffId: LIFF_ID,
           withLoginOnExternalBrowser: true
@@ -1751,473 +121,178 @@
         }
 
         const profile = await liff.getProfile();
-
         lineUserId = profile.userId;
-        lineName = profile.displayName || "LINE 使用者";
+        lineName = profile.displayName;
 
-        topStatus.textContent = lineName;
-        heroName.textContent = lineName;
-        heroHelper.textContent = "正在確認會員資料...";
+        status.innerHTML = "你好，" + lineName + " 🐾";
 
-        await checkMember();
+        checkMember();
+
       } catch (err) {
-        console.error("LIFF init error:", err);
-
-        topStatus.textContent = "連線異常";
-        heroName.textContent = "歡迎來到橘貓代購";
-        heroHelper.textContent = "LINE 初始化失敗，請重新從官方 LINE 開啟";
-
-        showToast("LIFF 發生錯誤：" + err.message);
+        status.innerHTML = "LIFF 發生錯誤：" + err.message;
       }
     }
 
-    // ---------- 查會員 ----------
     async function checkMember() {
-      try {
-        const res = await fetch("/api/get-member", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            line_user_id: lineUserId
-          })
-        });
+      const res = await fetch("/api/get-member", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          line_user_id: lineUserId
+        })
+      });
 
-        const result = await res.json();
+      const result = await res.json();
 
-        if (result.success && result.bound) {
-          currentMember = result.member;
-          currentCustomerName = result.member.customer_name;
+      if (result.success && result.bound) {
+        const m = result.member;
+        currentCustomerName = m.customer_name;
 
-          renderBoundMember(result.member);
-          await fetchOrders();
-        } else {
-          currentMember = null;
-          currentCustomerName = "";
-          renderUnboundMember();
-        }
-      } catch (err) {
-        console.error("get-member error:", err);
-        heroHelper.textContent = "會員資料讀取失敗，請稍後再試";
-        showToast("會員資料讀取失敗");
+        document.getElementById("bindArea").style.display = "none";
+        document.getElementById("memberArea").style.display = "block";
+
+        document.getElementById("memberInfo").innerHTML =
+          "包裹名稱：" + m.customer_name + "<br>" +
+          "會員等級：" + m.member_level + "<br>" +
+          "LINE 名稱：" + m.line_name;
+
+      } else {
+        document.getElementById("bindArea").style.display = "block";
       }
     }
 
-    function renderBoundMember(member) {
-      const customerName = safeText(member.customer_name, lineName || "會員");
-      const memberLevel = safeText(member.member_level, "一般會員");
-
-      heroName.textContent = customerName;
-      heroHelper.textContent = "今天也來看看包裹到哪裡了吧！";
-
-      memberNameEl.textContent = customerName;
-      memberLevelEl.textContent = memberLevel;
-
-      memberCard.classList.remove("hidden");
-      bindArea.classList.add("hidden");
-      homeBindBanner.classList.add("hidden");
-    }
-
-    function renderUnboundMember() {
-      heroName.textContent = lineName || "歡迎來到橘貓代購";
-      heroHelper.textContent = "綁定會員後即可查詢自己的訂單與包裹";
-
-      document.getElementById("homeStatProgress").textContent = "—";
-      document.getElementById("homeStatArrived").textContent = "—";
-      document.getElementById("homeStatReturnable").textContent = "—";
-
-      memberCard.classList.add("hidden");
-      bindArea.classList.remove("hidden");
-      homeBindBanner.classList.remove("hidden");
-    }
-
-    // ---------- 綁定 ----------
     async function bindLine() {
-      if (isPreviewMode) {
-        showToast("Preview 模式不會寫入正式會員資料");
-        return;
-      }
-
-      const customerName =
-        document.getElementById("customerName").value.trim();
-
-      const bindStatus =
-        document.getElementById("bindStatus");
+      const customerName = document.getElementById("customerName").value.trim();
+      const bindStatus = document.getElementById("bindStatus");
 
       if (!customerName) {
-        bindStatus.textContent = "請先輸入姓名。";
+        bindStatus.innerHTML = "請先輸入包裹名稱。";
         return;
       }
 
-      bindStatus.textContent = "綁定中...";
+      bindStatus.innerHTML = "綁定中...";
 
-      try {
-        const response = await fetch("/api/bind-line", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            customer_name: customerName,
-            line_user_id: lineUserId,
-            line_name: lineName
-          })
-        });
-
-        const result = await response.json();
-
-        if (result.success && result.affectedRows === 1) {
-          bindStatus.textContent = "✅ 綁定成功，正在載入會員資料...";
-          await checkMember();
-        } else {
-          bindStatus.textContent = "❌ 綁定失敗，請確認姓名是否正確。";
-        }
-      } catch (err) {
-        console.error("bind-line error:", err);
-        bindStatus.textContent = "❌ 系統連線失敗，請稍後再試。";
-      }
-    }
-
-    document
-      .getElementById("bindButton")
-      .addEventListener("click", bindLine);
-
-    document
-      .getElementById("customerName")
-      .addEventListener("keydown", event => {
-        if (event.key === "Enter") bindLine();
+      const response = await fetch("/api/bind-line", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customer_name: customerName,
+          line_user_id: lineUserId,
+          line_name: lineName
+        })
       });
 
-    document
-      .getElementById("goBindButton")
-      .addEventListener("click", () => {
-        showPage("member");
-        setTimeout(() => {
-          document.getElementById("customerName")?.focus();
-        }, 120);
+      const result = await response.json();
+
+      if (result.success && result.affectedRows === 1) {
+        bindStatus.innerHTML = "✅ 綁定成功，正在載入會員資料...";
+        checkMember();
+      } else {
+        bindStatus.innerHTML = "❌ 綁定失敗，請確認名稱是否正確。";
+      }
+    }
+
+    async function loadOrders(mode) {
+      const ordersArea = document.getElementById("ordersArea");
+      const ordersInfo = document.getElementById("ordersInfo");
+    
+      ordersArea.style.display = "block";
+      ordersInfo.innerHTML = "載入訂單中...";
+    
+      const res = await fetch("/api/get-orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customer_name: currentCustomerName
+        })
       });
-
-    // ---------- 訂單 ----------
-    async function fetchOrders() {
-      if (isPreviewMode) {
-        updateOrderStats();
-        return allOrders;
-      }
-
-      if (!currentCustomerName) {
-        return [];
-      }
-
-      try {
-        const res = await fetch("/api/get-orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            customer_name: currentCustomerName
-          })
-        });
-
-        const result = await res.json();
-
-        if (!result.success) {
-          throw new Error(result.error || "訂單讀取失敗");
-        }
-
-        allOrders = Array.isArray(result.orders) ? result.orders : [];
-        updateOrderStats();
-
-        return allOrders;
-      } catch (err) {
-        console.error("get-orders error:", err);
-        showToast("訂單資料讀取失敗");
-        return [];
-      }
-    }
-
-    function getOrderStats() {
-      const unreturned = allOrders.filter(order => !Boolean(order.is_returned));
-      const arrived = allOrders.filter(
-        order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
-      );
-
-      // 目前資料庫尚無獨立「已申請運回」欄位，
-      // 第一版暫以「已到貨且未運回」視為可運回。
-      const returnable = arrived;
-
-      return {
-        progress: unreturned.length,
-        arrived: arrived.length,
-        returnable: returnable.length
-      };
-    }
-
-    function updateOrderStats() {
-      const stats = getOrderStats();
-
-      document.getElementById("homeStatProgress").textContent = stats.progress;
-      document.getElementById("homeStatArrived").textContent = stats.arrived;
-      document.getElementById("homeStatReturnable").textContent = stats.returnable;
-
-      document.getElementById("memberStatProgress").textContent = stats.progress;
-      document.getElementById("memberStatArrived").textContent = stats.arrived;
-      document.getElementById("memberStatReturnable").textContent = stats.returnable;
-    }
-
-    async function openOrders(filterMode = "unreturned") {
-      if (!isPreviewMode && !currentCustomerName) {
-        showPage("member");
-        showToast("請先完成會員綁定");
+    
+      const result = await res.json();
+    
+      if (!result.success) {
+        ordersInfo.innerHTML = "❌ 訂單讀取失敗。";
         return;
       }
-
-      showPage("member");
-
-      memberMainView.style.display = "none";
-      ordersSubpage.classList.add("active");
-
-      if (!allOrders.length && !isPreviewMode) {
-        ordersInfo.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">⏳</div>
-            <div class="empty-title">載入訂單中</div>
-            <div class="empty-desc">請稍候...</div>
-          </div>
-        `;
-
-        await fetchOrders();
-      }
-
-      setOrderFilter(filterMode);
-      scrollTop();
-    }
-
-    function closeOrdersSubpage(shouldScroll = true) {
-      ordersSubpage.classList.remove("active");
-      memberMainView.style.display = "";
-
-      if (shouldScroll) scrollTop();
-    }
-
-    document
-      .getElementById("ordersBackButton")
-      .addEventListener("click", () => closeOrdersSubpage(true));
-
-    function setOrderFilter(mode) {
-      document.querySelectorAll(".filter-chip").forEach(chip => {
-        chip.classList.toggle("active", chip.dataset.filter === mode);
-      });
-
-      renderOrders(mode);
-    }
-
-    document.querySelectorAll(".filter-chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        setOrderFilter(chip.dataset.filter);
-      });
-    });
-
-    function renderOrders(mode = "unreturned") {
-      let orders = [...allOrders];
-
+    
+      let orders = result.orders;
+    
       if (mode === "unreturned") {
-        orders = orders.filter(order => !Boolean(order.is_returned));
+        orders = orders.filter(order => !order.is_returned);
       }
-
-      if (mode === "arrived") {
-        orders = orders.filter(
-          order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
-        );
+    
+      if (orders.length === 0) {
+        ordersInfo.innerHTML = "目前查無符合條件的訂單。";
+        return;
       }
-
-      const arrivedOrders = allOrders.filter(
-        order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
+    
+      const arrivedOrders = orders.filter(
+        order => order.is_arrived && !order.is_returned
       );
-
+      
+      const arrivedCount = arrivedOrders.length;
+      
       const arrivedWeight = arrivedOrders.reduce(
         (sum, order) => sum + Number(order.weight_kg || 0),
         0
       );
-
-      let html = `
-        <div class="order-summary">
-          <strong><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg> 可運回包裹</strong><br>
-          ${arrivedOrders.length} 件・約 ${arrivedWeight.toFixed(2)} kg
-        </div>
+      
+      html = `
+      <div style="
+      background:#fff3e8;
+      padding:16px;
+      border-radius:14px;
+      margin-bottom:16px;
+      line-height:1.9;
+      ">
+      
+      <b>📦 可運回包裹統計</b><br>
+      
+       包裹數量：${arrivedCount} 件<br>
+      
+       總重量：${arrivedWeight.toFixed(2)} kg
+      
+      </div>
       `;
-
-      if (!orders.length) {
+    
+      orders.forEach(order => {
+        const arrived = order.is_arrived ? "✔ 已到貨" : "✘ 未到貨";
+        const returned = order.is_returned ? "✔ 已運回" : "✘ 未運回";
+    
+        const orderDate = order.order_time
+          ? new Date(order.order_time).toLocaleDateString("zh-TW")
+          : "-";
+        
         html += `
-          <div class="empty-state">
-            <div class="empty-icon">📭</div>
-            <div class="empty-title">目前沒有符合條件的訂單</div>
-            <div class="empty-desc">可以切換上方篩選查看其他訂單。</div>
+          <div class="order">
+        
+            <b>${order.platform || "未填平台"}</b><br>
+        
+             訂單編號：${order.order_id}<br>
+        
+             下單日期：${orderDate}<br>
+        
+             物流單號：${order.tracking_number || "—"}<br>
+        
+             金額：${order.amount_rmb || 0} RMB<br>
+        
+             重量：${order.weight_kg || 0} kg<br><br>
+        
+            <span class="badge">${arrived}</span>
+            <span class="badge">${returned}</span>
+        
           </div>
         `;
-
-        ordersInfo.innerHTML = html;
-        return;
-      }
-
-      html += `<div class="order-list">`;
-
-      orders.forEach(order => {
-        const arrived = Boolean(order.is_arrived);
-        const returned = Boolean(order.is_returned);
-
-        let statusBadge = "";
-
-        if (returned) {
-          statusBadge = `<span class="badge gray">已運回</span>`;
-        } else if (arrived) {
-          statusBadge = `<span class="badge green">已到貨・可運回</span>`;
-        } else {
-          statusBadge = `<span class="badge orange">運送中</span>`;
-        }
-
-        html += `
-          <article class="order-card">
-            <div class="order-card-head">
-              <div>
-                <div class="order-platform">${safeText(order.platform, "未填平台")}</div>
-                <div class="order-id">訂單編號 ${safeText(order.order_id)}</div>
-              </div>
-              <div class="order-date">${formatDate(order.order_time)}</div>
-            </div>
-
-            <div class="order-grid">
-              <div class="order-field">
-                <div class="order-field-label">中國物流單號</div>
-                <div class="order-field-value">${safeText(order.tracking_number)}</div>
-              </div>
-
-              <div class="order-field">
-                <div class="order-field-label">商品金額</div>
-                <div class="order-field-value">¥ ${safeText(order.amount_rmb, "0")}</div>
-              </div>
-
-              <div class="order-field">
-                <div class="order-field-label">目前重量</div>
-                <div class="order-field-value">${safeText(order.weight_kg, "0")} kg</div>
-              </div>
-
-              <div class="order-field">
-                <div class="order-field-label">到貨狀態</div>
-                <div class="order-field-value">${arrived ? "已到貨" : "尚未到貨"}</div>
-              </div>
-            </div>
-
-            <div class="badge-row">
-              ${statusBadge}
-            </div>
-          </article>
-        `;
       });
-
-      html += `</div>`;
+    
       ordersInfo.innerHTML = html;
     }
 
-    // ---------- 快捷功能 ----------
-    function requireBinding(actionName) {
-      if (isPreviewMode) return true;
-
-      if (!currentCustomerName) {
-        showPage("member");
-        showToast("「" + actionName + "」需要先綁定會員");
-        return false;
-      }
-
-      return true;
-    }
-
-    function handleAction(action) {
-      switch (action) {
-        case "orders-unreturned":
-          openOrders("unreturned");
-          break;
-
-        case "orders-arrived":
-          openOrders("arrived");
-          break;
-
-        case "return-request":
-          if (!requireBinding("運回申請")) return;
-          showToast("運回申請會在下一階段製作");
-          break;
-
-        case "forward-register":
-          if (!requireBinding("集運登記")) return;
-          showToast("集運登記會在後續步驟製作");
-          break;
-
-        case "forward-list":
-          if (!requireBinding("集運包裹")) return;
-          showToast("集運包裹列表會在後續步驟製作");
-          break;
-
-        case "coupons":
-          if (!requireBinding("我的優惠券")) return;
-          showToast("優惠券功能會在後續步驟製作");
-          break;
-
-        case "vip":
-          if (!requireBinding("VIP 專區")) return;
-          showToast("VIP 專區會配合新的儲值規則製作");
-          break;
-
-        case "calculator":
-          showPage("pricing");
-          showToast("費用試算會在價目表頁製作");
-          break;
-
-        case "purchase-price":
-          showToast("代購費用頁會在下一階段製作");
-          break;
-
-        case "forward-price":
-          showToast("集運費用頁會在下一階段製作");
-          break;
-
-        case "announcements":
-          showToast("公告列表會在下一階段製作");
-          break;
-
-        case "promotions":
-          showToast("優惠活動頁會在下一階段製作");
-          break;
-
-        case "faq":
-          showPage("more");
-          showToast("FAQ 內容會在下一階段製作");
-          break;
-
-        case "terms":
-          showToast("交易須知會在下一階段製作");
-          break;
-
-        case "feedback":
-          showToast("匿名回饋會接回你原本的回饋功能");
-          break;
-
-        case "bug-report":
-          showToast("系統問題回報會在後續步驟製作");
-          break;
-
-        default:
-          showToast("此功能尚未開放");
-      }
-    }
-
-    document.querySelectorAll("[data-action]").forEach(element => {
-      element.addEventListener("click", () => {
-        handleAction(element.dataset.action);
-      });
-    });
-
-    // ---------- 啟動 ----------
     main();
   </script>
 </body>
