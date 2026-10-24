@@ -24,6 +24,7 @@ export default async function handler(req, res) {
       FROM site_settings
       WHERE setting_key IN (
         'current_exchange_rate',
+        'payment_exchange_rate',
         'orders_last_update_time'
       )
     `);
@@ -37,6 +38,8 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       exchange_rate: settings.current_exchange_rate ?? null,
+      payment_exchange_rate:
+        settings.payment_exchange_rate ?? settings.current_exchange_rate ?? null,
       orders_last_update_time:
         settings.orders_last_update_time ?? null
     });
