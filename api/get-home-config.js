@@ -30,9 +30,28 @@ export default async function handler(req, res) {
     `);
 
     const settings = {};
-
     for (const row of rows) {
       settings[row.setting_key] = row.setting_value;
+    }
+
+    let shippingBatches = [];
+
+    try {
+      const [batchRows] = await conn.execute(`
+        SELECT
+          batch_id,
+          batch_text,
+          delivery_type,
+          sort_order
+        FROM shipping_batches
+        WHERE is_active = 1
+        ORDER BY sort_order ASC, batch_id DESC
+        LIMIT 12
+      `);
+
+      shippingBatches = batchRows;
+    } catch (err) {
+      console.warn("shipping batches unavailable:", err.message);
     }
 
     return res.status(200).json({
@@ -41,7 +60,12 @@ export default async function handler(req, res) {
       payment_exchange_rate:
         settings.payment_exchange_rate ?? settings.current_exchange_rate ?? null,
       orders_last_update_time:
-        settings.orders_last_update_time ?? null
+        settings.orders_last_update_time ?? null,
+      shipping_batches: shippingBatches,
+      shipping_value:
+        shippingBatches.length > 0
+          ? shippingBatches[0].batch_text
+          : null
     });
 
   } catch (err) {
