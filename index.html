@@ -2512,6 +2512,120 @@
       line-height: 1.6;
     }
 
+  
+    /* ===== v4.13 FAQ / 交易須知 ===== */
+    .faq-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 15px 48px 15px 15px;
+      position: relative;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.5;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: "+";
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: var(--surface-tint);
+      color: var(--accent-deep);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .faq-item[open] summary::after {
+      content: "−";
+    }
+
+    .faq-answer {
+      padding: 0 15px 15px;
+      color: var(--muted-deep);
+      font-size: 11px;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .faq-answer::before {
+      content: "";
+      display: block;
+      height: 1px;
+      background: #f1f1f1;
+      margin-bottom: 12px;
+    }
+
+    .terms-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .terms-card {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px 16px 15px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .terms-card::before {
+      content: "";
+      position: absolute;
+      inset: 14px auto 14px 0;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: var(--accent);
+    }
+
+    .terms-title {
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .terms-body {
+      margin-top: 7px;
+      color: var(--muted-deep);
+      font-size: 11px;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .content-guide-card {
+      border: 1px solid #f1dfc7;
+      border-radius: 16px;
+      background: var(--surface-tint);
+      padding: 12px 13px;
+      margin-bottom: 12px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
   </style>
 </head>
 
@@ -3283,6 +3397,36 @@
       <div id="contentListWrap" class="content-list-wrap"></div>
     </section>
 
+    <!-- ==================== FAQ ==================== -->
+    <section id="page-faq" class="page">
+      <div class="sub-head">
+        <button id="faqBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>常見問題 FAQ</h2>
+          <p>常見的代購、集運、付款與運回事項。</p>
+        </div>
+      </div>
+
+      <div id="faqList" class="faq-list"></div>
+    </section>
+
+    <!-- ==================== 交易須知 ==================== -->
+    <section id="page-terms" class="page">
+      <div class="sub-head">
+        <button id="termsBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>交易須知</h2>
+          <p>下單前請先閱讀目前的交易與服務規則。</p>
+        </div>
+      </div>
+
+      <div class="content-guide-card">
+        實際服務內容以橘貓代購後台最新公告與訂單資料為準；規則更新時，本頁會同步顯示最新版本。
+      </div>
+
+      <div id="termsList" class="terms-list"></div>
+    </section>
+
     <!-- ==================== 匿名回饋 ==================== -->
     <section id="page-feedback" class="page">
       <div class="sub-head">
@@ -3378,7 +3522,7 @@
       <div style="height:12px"></div>
 
       <div class="coming-note">
-        FAQ、交易須知與系統問題回報會陸續補上。
+        系統問題回報會在後續版本補上。
       </div>
     </section>
   </main>
@@ -3416,6 +3560,8 @@
     let publicPaymentRate = null;
     let publicAnnouncements = [];
     let publicPromotions = [];
+    let publicFaqs = [];
+    let publicTerms = [];
 
     // =========================================================
     // 橘貓代購 LIFF V2 - STEP 1
@@ -3525,6 +3671,14 @@
     document
       .getElementById("contentBackButton")
       .addEventListener("click", () => showPage("home"));
+
+    document
+      .getElementById("faqBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("termsBackButton")
+      .addEventListener("click", () => showPage("more"));
 
     document
       .getElementById("feedbackBackButton")
@@ -3734,6 +3888,61 @@
       });
 
 
+
+    function renderFaqList() {
+      const wrap = document.getElementById("faqList");
+
+      if (!publicFaqs.length) {
+        wrap.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">目前沒有 FAQ</div>
+            <div class="empty-desc">常見問題整理完成後會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = publicFaqs.map((item, index) => `
+        <details class="faq-item" ${index === 0 ? "open" : ""}>
+          <summary>${escapeHtml(safeText(item.title, "未命名問題"))}</summary>
+          <div class="faq-answer">${escapeHtml(safeText(item.description, "尚無回答"))}</div>
+        </details>
+      `).join("");
+    }
+
+    function renderTermsList() {
+      const wrap = document.getElementById("termsList");
+
+      if (!publicTerms.length) {
+        wrap.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">目前沒有交易須知</div>
+            <div class="empty-desc">交易規則整理完成後會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = publicTerms.map(item => `
+        <article class="terms-card">
+          <div class="terms-title">${escapeHtml(safeText(item.title, "交易須知"))}</div>
+          <div class="terms-body">${escapeHtml(safeText(item.description, ""))}</div>
+        </article>
+      `).join("");
+    }
+
+    function openFaqPage() {
+      showPage("faq");
+      renderFaqList();
+      scrollTop();
+    }
+
+    function openTermsPage() {
+      showPage("terms");
+      renderTermsList();
+      scrollTop();
+    }
+
     function renderHomePublicContent() {
       const announcement = publicAnnouncements[0] || null;
       const promotion = publicPromotions[0] || null;
@@ -3900,6 +4109,14 @@
           ? result.promotions
           : [];
 
+        publicFaqs = Array.isArray(result.faqs)
+          ? result.faqs
+          : [];
+
+        publicTerms = Array.isArray(result.terms)
+          ? result.terms
+          : [];
+
         renderHomePublicContent();
 
         const shippingEl = document.getElementById("shippingValue");
@@ -3932,6 +4149,8 @@
         document.getElementById("shippingValue").textContent = "讀取失敗";
         publicAnnouncements = [];
         publicPromotions = [];
+        publicFaqs = [];
+        publicTerms = [];
         renderHomePublicContent();
         const pp = document.getElementById("pricingPurchaseRate");
         const py = document.getElementById("pricingPaymentRate");
@@ -5188,12 +5407,11 @@
           break;
 
         case "faq":
-          showPage("more");
-          showToast("FAQ 內容會在下一階段製作");
+          openFaqPage();
           break;
 
         case "terms":
-          showToast("交易須知會在下一階段製作");
+          openTermsPage();
           break;
 
         case "feedback":
