@@ -1409,6 +1409,287 @@
       border-radius: inherit;
     }
 
+  
+    /* ===== v4.3 正式價目表 ===== */
+    .pricing-rate-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .pricing-rate-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-rate-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .pricing-rate-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .pricing-rate-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+
+    .pricing-rate-card small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .pricing-panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-panel-head {
+      padding: 15px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .pricing-panel-head strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .pricing-panel-head span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .fee-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .fee-table th,
+    .fee-table td {
+      padding: 12px 14px;
+      border-top: 1px solid #f2f2f2;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .fee-table th {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .fee-table td:last-child {
+      text-align: right;
+      font-weight: 800;
+    }
+
+    .payment-rule-grid,
+    .shipping-rate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .payment-rule-card,
+    .shipping-rate-card {
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+      padding: 14px 12px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .payment-rule-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-tint);
+      border: 1px solid #f1dfc7;
+      color: var(--accent-strong);
+      margin-bottom: 10px;
+    }
+
+    .payment-rule-card strong,
+    .shipping-rate-card strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .payment-rule-card p,
+    .shipping-rate-card p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .shipping-price {
+      display: block;
+      margin-top: 8px;
+      color: var(--accent-deep);
+      font-size: 19px;
+      font-weight: 850;
+    }
+
+    .vip-discount-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .vip-discount-item {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      padding: 10px 6px;
+      text-align: center;
+    }
+
+    .vip-discount-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .vip-discount-item strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .calculator-card {
+      border: 1px solid #efd8ba;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fffaf4 0%, #fff 100%);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .calculator-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .calculator-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .calculator-field input,
+    .calculator-field select {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 11px;
+      outline: none;
+    }
+
+    .calculator-field input:focus,
+    .calculator-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .calculator-result {
+      margin-top: 14px;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .calculator-result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 13px;
+      border-top: 1px solid #f2f2f2;
+      font-size: 12px;
+    }
+
+    .calculator-result-row:first-child {
+      border-top: 0;
+    }
+
+    .calculator-result-row span {
+      color: var(--muted);
+    }
+
+    .calculator-result-row strong {
+      font-weight: 800;
+    }
+
+    .calculator-total {
+      background: var(--surface-tint);
+    }
+
+    .calculator-total strong {
+      color: var(--accent-deep);
+      font-size: 19px;
+    }
+
+    .pricing-footnote {
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .payment-rule-grid,
+      .shipping-rate-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -1570,51 +1851,166 @@
     <section id="page-pricing" class="page">
       <div class="page-title">
         <h1>價目表</h1>
-        <p>代購、集運與費用試算集中在這裡。</p>
+        <p>即時匯率、代購手續費、會員折扣與國際運費。</p>
       </div>
 
-      <div class="price-intro">
-        <strong>費用資訊會以後台設定為準</strong>
-        <p>
-          目前先建立操作入口。之後會接上代購匯率、代付匯率、手續費、國際運費與 VIP 折扣。
-        </p>
+      <div class="pricing-rate-grid">
+        <div class="pricing-rate-card">
+          <span>代購定價匯率</span>
+          <strong id="pricingPurchaseRate">—</strong>
+          <small>一般代購訂單使用</small>
+        </div>
+        <div class="pricing-rate-card">
+          <span>代付定價匯率</span>
+          <strong id="pricingPaymentRate">—</strong>
+          <small>代付訂單使用</small>
+        </div>
       </div>
 
-      <div class="menu-list">
-        <button class="menu-row" type="button" data-action="purchase-price">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 11H7L6 8Z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">代購費用</span>
-            <span class="row-desc">匯率、手續費與平台相關費用</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="forward-price">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">集運費用</span>
-            <span class="row-desc">重量級距、宅配與超材費用</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
-
-        <button class="menu-row" type="button" data-action="calculator">
-          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></span>
-          <span class="row-content">
-            <span class="row-title">費用試算</span>
-            <span class="row-desc">代購、代付、集運快速估算</span>
-          </span>
-          <span class="chevron">›</span>
-        </button>
+      <div class="section-head" id="purchasePricingSection">
+        <h2>代購手續費</h2>
+        <span class="section-note">人民幣金額級距</span>
       </div>
 
-      <div style="height:12px"></div>
+      <div class="pricing-panel">
+        <div class="pricing-panel-head">
+          <strong>一般手續費</strong>
+          <span>銀行轉帳依一般手續費計算；餘額扣款才適用 VIP 折扣。</span>
+        </div>
+        <table class="fee-table">
+          <thead>
+            <tr><th>人民幣金額</th><th>手續費</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1–499 RMB</td><td>NT$30</td></tr>
+            <tr><td>500–999 RMB</td><td>NT$50</td></tr>
+            <tr><td>1000–1499 RMB</td><td>NT$100</td></tr>
+            <tr><td>1500–1999 RMB</td><td>NT$150</td></tr>
+            <tr><td>2000 RMB 以上</td><td>每滿 500 RMB + NT$50</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <div class="coming-note">
-        這一版只建立價目表入口，不先寫死費率。等 UI 確認後，再接你後台實際的匯率與收費規則。
+      <div class="section-head">
+        <h2>客戶付款方式</h2>
+        <span class="section-note">影響手續費</span>
+      </div>
+
+      <div class="payment-rule-grid">
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h18"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8"/><path d="M2 20h20M12 3l9 5H3l9-5Z"/></svg>
+          </div>
+          <strong>銀行轉帳</strong>
+          <p>依一般手續費計算，不套用 VIP 折扣。</p>
+        </div>
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h3"/></svg>
+          </div>
+          <strong>餘額扣款</strong>
+          <p>依會員等級套用 VIP 手續費折扣。</p>
+        </div>
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h11v10H4z"/><path d="M15 10h3l3 3v4h-6z"/><circle cx="8" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+          </div>
+          <strong>貨到付款</strong>
+          <p>固定手續費 NT$60，不另外套用會員折扣。</p>
+        </div>
+      </div>
+
+      <div class="vip-discount-row">
+        <div class="vip-discount-item"><span>一般會員</span><strong>原價</strong></div>
+        <div class="vip-discount-item"><span>VIP1</span><strong>9 折</strong></div>
+        <div class="vip-discount-item"><span>VIP2</span><strong>85 折</strong></div>
+        <div class="vip-discount-item"><span>VIP3</span><strong>8 折</strong></div>
+      </div>
+
+      <div class="section-head" id="forwardPricingSection">
+        <h2>國際運費</h2>
+        <span class="section-note">依後台目前規則</span>
+      </div>
+
+      <div class="shipping-rate-grid">
+        <div class="shipping-rate-card">
+          <strong>集運包裹</strong>
+          <span class="shipping-price">NT$90 / kg</span>
+          <p>0.5 kg 為一個計費級距，最低以 1 kg 計費。</p>
+        </div>
+        <div class="shipping-rate-card">
+          <strong>代購平台包裹</strong>
+          <span class="shipping-price">NT$70 / kg</span>
+          <p>0.5 kg 為一個計費級距，最低以 0.5 kg 計費。</p>
+        </div>
+        <div class="shipping-rate-card">
+          <strong>重量計算</strong>
+          <span class="shipping-price">0.5 kg 級距</span>
+          <p>同一客戶依集運／代購兩類分開合併重量後向上進位。</p>
+        </div>
+      </div>
+
+      <div class="section-head" id="pricingCalculatorSection">
+        <h2>費用試算</h2>
+        <span class="section-note">即時計算</span>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calculator-grid">
+          <div class="calculator-field">
+            <label for="calcOrderType">訂單類型</label>
+            <select id="calcOrderType">
+              <option value="purchase">代購</option>
+              <option value="payment">代付</option>
+            </select>
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcAmount">人民幣金額</label>
+            <input id="calcAmount" type="number" min="0" step="0.01" placeholder="例如 399">
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcCustomerPayment">客戶付款方式</label>
+            <select id="calcCustomerPayment">
+              <option value="bank">銀行轉帳</option>
+              <option value="balance">餘額扣款</option>
+              <option value="cod">貨到付款</option>
+            </select>
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcMemberLevel">會員等級</label>
+            <select id="calcMemberLevel">
+              <option value="normal">一般會員</option>
+              <option value="vip1">VIP1</option>
+              <option value="vip2">VIP2</option>
+              <option value="vip3">VIP3</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calculator-result">
+          <div class="calculator-result-row">
+            <span>適用匯率</span>
+            <strong id="calcRateResult">—</strong>
+          </div>
+          <div class="calculator-result-row">
+            <span>本單手續費</span>
+            <strong id="calcFeeResult">NT$0</strong>
+          </div>
+          <div class="calculator-result-row calculator-total">
+            <span>預估應收台幣</span>
+            <strong id="calcTotalResult">NT$0</strong>
+          </div>
+        </div>
+
+        <div class="pricing-footnote">
+          試算金額依目前公開匯率與後台手續費規則估算；實際訂單仍以系統建立時的匯率與訂單資料為準。
+        </div>
       </div>
     </section>
+
 
     <!-- ==================== 會員中心 ==================== -->
     <section id="page-member" class="page">
@@ -1867,6 +2263,9 @@
   </nav>
 
   <script>
+    let publicPurchaseRate = null;
+    let publicPaymentRate = null;
+
     // =========================================================
     // 橘貓代購 LIFF V2 - STEP 1
     // UI 骨架 + 保留既有 LIFF / 會員綁定 / 訂單 API
@@ -2014,6 +2413,85 @@
       ];
     }
 
+
+    // ---------- 價目表試算 ----------
+    function roundHalfEven(value) {
+      if (!Number.isFinite(value)) return 0;
+      const floor = Math.floor(value);
+      const fraction = value - floor;
+      if (fraction > 0.500000001) return floor + 1;
+      if (fraction < 0.499999999) return floor;
+      return floor % 2 === 0 ? floor : floor + 1;
+    }
+
+    function roundTwd(value) {
+      if (!Number.isFinite(value) || value <= 0) return 0;
+      return Math.floor(value + 0.5);
+    }
+
+    function calculateBaseServiceFee(amount) {
+      if (!Number.isFinite(amount) || amount <= 0) return 0;
+      if (amount < 500) return 30;
+      return Math.floor(amount / 500) * 50;
+    }
+
+    function updatePricingCalculator() {
+      const typeEl = document.getElementById("calcOrderType");
+      const amountEl = document.getElementById("calcAmount");
+      const paymentEl = document.getElementById("calcCustomerPayment");
+      const memberEl = document.getElementById("calcMemberLevel");
+
+      if (!typeEl || !amountEl || !paymentEl || !memberEl) return;
+
+      const amount = Number(amountEl.value || 0);
+      const rate =
+        typeEl.value === "payment"
+          ? publicPaymentRate
+          : publicPurchaseRate;
+
+      const baseFee = calculateBaseServiceFee(amount);
+      let fee = baseFee;
+
+      if (paymentEl.value === "cod") {
+        fee = amount > 0 ? 60 : 0;
+      } else if (paymentEl.value === "balance") {
+        const discounts = {
+          normal: 1,
+          vip1: 0.90,
+          vip2: 0.85,
+          vip3: 0.80
+        };
+        fee = roundHalfEven(baseFee * (discounts[memberEl.value] || 1));
+      }
+
+      const total =
+        rate !== null && Number.isFinite(rate)
+          ? roundTwd(amount * rate + fee)
+          : 0;
+
+      document.getElementById("calcRateResult").textContent =
+        rate !== null && Number.isFinite(rate)
+          ? rate.toFixed(2)
+          : "匯率讀取中";
+
+      document.getElementById("calcFeeResult").textContent =
+        `NT$${fee.toLocaleString("zh-TW")}`;
+
+      document.getElementById("calcTotalResult").textContent =
+        rate !== null && Number.isFinite(rate)
+          ? `NT$${total.toLocaleString("zh-TW")}`
+          : "—";
+    }
+
+    ["calcOrderType", "calcAmount", "calcCustomerPayment", "calcMemberLevel"]
+      .forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("input", updatePricingCalculator);
+          el.addEventListener("change", updatePricingCalculator);
+        }
+      });
+
     // ---------- 首頁公開設定 ----------
     async function loadHomeConfig() {
       try {
@@ -2040,14 +2518,42 @@
           result.exchange_rate !== ""
         ) {
           const rate = Number(result.exchange_rate);
+          publicPurchaseRate = Number.isFinite(rate) ? rate : null;
 
           exchangeRateEl.textContent =
             Number.isFinite(rate)
               ? rate.toFixed(2)
               : String(result.exchange_rate);
         } else {
+          publicPurchaseRate = null;
           exchangeRateEl.textContent = "未設定";
         }
+
+        if (
+          result.payment_exchange_rate !== null &&
+          result.payment_exchange_rate !== undefined &&
+          result.payment_exchange_rate !== ""
+        ) {
+          const paymentRate = Number(result.payment_exchange_rate);
+          publicPaymentRate = Number.isFinite(paymentRate) ? paymentRate : null;
+        } else {
+          publicPaymentRate = publicPurchaseRate;
+        }
+
+        const pricingPurchaseRate = document.getElementById("pricingPurchaseRate");
+        const pricingPaymentRate = document.getElementById("pricingPaymentRate");
+
+        if (pricingPurchaseRate) {
+          pricingPurchaseRate.textContent =
+            publicPurchaseRate !== null ? publicPurchaseRate.toFixed(2) : "未設定";
+        }
+
+        if (pricingPaymentRate) {
+          pricingPaymentRate.textContent =
+            publicPaymentRate !== null ? publicPaymentRate.toFixed(2) : "未設定";
+        }
+
+        updatePricingCalculator();
 
         if (result.orders_last_update_time) {
           const raw = String(result.orders_last_update_time);
@@ -2068,6 +2574,10 @@
 
         document.getElementById("exchangeRateValue").textContent = "讀取失敗";
         document.getElementById("updatedValue").textContent = "讀取失敗";
+        const pp = document.getElementById("pricingPurchaseRate");
+        const py = document.getElementById("pricingPaymentRate");
+        if (pp) pp.textContent = "讀取失敗";
+        if (py) py.textContent = "讀取失敗";
       }
     }
 
@@ -2513,15 +3023,32 @@
 
         case "calculator":
           showPage("pricing");
-          showToast("費用試算會在價目表頁製作");
+          setTimeout(() => {
+            document.getElementById("pricingCalculatorSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
           break;
 
         case "purchase-price":
-          showToast("代購費用頁會在下一階段製作");
+          showPage("pricing");
+          setTimeout(() => {
+            document.getElementById("purchasePricingSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
           break;
 
         case "forward-price":
-          showToast("集運費用頁會在下一階段製作");
+          showPage("pricing");
+          setTimeout(() => {
+            document.getElementById("forwardPricingSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
           break;
 
         case "announcements":
