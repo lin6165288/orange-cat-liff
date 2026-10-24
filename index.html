@@ -1734,6 +1734,186 @@
       line-height: 1.55;
     }
 
+  
+    /* ===== v4.5 貨到付款限制 / 會員中心 ===== */
+    .calc-warning {
+      display: none;
+      margin-top: 10px;
+      border: 1px solid #efcccc;
+      border-radius: 12px;
+      background: #fff6f6;
+      color: #a84c4c;
+      padding: 10px 12px;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .calc-warning.show {
+      display: block;
+    }
+
+    .calculator-total.unsupported strong {
+      color: #b94f4f;
+      font-size: 14px;
+    }
+
+    .member-wallet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .member-wallet-item {
+      min-width: 0;
+      border: 1px solid #efe6db;
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      padding: 11px 8px;
+      text-align: center;
+    }
+
+    .member-wallet-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .member-wallet-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .member-subpage-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .member-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .member-overview-item {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fafafa;
+      padding: 13px;
+    }
+
+    .member-overview-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .member-overview-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .member-benefit-note {
+      margin-top: 12px;
+      border: 1px solid #f1dfc7;
+      border-radius: 14px;
+      background: var(--surface-tint);
+      padding: 12px 13px;
+      color: var(--muted-deep);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .coupon-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .coupon-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .coupon-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .coupon-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .coupon-name {
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.4;
+    }
+
+    .coupon-status {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .coupon-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .coupon-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 12px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f1;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    @media (max-width: 420px) {
+      .member-wallet-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .member-wallet-item {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .member-wallet-item strong {
+        font-size: 12px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1950,7 +2130,7 @@
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h11v10H4z"/><path d="M15 10h3l3 3v4h-6z"/><circle cx="8" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
           </div>
           <strong>貨到付款</strong>
-          <p>固定手續費 NT$60，不另外套用會員折扣。</p>
+          <p>固定手續費 NT$60；限台幣 NT$500 以內訂單，不另外套用會員折扣。</p>
         </div>
       </div>
 
@@ -2032,6 +2212,10 @@
           </div>
         </div>
 
+        <div id="calcCodWarning" class="calc-warning">
+          此筆訂單超過 NT$500，不支援貨到付款，請改用銀行轉帳或 VIP 儲值金扣款。
+        </div>
+
         <div class="pricing-footnote">
           試算金額依目前公開匯率與後台手續費規則估算；實際訂單仍以系統建立時的匯率與訂單資料為準。
         </div>
@@ -2054,6 +2238,21 @@
             <div class="member-meta">
               <div id="memberName" class="member-name">會員</div>
               <div id="memberLevel" class="vip-pill">一般會員</div>
+            </div>
+          </div>
+
+          <div class="member-wallet-grid">
+            <div class="member-wallet-item">
+              <span>VIP 儲值金</span>
+              <strong id="memberBalanceValue">NT$—</strong>
+            </div>
+            <div class="member-wallet-item">
+              <span>會員點數</span>
+              <strong id="memberPointsValue">—</strong>
+            </div>
+            <div class="member-wallet-item">
+              <span>可用優惠券</span>
+              <strong id="memberCouponsValue">—</strong>
             </div>
           </div>
 
@@ -2148,7 +2347,7 @@
             <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M12 7v10"/></svg></span>
             <span class="row-content">
               <span class="row-title">我的優惠券</span>
-              <span class="row-desc">查看可使用、已使用與失效優惠</span>
+              <span id="couponMenuDesc" class="row-desc">查看目前可使用優惠券</span>
             </span>
             <span class="chevron">›</span>
           </button>
@@ -2157,7 +2356,7 @@
             <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 8 4 4 4-6 4 6 4-4-2 10H6L4 8Z"/></svg></span>
             <span class="row-content">
               <span class="row-title">VIP 專區</span>
-              <span class="row-desc">查看目前等級與會員權益</span>
+              <span id="vipMenuDesc" class="row-desc">查看目前等級、儲值金與會員權益</span>
             </span>
             <span class="chevron">›</span>
           </button>
@@ -2203,6 +2402,55 @@
             <div class="empty-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></div>
             <div class="empty-title">準備載入訂單</div>
             <div class="empty-desc">進入 LIFF 並完成會員綁定後即可讀取。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 優惠券子頁 -->
+      <div id="couponsSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="couponsBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>我的優惠券</h2>
+            <p>顯示目前仍可使用的優惠券。</p>
+          </div>
+        </div>
+
+        <div id="couponsInfo" class="coupon-list"></div>
+      </div>
+
+      <!-- VIP 子頁 -->
+      <div id="vipSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="vipBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>VIP 專區</h2>
+            <p>查看會員等級、VIP 儲值金與目前權益。</p>
+          </div>
+        </div>
+
+        <div class="member-subpage-card">
+          <div class="member-overview-grid">
+            <div class="member-overview-item">
+              <span>目前會員等級</span>
+              <strong id="vipDetailLevel">—</strong>
+            </div>
+            <div class="member-overview-item">
+              <span>VIP 儲值金</span>
+              <strong id="vipDetailBalance">NT$—</strong>
+            </div>
+            <div class="member-overview-item">
+              <span>會員點數</span>
+              <strong id="vipDetailPoints">—</strong>
+            </div>
+            <div class="member-overview-item">
+              <span>可用優惠券</span>
+              <strong id="vipDetailCoupons">—</strong>
+            </div>
+          </div>
+
+          <div id="vipBenefitText" class="member-benefit-note">
+            VIP 儲值金扣款時，手續費會依目前會員等級套用優惠。
           </div>
         </div>
       </div>
@@ -2325,8 +2573,15 @@
     const memberLevelEl = document.getElementById("memberLevel");
 
     const ordersSubpage = document.getElementById("ordersSubpage");
+    const couponsSubpage = document.getElementById("couponsSubpage");
+    const vipSubpage = document.getElementById("vipSubpage");
     const memberMainView = document.getElementById("memberMainView");
     const ordersInfo = document.getElementById("ordersInfo");
+    const couponsInfo = document.getElementById("couponsInfo");
+
+    const memberBalanceValue = document.getElementById("memberBalanceValue");
+    const memberPointsValue = document.getElementById("memberPointsValue");
+    const memberCouponsValue = document.getElementById("memberCouponsValue");
 
     // ---------- 工具 ----------
     function safeText(value, fallback = "—") {
@@ -2369,7 +2624,7 @@
       });
 
       if (pageName !== "member") {
-        closeOrdersSubpage(false);
+        closeMemberSubpages(false);
       }
 
       scrollTop();
@@ -2405,6 +2660,32 @@
       document.getElementById("memberStatProgress").textContent = "12";
       document.getElementById("memberStatArrived").textContent = "4";
       document.getElementById("memberStatReturnable").textContent = "3";
+
+      memberBalanceValue.textContent = "NT$3,000";
+      memberPointsValue.textContent = "18";
+      memberCouponsValue.textContent = "2";
+
+      currentMember = {
+        customer_name: "測試會員",
+        member_level: "VIP2",
+        balance_twd: 3000,
+        points_balance: 18,
+        available_coupon_count: 2,
+        coupons: [
+          {
+            member_coupon_id: 1,
+            coupon_name: "代購手續費折抵",
+            description: "測試優惠券",
+            expires_at: null
+          },
+          {
+            member_coupon_id: 2,
+            coupon_name: "會員活動優惠",
+            description: "測試優惠券",
+            expires_at: "2026-12-31"
+          }
+        ]
+      };
 
       allOrders = [
         {
@@ -2496,6 +2777,29 @@
           ? roundTwd(amount * rate + fee)
           : 0;
 
+      const codUnsupported =
+        paymentEl.value === "cod" &&
+        rate !== null &&
+        Number.isFinite(rate) &&
+        total > 500;
+
+      const codWarning = document.getElementById("calcCodWarning");
+      const totalRow = document
+        .getElementById("calcTotalResult")
+        ?.closest(".calculator-result-row");
+
+      if (codWarning) {
+        codWarning.classList.toggle("show", codUnsupported);
+        if (codUnsupported) {
+          codWarning.textContent =
+            `此筆試算為 NT$${total.toLocaleString("zh-TW")}，超過貨到付款 NT$500 上限，請改用銀行轉帳或 VIP 儲值金扣款。`;
+        }
+      }
+
+      if (totalRow) {
+        totalRow.classList.toggle("unsupported", codUnsupported);
+      }
+
       document.getElementById("calcRateResult").textContent =
         rate !== null && Number.isFinite(rate)
           ? rate.toFixed(2)
@@ -2505,9 +2809,13 @@
         `NT$${fee.toLocaleString("zh-TW")}`;
 
       document.getElementById("calcTotalResult").textContent =
-        rate !== null && Number.isFinite(rate)
-          ? `NT$${total.toLocaleString("zh-TW")}`
-          : "—";
+        codUnsupported
+          ? "不支援貨到付款"
+          : (
+              rate !== null && Number.isFinite(rate)
+                ? `NT$${total.toLocaleString("zh-TW")}`
+                : "—"
+            );
     }
 
     ["calcOrderType", "calcAmount", "calcCustomerPayment", "calcMemberLevel"]
@@ -2694,6 +3002,32 @@
       memberNameEl.textContent = customerName;
       memberLevelEl.textContent = memberLevel;
 
+      const balance = Number(member.balance_twd || 0);
+      const points = Number(member.points_balance || 0);
+      const couponCount = Number(member.available_coupon_count || 0);
+
+      memberBalanceValue.textContent =
+        `NT$${Math.round(balance).toLocaleString("zh-TW")}`;
+      memberPointsValue.textContent =
+        Math.round(points).toLocaleString("zh-TW");
+      memberCouponsValue.textContent =
+        couponCount.toLocaleString("zh-TW");
+
+      const couponMenuDesc = document.getElementById("couponMenuDesc");
+      const vipMenuDesc = document.getElementById("vipMenuDesc");
+
+      if (couponMenuDesc) {
+        couponMenuDesc.textContent =
+          couponCount > 0
+            ? `目前有 ${couponCount} 張可使用`
+            : "目前沒有可使用優惠券";
+      }
+
+      if (vipMenuDesc) {
+        vipMenuDesc.textContent =
+          `${memberLevel}｜VIP 儲值金 NT$${Math.round(balance).toLocaleString("zh-TW")}`;
+      }
+
       memberCard.classList.remove("hidden");
       bindArea.classList.add("hidden");
       homeBindBanner.classList.add("hidden");
@@ -2706,6 +3040,10 @@
       document.getElementById("homeStatProgress").textContent = "—";
       document.getElementById("homeStatArrived").textContent = "—";
       document.getElementById("homeStatReturnable").textContent = "—";
+
+      memberBalanceValue.textContent = "NT$—";
+      memberPointsValue.textContent = "—";
+      memberCouponsValue.textContent = "—";
 
       memberCard.classList.add("hidden");
       bindArea.classList.remove("hidden");
@@ -2854,6 +3192,7 @@
       }
 
       showPage("member");
+      closeMemberSubpages(false);
 
       memberMainView.style.display = "none";
       ordersSubpage.classList.add("active");
@@ -2874,16 +3213,30 @@
       scrollTop();
     }
 
-    function closeOrdersSubpage(shouldScroll = true) {
+    function closeMemberSubpages(shouldScroll = true) {
       ordersSubpage.classList.remove("active");
+      couponsSubpage.classList.remove("active");
+      vipSubpage.classList.remove("active");
       memberMainView.style.display = "";
 
       if (shouldScroll) scrollTop();
     }
 
+    function closeOrdersSubpage(shouldScroll = true) {
+      closeMemberSubpages(shouldScroll);
+    }
+
     document
       .getElementById("ordersBackButton")
-      .addEventListener("click", () => closeOrdersSubpage(true));
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("couponsBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("vipBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
 
     function setOrderFilter(mode) {
       document.querySelectorAll(".filter-chip").forEach(chip => {
@@ -3000,6 +3353,101 @@
       ordersInfo.innerHTML = html;
     }
 
+
+    function formatMoney(value) {
+      const n = Number(value || 0);
+      return `NT$${Math.round(n).toLocaleString("zh-TW")}`;
+    }
+
+    function renderCoupons() {
+      const coupons = Array.isArray(currentMember?.coupons)
+        ? currentMember.coupons
+        : [];
+
+      if (!coupons.length) {
+        couponsInfo.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/>
+                <path d="M12 7v10"/>
+              </svg>
+            </div>
+            <div class="empty-title">目前沒有可使用優惠券</div>
+            <div class="empty-desc">之後取得的新優惠券會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      couponsInfo.innerHTML = coupons.map(coupon => {
+        const expiresText = coupon.expires_at
+          ? `有效期限 ${formatDate(coupon.expires_at)}`
+          : "無指定期限";
+
+        const desc = safeText(
+          coupon.description,
+          safeText(coupon.issued_reason, "會員優惠券")
+        );
+
+        return `
+          <article class="coupon-card">
+            <div class="coupon-card-head">
+              <div>
+                <div class="coupon-name">${safeText(coupon.coupon_name, "會員優惠券")}</div>
+                <div class="coupon-desc">${desc}</div>
+              </div>
+              <span class="coupon-status">可使用</span>
+            </div>
+            <div class="coupon-meta">
+              <span>${expiresText}</span>
+              <span>券號 #${safeText(coupon.member_coupon_id, "—")}</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function openCoupons() {
+      showPage("member");
+      closeMemberSubpages(false);
+      memberMainView.style.display = "none";
+      couponsSubpage.classList.add("active");
+      renderCoupons();
+      scrollTop();
+    }
+
+    function renderVipPanel() {
+      const level = safeText(currentMember?.member_level, "一般會員");
+      const balance = Number(currentMember?.balance_twd || 0);
+      const points = Number(currentMember?.points_balance || 0);
+      const coupons = Number(currentMember?.available_coupon_count || 0);
+
+      document.getElementById("vipDetailLevel").textContent = level;
+      document.getElementById("vipDetailBalance").textContent = formatMoney(balance);
+      document.getElementById("vipDetailPoints").textContent =
+        Math.round(points).toLocaleString("zh-TW");
+      document.getElementById("vipDetailCoupons").textContent =
+        coupons.toLocaleString("zh-TW");
+
+      const discountText = {
+        "VIP1": "VIP 儲值金扣款時，代購手續費享 9 折。",
+        "VIP2": "VIP 儲值金扣款時，代購手續費享 85 折。",
+        "VIP3": "VIP 儲值金扣款時，代購手續費享 8 折。"
+      }[level] || "一般會員目前不套用 VIP 手續費折扣。";
+
+      document.getElementById("vipBenefitText").textContent = discountText;
+    }
+
+    function openVipPanel() {
+      showPage("member");
+      closeMemberSubpages(false);
+      memberMainView.style.display = "none";
+      vipSubpage.classList.add("active");
+      renderVipPanel();
+      scrollTop();
+    }
+
     // ---------- 快捷功能 ----------
     function requireBinding(actionName) {
       if (isPreviewMode) return true;
@@ -3040,12 +3488,12 @@
 
         case "coupons":
           if (!requireBinding("我的優惠券")) return;
-          showToast("優惠券功能會在後續步驟製作");
+          openCoupons();
           break;
 
         case "vip":
           if (!requireBinding("VIP 專區")) return;
-          showToast("VIP 專區會配合新的儲值規則製作");
+          openVipPanel();
           break;
 
         case "calculator":
