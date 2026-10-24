@@ -60,18 +60,6 @@ export default async function handler(req, res) {
         AND COALESCE(o.is_returned, 0) = 0
         AND COALESCE(o.order_status, '正常') <> '取消'
         AND COALESCE(o.is_arrived, 0) = 1
-        AND (
-          COALESCE(o.is_early_returned, 0) = 1
-          OR NOT EXISTS (
-            SELECT 1
-            FROM orders pending
-            WHERE LOWER(TRIM(pending.customer_name))
-                  = LOWER(TRIM(o.customer_name))
-              AND COALESCE(pending.is_arrived, 0) = 0
-              AND COALESCE(pending.is_returned, 0) = 0
-              AND COALESCE(pending.order_status, '正常') <> '取消'
-          )
-        )
         AND NOT EXISTS (
           SELECT 1
           FROM customer_return_request_items ri

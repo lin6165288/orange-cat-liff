@@ -70,7 +70,12 @@ export default async function handler(req, res) {
       )]
     : [];
 
-  const batchId = Number(req.body?.shipping_batch_id || 0);
+  const rawBatchId = req.body?.shipping_batch_id;
+  const batchId =
+    rawBatchId === null || rawBatchId === undefined || rawBatchId === ""
+      ? null
+      : Number(rawBatchId);
+
   const deliveryType =
     String(req.body?.delivery_type || "").trim();
 
@@ -88,10 +93,16 @@ export default async function handler(req, res) {
     });
   }
 
+  if (!["home_delivery", "shop_delivery"].includes(deliveryType)) {
+    return res.status(400).json({
+      success: false,
+      error: "請選擇有效寄送方式"
+    });
+  }
+
   if (
-    !Number.isInteger(batchId) ||
-    batchId <= 0 ||
-    !["home_delivery", "shop_delivery"].includes(deliveryType)
+    deliveryType === "shop_delivery" &&
+    (!Number.isInteger(batchId) || batchId <= 0)
   ) {
     return res.status(400).json({
       success: false,
@@ -105,29 +116,35 @@ export default async function handler(req, res) {
     conn = await mysql.createConnection(dbConfig());
     await conn.beginTransaction();
 
-    const [batchRows] = await conn.execute(
-      `
-      SELECT
-        batch_id,
-        batch_text,
-        delivery_type
-      FROM shipping_batches
-      WHERE batch_id = ?
-        AND is_active = 1
-      LIMIT 1
-      FOR UPDATE
-      `,
-      [batchId]
-    );
+    let selectedShippingBatch = "宅配｜每日皆可申請｜預計 4–6 天到貨";
 
-    if (!batchRows.length) {
-      throw new Error("所選船班目前已停用，請重新選擇");
-    }
+    if (deliveryType === "shop_delivery") {
+      const [batchRows] = await conn.execute(
+        `
+        SELECT
+          batch_id,
+          batch_text,
+          delivery_type
+        FROM shipping_batches
+        WHERE batch_id = ?
+          AND is_active = 1
+        LIMIT 1
+        FOR UPDATE
+        `,
+        [batchId]
+      );
 
-    const batch = batchRows[0];
+      if (!batchRows.length) {
+        throw new Error("所選船班目前已停用，請重新選擇");
+      }
 
-    if (batch.delivery_type !== deliveryType) {
-      throw new Error("船班與台灣端寄送方式不一致");
+      const batch = batchRows[0];
+
+      if (batch.delivery_type !== deliveryType) {
+        throw new Error("船班與台灣端寄送方式不一致");
+      }
+
+      selectedShippingBatch = batch.batch_text;
     }
 
     const placeholders =
@@ -146,18 +163,6 @@ export default async function handler(req, res) {
         AND COALESCE(o.is_returned, 0) = 0
         AND COALESCE(o.order_status, '正常') <> '取消'
         AND COALESCE(o.is_arrived, 0) = 1
-        AND (
-          COALESCE(o.is_early_returned, 0) = 1
-          OR NOT EXISTS (
-            SELECT 1
-            FROM orders pending
-            WHERE LOWER(TRIM(pending.customer_name))
-                  = LOWER(TRIM(o.customer_name))
-              AND COALESCE(pending.is_arrived, 0) = 0
-              AND COALESCE(pending.is_returned, 0) = 0
-              AND COALESCE(pending.order_status, '正常') <> '取消'
-          )
-        )
         AND NOT EXISTS (
           SELECT 1
           FROM customer_return_request_items ri
@@ -200,7 +205,7 @@ export default async function handler(req, res) {
       `,
       [
         customerName,
-        batch.batch_text,
+        selectedShippingBatch,
         deliveryLabel(deliveryType),
         orders.length,
         totalWeight.toFixed(3),
