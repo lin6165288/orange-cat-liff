@@ -1690,6 +1690,50 @@
       }
     }
 
+  
+    .pricing-formula-card {
+      border: 1px solid #efd8ba;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fffaf4 0%, #ffffff 100%);
+      padding: 18px 16px;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+
+    .pricing-formula-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .pricing-formula-main {
+      margin-top: 10px;
+      font-size: 17px;
+      line-height: 1.7;
+      font-weight: 850;
+      color: var(--text);
+    }
+
+    .pricing-formula-main span {
+      color: var(--accent-strong);
+      padding: 0 3px;
+    }
+
+    .pricing-formula-equal {
+      margin-top: 5px;
+      color: var(--accent-deep);
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .pricing-formula-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
   </style>
 </head>
 
@@ -1851,7 +1895,7 @@
     <section id="page-pricing" class="page">
       <div class="page-title">
         <h1>價目表</h1>
-        <p>即時匯率、代購手續費、會員折扣與國際運費。</p>
+        <p>即時匯率、客戶付款方式、國際運費與費用試算。</p>
       </div>
 
       <div class="pricing-rate-grid">
@@ -1868,27 +1912,17 @@
       </div>
 
       <div class="section-head" id="purchasePricingSection">
-        <h2>代購手續費</h2>
-        <span class="section-note">人民幣金額級距</span>
+        <h2>台幣金額計算</h2>
+        <span class="section-note">訂單計價方式</span>
       </div>
 
-      <div class="pricing-panel">
-        <div class="pricing-panel-head">
-          <strong>一般手續費</strong>
-          <span>銀行轉帳依一般手續費計算；餘額扣款才適用 VIP 折扣。</span>
+      <div class="pricing-formula-card">
+        <div class="pricing-formula-label">應付台幣</div>
+        <div class="pricing-formula-main">
+          商品人民幣金額 <span>×</span> 適用匯率 <span>＋</span> 手續費
         </div>
-        <table class="fee-table">
-          <thead>
-            <tr><th>人民幣金額</th><th>手續費</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1–499 RMB</td><td>NT$30</td></tr>
-            <tr><td>500–999 RMB</td><td>NT$50</td></tr>
-            <tr><td>1000–1499 RMB</td><td>NT$100</td></tr>
-            <tr><td>1500–1999 RMB</td><td>NT$150</td></tr>
-            <tr><td>2000 RMB 以上</td><td>每滿 500 RMB + NT$50</td></tr>
-          </tbody>
-        </table>
+        <div class="pricing-formula-equal">＝ 台幣金額</div>
+        <div class="pricing-formula-note">最後金額依系統計算結果四捨五入至個位數。</div>
       </div>
 
       <div class="section-head">
@@ -1908,8 +1942,8 @@
           <div class="payment-rule-icon">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h3"/></svg>
           </div>
-          <strong>餘額扣款</strong>
-          <p>依會員等級套用 VIP 手續費折扣。</p>
+          <strong>VIP 儲值金扣款</strong>
+          <p>使用 VIP 儲值金付款，依會員等級套用手續費優惠。</p>
         </div>
         <div class="payment-rule-card">
           <div class="payment-rule-icon">
@@ -1918,13 +1952,6 @@
           <strong>貨到付款</strong>
           <p>固定手續費 NT$60，不另外套用會員折扣。</p>
         </div>
-      </div>
-
-      <div class="vip-discount-row">
-        <div class="vip-discount-item"><span>一般會員</span><strong>原價</strong></div>
-        <div class="vip-discount-item"><span>VIP1</span><strong>9 折</strong></div>
-        <div class="vip-discount-item"><span>VIP2</span><strong>85 折</strong></div>
-        <div class="vip-discount-item"><span>VIP3</span><strong>8 折</strong></div>
       </div>
 
       <div class="section-head" id="forwardPricingSection">
@@ -1974,13 +2001,13 @@
             <label for="calcCustomerPayment">客戶付款方式</label>
             <select id="calcCustomerPayment">
               <option value="bank">銀行轉帳</option>
-              <option value="balance">餘額扣款</option>
+              <option value="balance">VIP 儲值金扣款</option>
               <option value="cod">貨到付款</option>
             </select>
           </div>
 
           <div class="calculator-field">
-            <label for="calcMemberLevel">會員等級</label>
+            <label for="calcMemberLevel">會員等級（VIP 儲值金扣款適用）</label>
             <select id="calcMemberLevel">
               <option value="normal">一般會員</option>
               <option value="vip1">VIP1</option>
