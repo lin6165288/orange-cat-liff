@@ -2653,6 +2653,130 @@
       line-height: 1.65;
     }
 
+  
+    /* ===== v4.17 系統問題回報 ===== */
+    .issue-report-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .issue-field {
+      display: block;
+      margin-bottom: 13px;
+    }
+
+    .issue-field > span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .issue-field select,
+    .issue-field input,
+    .issue-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      font: inherit;
+    }
+
+    .issue-field select,
+    .issue-field input {
+      height: 43px;
+    }
+
+    .issue-field textarea {
+      min-height: 170px;
+      padding: 12px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .issue-field select:focus,
+    .issue-field input:focus,
+    .issue-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.09);
+    }
+
+    .issue-helper {
+      margin-top: -5px;
+      margin-bottom: 13px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.6;
+    }
+
+    .issue-identity {
+      border: 1px solid #f1dfc7;
+      border-radius: 13px;
+      background: var(--surface-tint);
+      padding: 11px 12px;
+      margin-bottom: 13px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .issue-submit {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .issue-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .issue-success {
+      border: 1px solid #cfe7d5;
+      border-radius: 18px;
+      background: #f2faf4;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    .issue-success .success-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: #e5f5e9;
+      color: #3c7b4d;
+    }
+
+    .issue-success strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .issue-success p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
   </style>
 </head>
 
@@ -3501,6 +3625,84 @@
       </div>
     </section>
 
+    <!-- ==================== 系統問題回報 ==================== -->
+    <section id="page-bug-report" class="page">
+      <div class="sub-head">
+        <button id="issueReportBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>系統問題回報</h2>
+          <p>頁面異常、資料錯誤或操作問題都可以在這裡回報。</p>
+        </div>
+      </div>
+
+      <div id="issueReportFormCard" class="issue-report-card">
+        <label class="issue-field">
+          <span>問題類型</span>
+          <select id="issueType">
+            <option value="頁面無法操作">頁面無法操作</option>
+            <option value="資料顯示異常">資料顯示異常</option>
+            <option value="訂單資料問題">訂單資料問題</option>
+            <option value="付款或金額問題">付款或金額問題</option>
+            <option value="會員資料問題">會員資料問題</option>
+            <option value="其他">其他</option>
+          </select>
+        </label>
+
+        <label class="issue-field">
+          <span>發生頁面</span>
+          <select id="issuePageName">
+            <option value="首頁">首頁</option>
+            <option value="價目表">價目表</option>
+            <option value="會員中心">會員中心</option>
+            <option value="我的訂單">我的訂單</option>
+            <option value="運回申請">運回申請</option>
+            <option value="集運登記">集運登記</option>
+            <option value="優惠券 / VIP">優惠券 / VIP</option>
+            <option value="公告 / 優惠活動">公告 / 優惠活動</option>
+            <option value="FAQ / 交易須知">FAQ / 交易須知</option>
+            <option value="其他">其他</option>
+          </select>
+        </label>
+
+        <label class="issue-field">
+          <span>問題描述</span>
+          <textarea
+            id="issueDescription"
+            maxlength="2000"
+            placeholder="請描述你剛剛做了什麼、畫面出現什麼情況，以及你原本預期會看到什麼。"
+          ></textarea>
+        </label>
+
+        <div class="issue-helper">
+          建議盡量寫清楚操作步驟，方便更快找到問題。
+          <span id="issueCounter">0 / 2000</span>
+        </div>
+
+        <div id="issueIdentityNote" class="issue-identity">
+          如果目前已登入 LINE，回報會附上 LINE User ID；若已綁定會員，也會附上會員姓名，方便核對問題。
+        </div>
+
+        <button id="issueSubmitButton" class="issue-submit" type="button">
+          送出問題回報
+        </button>
+
+        <div id="issueStatus" class="form-status"></div>
+      </div>
+
+      <div id="issueSuccessCard" class="issue-success hidden">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="m5 12 4 4L19 6"/>
+          </svg>
+        </div>
+        <strong>問題回報已送出</strong>
+        <p id="issueSuccessText">已收到你的問題回報。</p>
+        <button id="issueAgainButton" class="primary-btn" type="button" style="margin-top:14px;">
+          再回報一個問題
+        </button>
+      </div>
+    </section>
+
     <!-- ==================== 更多 ==================== -->
     <section id="page-more" class="page">
       <div class="page-title">
@@ -3546,11 +3748,6 @@
         </button>
       </div>
 
-      <div style="height:12px"></div>
-
-      <div class="coming-note">
-        系統問題回報會在後續版本補上。
-      </div>
     </section>
   </main>
 
@@ -3706,6 +3903,22 @@
     document
       .getElementById("termsBackButton")
       .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("issueReportBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("issueDescription")
+      .addEventListener("input", updateIssueCounter);
+
+    document
+      .getElementById("issueSubmitButton")
+      .addEventListener("click", submitIssueReport);
+
+    document
+      .getElementById("issueAgainButton")
+      .addEventListener("click", () => resetIssueReportForm(true));
 
     document
       .getElementById("feedbackBackButton")
@@ -5286,6 +5499,131 @@
     }
 
 
+
+    const issuePageLabelMap = {
+      home: "首頁",
+      pricing: "價目表",
+      member: "會員中心",
+      orders: "我的訂單",
+      forwarding: "集運登記",
+      "return-request": "運回申請",
+      coupons: "優惠券 / VIP",
+      vip: "優惠券 / VIP",
+      content: "公告 / 優惠活動",
+      faq: "FAQ / 交易須知",
+      terms: "FAQ / 交易須知",
+      more: "其他"
+    };
+
+    function openIssueReportPage() {
+      const sourcePage = currentPage;
+      showPage("bug-report");
+
+      const select = document.getElementById("issuePageName");
+      const guessed = issuePageLabelMap[sourcePage] || "其他";
+
+      if (select) {
+        const hasOption = Array.from(select.options).some(
+          option => option.value === guessed
+        );
+        select.value = hasOption ? guessed : "其他";
+      }
+
+      resetIssueReportForm(false);
+      scrollTop();
+    }
+
+    function resetIssueReportForm(shouldFocus = true) {
+      const form = document.getElementById("issueReportFormCard");
+      const success = document.getElementById("issueSuccessCard");
+      const description = document.getElementById("issueDescription");
+      const status = document.getElementById("issueStatus");
+
+      form.classList.remove("hidden");
+      success.classList.add("hidden");
+      status.textContent = "";
+      description.value = "";
+      updateIssueCounter();
+
+      if (shouldFocus) {
+        setTimeout(() => description.focus(), 80);
+      }
+    }
+
+    function updateIssueCounter() {
+      const description = document.getElementById("issueDescription");
+      const counter = document.getElementById("issueCounter");
+
+      if (!description || !counter) return;
+      counter.textContent = `${description.value.length} / 2000`;
+    }
+
+    async function submitIssueReport() {
+      const issueType = document.getElementById("issueType").value;
+      const pageName = document.getElementById("issuePageName").value;
+      const descriptionEl = document.getElementById("issueDescription");
+      const button = document.getElementById("issueSubmitButton");
+      const status = document.getElementById("issueStatus");
+      const description = descriptionEl.value.trim();
+
+      if (description.length < 5) {
+        status.textContent = "❌ 請再描述詳細一點，至少輸入 5 個字。";
+        descriptionEl.focus();
+        return;
+      }
+
+      if (description.length > 2000) {
+        status.textContent = "❌ 問題描述最多 2000 個字。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-issue-report", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            issue_type: issueType,
+            page_name: pageName,
+            description,
+            customer_name: currentCustomerName || "",
+            line_user_id: lineUserId || "",
+            frontend_version: "v4.17",
+            page_path: window.location.pathname
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document
+          .getElementById("issueReportFormCard")
+          .classList.add("hidden");
+
+        document
+          .getElementById("issueSuccessCard")
+          .classList.remove("hidden");
+
+        document.getElementById("issueSuccessText").textContent =
+          `回報編號 #${result.report_id}，已送到橘貓後台。`;
+
+        showToast("系統問題回報已送出");
+      } catch (err) {
+        console.error("submit-issue-report error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
     function openFeedbackPage() {
       showPage("feedback");
       resetFeedbackForm(false);
@@ -5464,7 +5802,7 @@
           break;
 
         case "bug-report":
-          showToast("系統問題回報會在後續步驟製作");
+          openIssueReportPage();
           break;
 
         default:
