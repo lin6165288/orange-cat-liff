@@ -2512,154 +2512,97 @@
       line-height: 1.6;
     }
 
-    /* ===== v4.14 動態 FAQ / 交易須知 ===== */
-    .faq-shell {
+    /* ===== v4.16 單一展開式 FAQ ===== */
+    .faq-list {
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 12px;
-      align-items: start;
+      gap: 9px;
     }
 
-    .faq-question-panel,
-    .faq-answer-panel {
+    .faq-accordion-item {
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 15px;
       background: #fff;
       box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      transition: border-color .2s ease, box-shadow .2s ease;
     }
 
-    .faq-question-panel {
-      padding: 10px;
+    .faq-accordion-item.is-open {
+      border-color: #edc996;
+      box-shadow: 0 8px 22px rgba(88, 61, 28, .06);
     }
 
-    .faq-question-list {
-      display: grid;
-      gap: 7px;
-    }
-
-    .faq-question-btn {
+    .faq-question-row {
       width: 100%;
-      min-height: 48px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background: transparent;
+      min-height: 56px;
+      padding: 14px 15px;
+      border: 0;
+      background: #fff;
       color: var(--text);
-      padding: 11px 42px 11px 12px;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       text-align: left;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.55;
       cursor: pointer;
-      transition: .16s ease;
+      font: inherit;
     }
 
-    .faq-question-btn:hover {
+    .faq-question-row:hover {
+      background: #fffaf4;
+    }
+
+    .faq-question-text {
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.55;
+    }
+
+    .faq-question-icon {
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
       background: var(--surface-tint);
-    }
-
-    .faq-question-btn::after {
-      content: "›";
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      border-radius: 8px;
+      color: var(--accent-deep);
       display: grid;
       place-items: center;
-      background: #f7f7f7;
-      color: var(--muted-deep);
       font-size: 18px;
-      font-weight: 500;
+      line-height: 1;
+      transition: transform .22s ease, background .22s ease;
     }
 
-    .faq-question-btn.is-active {
-      border-color: #f0d3ad;
-      background: var(--surface-tint);
-      color: var(--accent-deep);
-    }
-
-    .faq-question-btn.is-active::after {
-      background: #fff;
-      color: var(--accent-deep);
+    .faq-accordion-item.is-open .faq-question-icon {
+      transform: rotate(45deg);
+      background: #fff0dc;
     }
 
     .faq-answer-panel {
-      min-height: 220px;
-      padding: 18px;
-      position: sticky;
-      top: 12px;
-    }
-
-    .faq-answer-placeholder {
-      min-height: 180px;
       display: grid;
-      place-items: center;
-      text-align: center;
-      color: var(--muted);
-      padding: 22px;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .24s ease;
     }
 
-    .faq-answer-placeholder strong {
-      display: block;
-      color: var(--text);
-      font-size: 14px;
-      margin-bottom: 5px;
+    .faq-accordion-item.is-open .faq-answer-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-answer-inner {
+      min-height: 0;
+      overflow: hidden;
     }
 
     .faq-answer-content {
-      animation: faqAnswerIn .18s ease;
-    }
-
-    .faq-answer-kicker {
-      display: inline-flex;
-      align-items: center;
-      height: 24px;
-      padding: 0 8px;
-      border-radius: 999px;
-      background: var(--surface-tint);
-      color: var(--accent-deep);
-      font-size: 9px;
-      font-weight: 850;
-      letter-spacing: .08em;
-    }
-
-    .faq-answer-title {
-      margin: 11px 0 0;
-      font-size: 16px;
-      font-weight: 900;
-      line-height: 1.5;
-    }
-
-    .faq-answer-body {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #f0f0f0;
+      margin: 0 14px 14px;
+      padding: 13px 14px;
+      border: 1px solid #f0ddc3;
+      border-radius: 12px;
+      background: #fff9f1;
       color: var(--muted-deep);
       font-size: 11px;
       line-height: 1.8;
       white-space: pre-line;
-    }
-
-    @keyframes faqAnswerIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 720px) {
-      .faq-shell {
-        grid-template-columns: 1fr;
-      }
-      .faq-answer-panel {
-        position: static;
-        min-height: 0;
-      }
-      .faq-answer-placeholder {
-        min-height: 120px;
-      }
     }
 
     .terms-list {
@@ -3487,23 +3430,11 @@
         <button id="faqBackButton" class="back-btn" type="button">‹</button>
         <div class="sub-title">
           <h2>常見問題 FAQ</h2>
-          <p>常見的代購、集運、付款與運回事項。</p>
+          <p>點選問題後，答案會在該題下方展開。</p>
         </div>
       </div>
 
-      <div class="faq-shell">
-        <div class="faq-question-panel">
-          <div id="faqQuestionList" class="faq-question-list"></div>
-        </div>
-        <div id="faqAnswerPanel" class="faq-answer-panel">
-          <div class="faq-answer-placeholder">
-            <div>
-              <strong>請選擇一個問題</strong>
-              點選左側問題後，答案會顯示在這裡。
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="faqList" class="faq-list"></div>
     </section>
 
     <!-- ==================== 交易須知 ==================== -->
@@ -3987,6 +3918,7 @@
 
     function renderFaqList() {
       const wrap = document.getElementById("faqList");
+      if (!wrap) return;
 
       if (!publicFaqs.length) {
         wrap.innerHTML = `
@@ -4024,10 +3956,14 @@
         document.querySelectorAll("#faqList .faq-accordion-item")
       );
 
+      const target = items[index];
+      const targetWasOpen =
+        target ? target.classList.contains("is-open") : false;
+
       items.forEach((item, itemIndex) => {
         const button = item.querySelector(".faq-question-row");
         const shouldOpen =
-          itemIndex === index && !item.classList.contains("is-open");
+          itemIndex === index && !targetWasOpen;
 
         item.classList.toggle("is-open", shouldOpen);
 
