@@ -1076,6 +1076,314 @@
       }
     }
 
+
+    /* ===== v4.1 Premium polish ===== */
+    body {
+      background:
+        radial-gradient(circle at 12% -4%, rgba(242,154,56,.08), transparent 24%),
+        radial-gradient(circle at 88% 8%, rgba(0,0,0,.025), transparent 20%),
+        var(--bg);
+    }
+
+    .app {
+      padding-top: 20px;
+    }
+
+    .topbar {
+      margin-bottom: 22px;
+    }
+
+    .brand-logo {
+      position: relative;
+      background: linear-gradient(180deg, #fff 0%, #fffaf4 100%);
+      border-color: #eadfce;
+      box-shadow: 0 8px 20px rgba(34,34,34,.045);
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(242,154,56,.12);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .brand-title {
+      letter-spacing: .04em;
+    }
+
+    .brand-subtitle {
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 10px;
+    }
+
+    .top-pill {
+      border-color: #e9e3dc;
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero-card {
+      padding: 22px 20px 18px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.98) 0%, rgba(255,250,244,.98) 100%);
+      border-color: #ebe5df;
+      box-shadow: 0 18px 38px rgba(28, 25, 23, .055);
+    }
+
+    .hero-card::before {
+      height: 3px;
+      background: linear-gradient(90deg, #f29a38 0%, #f08300 52%, #d9b78a 100%);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -82px;
+      top: -88px;
+      border-radius: 50%;
+      border: 1px solid rgba(242,154,56,.12);
+      box-shadow:
+        0 0 0 24px rgba(242,154,56,.035),
+        0 0 0 48px rgba(242,154,56,.018);
+      pointer-events: none;
+    }
+
+    .hero-brandline {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 11px;
+      color: #a17749;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+
+    .hero-kicker,
+    .hero-name,
+    .hero-helper,
+    .stats {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-kicker {
+      padding: 4px 8px;
+      background: #fff7ed;
+      color: #b36a15;
+      border: 1px solid #f2dfc6;
+    }
+
+    .hero-name {
+      margin-top: 11px;
+      font-size: 25px;
+      letter-spacing: .025em;
+    }
+
+    .hero-helper {
+      color: #85807a;
+    }
+
+    .stat-button {
+      position: relative;
+      overflow: hidden;
+      border-color: #ede6de;
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 5px 14px rgba(17,24,39,.028);
+    }
+
+    .stat-button::before {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242,154,56,.5), transparent);
+    }
+
+    .stat-value {
+      color: #222;
+      font-size: 21px;
+    }
+
+    .section-head {
+      margin-top: 26px;
+      align-items: flex-end;
+    }
+
+    .section-head-stacked > div:first-child {
+      min-width: 0;
+    }
+
+    .section-subtitle {
+      margin-top: 4px;
+      color: #aaa39c;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .section-head h2 {
+      letter-spacing: .02em;
+    }
+
+    .announcement {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border-color: #e9e5e0;
+      box-shadow: 0 9px 22px rgba(17,24,39,.035);
+    }
+
+    .announcement::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: linear-gradient(180deg, #f29a38, #f08300);
+    }
+
+    .announcement-icon,
+    .mini-icon,
+    .row-icon,
+    .info-emoji,
+    .member-avatar {
+      background: linear-gradient(180deg, #fffaf4 0%, #fff5e9 100%);
+      border-color: #efddc5;
+      color: #e98516;
+    }
+
+    .announcement-tag {
+      color: #d97809;
+      letter-spacing: .12em;
+    }
+
+    .announcement-title {
+      color: #252525;
+    }
+
+    .info-card {
+      position: relative;
+      overflow: hidden;
+      padding-top: 16px;
+      border-color: #e9e6e2;
+      box-shadow: 0 8px 20px rgba(17,24,39,.032);
+    }
+
+    .info-card::after {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242,154,56,.35), transparent);
+    }
+
+    .info-value {
+      color: #242424;
+      font-size: 13px;
+    }
+
+    .quick-grid {
+      gap: 11px;
+    }
+
+    .quick-btn {
+      position: relative;
+      min-height: 98px;
+      border-color: #e9e6e2;
+      box-shadow: 0 8px 20px rgba(17,24,39,.032);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .quick-btn:hover {
+      border-color: #e7d3b7;
+      box-shadow: 0 11px 24px rgba(17,24,39,.05);
+    }
+
+    .quick-btn .mini-icon {
+      transition: transform .16s ease;
+    }
+
+    .quick-btn:hover .mini-icon {
+      transform: translateY(-1px);
+    }
+
+    .promo-card {
+      background:
+        radial-gradient(circle at 92% 10%, rgba(242,154,56,.09), transparent 26%),
+        linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
+      border-color: #eadfce;
+    }
+
+    .member-card {
+      border-color: #e9e5e0;
+      box-shadow: 0 16px 32px rgba(17,24,39,.045);
+    }
+
+    .menu-row {
+      border-color: #e9e6e2;
+      box-shadow: 0 7px 18px rgba(17,24,39,.028);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .menu-row:hover {
+      border-color: #e7d3b7;
+      box-shadow: 0 10px 22px rgba(17,24,39,.045);
+    }
+
+    .bottom-nav-shell {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+
+    .bottom-nav {
+      border-color: #e5e2df;
+      border-radius: 20px;
+      padding: 6px;
+      box-shadow: 0 12px 34px rgba(17,24,39,.09);
+    }
+
+    .nav-btn {
+      min-height: 52px;
+      border-radius: 14px;
+      transition: background .16s ease, color .16s ease, transform .16s ease;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(180deg, #fff4e6 0%, #ffedda 100%);
+      color: #df7d0c;
+      box-shadow: inset 0 0 0 1px rgba(242,154,56,.08);
+    }
+
+    .nav-btn.active .nav-icon {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 420px) {
+      .hero-card {
+        padding: 20px 16px 16px;
+      }
+
+      .hero-brandline {
+        font-size: 8px;
+        letter-spacing: .13em;
+      }
+
+      .section-head {
+        margin-top: 23px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1097,6 +1405,7 @@
     <!-- ==================== 首頁 ==================== -->
     <section id="page-home" class="page active">
       <div class="hero-card">
+        <div class="hero-brandline">ORANGE CAT · MEMBER SPACE</div>
         <div class="hero-kicker">歡迎回來</div>
         <div id="heroName" class="hero-name">正在載入...</div>
         <div id="heroHelper" class="hero-helper">正在確認會員狀態</div>
@@ -1127,8 +1436,11 @@
         <button id="goBindButton" class="inline-btn" type="button">立即綁定</button>
       </div>
 
-      <div class="section-head">
-        <h2>重要公告</h2>
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>重要公告</h2>
+          <div class="section-subtitle">物流、匯率與活動更新</div>
+        </div>
         <span class="section-note">最新消息</span>
       </div>
 
@@ -1144,8 +1456,11 @@
         <div class="chevron">›</div>
       </button>
 
-      <div class="section-head">
-        <h2>今日資訊</h2>
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>今日資訊</h2>
+          <div class="section-subtitle">目前服務狀態</div>
+        </div>
         <span class="section-note">即時資訊</span>
       </div>
 
@@ -1169,8 +1484,11 @@
         </div>
       </div>
 
-      <div class="section-head">
-        <h2>快速功能</h2>
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>快速功能</h2>
+          <div class="section-subtitle">常用服務集中在這裡</div>
+        </div>
         <span class="section-note">常用服務</span>
       </div>
 
