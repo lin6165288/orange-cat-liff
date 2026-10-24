@@ -1914,6 +1914,250 @@
       }
     }
 
+  
+    /* ===== v4.6 運回申請 ===== */
+    .return-flow-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .return-step-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .return-step-no {
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .return-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 13px;
+    }
+
+    .return-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .return-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .return-field select {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 11px;
+      outline: none;
+    }
+
+    .return-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .return-order-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 13px;
+    }
+
+    .return-order-card {
+      position: relative;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 13px 13px 13px 43px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .return-order-card:has(input:checked) {
+      border-color: #efc792;
+      background: #fffaf4;
+      box-shadow: 0 0 0 2px rgba(242,154,56,.06);
+    }
+
+    .return-order-card input {
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--accent);
+    }
+
+    .return-order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .return-order-platform {
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .return-order-date {
+      color: var(--muted);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .return-order-meta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .return-order-track {
+      overflow-wrap: anywhere;
+    }
+
+    .return-order-weight {
+      color: var(--text);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .return-summary {
+      margin-top: 13px;
+      border: 1px solid #f1dfc7;
+      border-radius: 15px;
+      background: var(--surface-tint);
+      overflow: hidden;
+    }
+
+    .return-summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(239,216,186,.65);
+      font-size: 11px;
+    }
+
+    .return-summary-row:first-child {
+      border-top: 0;
+    }
+
+    .return-summary-row span {
+      color: var(--muted);
+    }
+
+    .return-summary-row strong {
+      font-weight: 850;
+    }
+
+    .return-summary-row.total strong {
+      color: var(--accent-deep);
+      font-size: 16px;
+    }
+
+    .return-submit {
+      width: 100%;
+      margin-top: 13px;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .return-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .return-help {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .pending-request-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .pending-request-card {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+      padding: 12px 13px;
+    }
+
+    .pending-request-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pending-request-head strong {
+      font-size: 12px;
+    }
+
+    .pending-request-status {
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #fff4df;
+      color: #a86913;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .pending-request-meta {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .return-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -1948,7 +2192,7 @@
 
           <button class="stat-button" type="button" data-action="orders-arrived">
             <span id="homeStatArrived" class="stat-value">—</span>
-            <span class="stat-label">已到貨</span>
+            <span class="stat-label">已到倉</span>
           </button>
 
           <button class="stat-button" type="button" data-action="return-request">
@@ -2263,7 +2507,7 @@
             </div>
             <div class="member-stat">
               <strong id="memberStatArrived">—</strong>
-              <span>已到貨</span>
+              <span>已到倉</span>
             </div>
             <div class="member-stat">
               <strong id="memberStatReturnable">—</strong>
@@ -2313,7 +2557,7 @@
             <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
             <span class="row-content">
               <span class="row-title">運回申請</span>
-              <span class="row-desc">選擇已到貨包裹申請寄回台灣</span>
+              <span class="row-desc">選擇已到倉包裹申請寄回台灣</span>
             </span>
             <span class="chevron">›</span>
           </button>
@@ -2393,7 +2637,7 @@
 
         <div class="filter-row">
           <button class="filter-chip active" type="button" data-filter="unreturned">未運回</button>
-          <button class="filter-chip" type="button" data-filter="arrived">已到貨</button>
+          <button class="filter-chip" type="button" data-filter="arrived">已到倉</button>
           <button class="filter-chip" type="button" data-filter="all">全部</button>
         </div>
 
@@ -2402,6 +2646,112 @@
             <div class="empty-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></div>
             <div class="empty-title">準備載入訂單</div>
             <div class="empty-desc">進入 LIFF 並完成會員綁定後即可讀取。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 運回申請子頁 -->
+      <div id="returnRequestSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="returnRequestBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>運回申請</h2>
+            <p>選擇可運回包裹與近期船班。</p>
+          </div>
+        </div>
+
+        <div id="returnRequestLoading" class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </div>
+          <div class="empty-title">正在讀取可運回包裹</div>
+          <div class="empty-desc">請稍候。</div>
+        </div>
+
+        <div id="returnRequestContent" class="hidden">
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">1</span>
+              選擇台灣端寄送與船班
+            </div>
+
+            <div class="return-form-grid">
+              <div class="return-field">
+                <label for="returnDeliveryMethod">台灣端寄送</label>
+                <select id="returnDeliveryMethod">
+                  <option value="home_delivery">宅配</option>
+                  <option value="shop_delivery">賣貨便</option>
+                </select>
+              </div>
+
+              <div class="return-field">
+                <label for="returnShippingBatch">近期船班</label>
+                <select id="returnShippingBatch"></select>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">2</span>
+              選擇要運回的包裹
+            </div>
+
+            <div id="returnOrdersList" class="return-order-list"></div>
+
+            <div id="returnNoOrders" class="empty-state hidden" style="margin-top:12px;">
+              <div class="empty-title">目前沒有可申請運回的包裹</div>
+              <div class="empty-desc">
+                尚未全部到倉的訂單，除非已標記提前運回，暫時不會列入。
+              </div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">3</span>
+              確認申請
+            </div>
+
+            <div class="return-summary">
+              <div class="return-summary-row">
+                <span>已選包裹</span>
+                <strong id="returnSelectedCount">0 件</strong>
+              </div>
+              <div class="return-summary-row">
+                <span>實際重量</span>
+                <strong id="returnSelectedWeight">0.00 kg</strong>
+              </div>
+              <div class="return-summary-row total">
+                <span>預估國際運費</span>
+                <strong id="returnEstimatedFee">NT$0</strong>
+              </div>
+            </div>
+
+            <button id="returnSubmitButton" class="return-submit" type="button" disabled>
+              送出運回申請
+            </button>
+
+            <div class="return-help">
+              預估運費依目前後台計費規則計算；未記重的包裹不預估運費，實際金額仍以最終出貨資料為準。
+            </div>
+
+            <div id="returnSubmitStatus" class="form-status"></div>
+          </div>
+
+          <div id="pendingReturnSection" class="hidden">
+            <div class="section-head">
+              <h2>待處理申請</h2>
+              <span class="section-note">已送出</span>
+            </div>
+            <div id="pendingReturnList" class="pending-request-list"></div>
           </div>
         </div>
       </div>
@@ -2573,8 +2923,15 @@
     const memberLevelEl = document.getElementById("memberLevel");
 
     const ordersSubpage = document.getElementById("ordersSubpage");
+    const returnRequestSubpage = document.getElementById("returnRequestSubpage");
     const couponsSubpage = document.getElementById("couponsSubpage");
     const vipSubpage = document.getElementById("vipSubpage");
+
+    let returnOptions = {
+      batches: [],
+      orders: [],
+      pending_requests: []
+    };
     const memberMainView = document.getElementById("memberMainView");
     const ordersInfo = document.getElementById("ordersInfo");
     const couponsInfo = document.getElementById("couponsInfo");
@@ -2890,6 +3247,14 @@
 
         updatePricingCalculator();
 
+        const shippingEl = document.getElementById("shippingValue");
+        if (shippingEl) {
+          shippingEl.textContent =
+            result.shipping_value
+              ? String(result.shipping_value)
+              : "未設定";
+        }
+
         if (result.orders_last_update_time) {
           const raw = String(result.orders_last_update_time);
 
@@ -2909,6 +3274,7 @@
 
         document.getElementById("exchangeRateValue").textContent = "讀取失敗";
         document.getElementById("updatedValue").textContent = "讀取失敗";
+        document.getElementById("shippingValue").textContent = "讀取失敗";
         const pp = document.getElementById("pricingPurchaseRate");
         const py = document.getElementById("pricingPaymentRate");
         if (pp) pp.textContent = "讀取失敗";
@@ -3098,6 +3464,18 @@
     }
 
     document
+      .getElementById("returnDeliveryMethod")
+      .addEventListener("change", renderReturnBatchOptions);
+
+    document
+      .getElementById("returnShippingBatch")
+      .addEventListener("change", updateReturnSummary);
+
+    document
+      .getElementById("returnSubmitButton")
+      .addEventListener("click", submitReturnRequest);
+
+    document
       .getElementById("bindButton")
       .addEventListener("click", bindLine);
 
@@ -3162,7 +3540,7 @@
       );
 
       // 目前資料庫尚無獨立「已申請運回」欄位，
-      // 第一版暫以「已到貨且未運回」視為可運回。
+      // 第一版暫以「已到倉且未運回」視為可運回。
       const returnable = arrived;
 
       return {
@@ -3215,6 +3593,7 @@
 
     function closeMemberSubpages(shouldScroll = true) {
       ordersSubpage.classList.remove("active");
+      returnRequestSubpage.classList.remove("active");
       couponsSubpage.classList.remove("active");
       vipSubpage.classList.remove("active");
       memberMainView.style.display = "";
@@ -3228,6 +3607,10 @@
 
     document
       .getElementById("ordersBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("returnRequestBackButton")
       .addEventListener("click", () => closeMemberSubpages(true));
 
     document
@@ -3305,7 +3688,7 @@
         if (returned) {
           statusBadge = `<span class="badge gray">已運回</span>`;
         } else if (arrived) {
-          statusBadge = `<span class="badge green">已到貨・可運回</span>`;
+          statusBadge = `<span class="badge green">已到倉・可運回</span>`;
         } else {
           statusBadge = `<span class="badge orange">運送中</span>`;
         }
@@ -3338,7 +3721,7 @@
 
               <div class="order-field">
                 <div class="order-field-label">到貨狀態</div>
-                <div class="order-field-value">${arrived ? "已到貨" : "尚未到貨"}</div>
+                <div class="order-field-value">${arrived ? "已到倉" : "尚未到貨"}</div>
               </div>
             </div>
 
@@ -3353,6 +3736,281 @@
       ordersInfo.innerHTML = html;
     }
 
+
+
+    function returnDeliveryLabel(value) {
+      return value === "shop_delivery" ? "賣貨便" : "宅配";
+    }
+
+    function calculateReturnFee(selectedOrders) {
+      const forwardingWeight = selectedOrders
+        .filter(order => order.platform === "集運")
+        .reduce((sum, order) => sum + Number(order.weight_kg || 0), 0);
+
+      const purchaseWeight = selectedOrders
+        .filter(order => order.platform !== "集運")
+        .reduce((sum, order) => sum + Number(order.weight_kg || 0), 0);
+
+      const billWeight = (weight, minWeight) => {
+        if (!Number.isFinite(weight) || weight <= 0) return 0;
+        return Math.max(minWeight, Math.ceil(weight / 0.5) * 0.5);
+      };
+
+      const forwardingBill = billWeight(forwardingWeight, 1);
+      const purchaseBill = billWeight(purchaseWeight, 0.5);
+
+      return Math.round(forwardingBill * 90 + purchaseBill * 70);
+    }
+
+    function filteredReturnBatches() {
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
+      return returnOptions.batches.filter(
+        batch => batch.delivery_type === deliveryType
+      );
+    }
+
+    function renderReturnBatchOptions() {
+      const select = document.getElementById("returnShippingBatch");
+      if (!select) return;
+
+      const batches = filteredReturnBatches();
+
+      if (!batches.length) {
+        select.innerHTML = `<option value="">目前沒有可選船班</option>`;
+        select.disabled = true;
+      } else {
+        select.disabled = false;
+        select.innerHTML = batches
+          .map(batch => `
+            <option value="${batch.batch_id}">
+              ${safeText(batch.batch_text, "未命名船班")}
+            </option>
+          `)
+          .join("");
+      }
+
+      updateReturnSummary();
+    }
+
+    function selectedReturnOrders() {
+      const selectedIds = Array.from(
+        document.querySelectorAll(
+          '#returnOrdersList input[type="checkbox"]:checked'
+        )
+      ).map(input => Number(input.value));
+
+      return returnOptions.orders.filter(
+        order => selectedIds.includes(Number(order.order_id))
+      );
+    }
+
+    function updateReturnSummary() {
+      const selected = selectedReturnOrders();
+      const count = selected.length;
+      const totalWeight = selected.reduce(
+        (sum, order) => sum + Number(order.weight_kg || 0),
+        0
+      );
+      const fee = calculateReturnFee(selected);
+
+      document.getElementById("returnSelectedCount").textContent =
+        `${count} 件`;
+      document.getElementById("returnSelectedWeight").textContent =
+        `${totalWeight.toFixed(2)} kg`;
+      document.getElementById("returnEstimatedFee").textContent =
+        `NT$${fee.toLocaleString("zh-TW")}`;
+
+      const batchId =
+        document.getElementById("returnShippingBatch")?.value || "";
+
+      const submit = document.getElementById("returnSubmitButton");
+      if (submit) {
+        submit.disabled = count === 0 || !batchId;
+      }
+    }
+
+    function renderReturnOrders() {
+      const list = document.getElementById("returnOrdersList");
+      const empty = document.getElementById("returnNoOrders");
+
+      if (!returnOptions.orders.length) {
+        list.innerHTML = "";
+        empty.classList.remove("hidden");
+        updateReturnSummary();
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      list.innerHTML = returnOptions.orders.map(order => `
+        <label class="return-order-card">
+          <input type="checkbox" value="${order.order_id}">
+          <div class="return-order-head">
+            <div class="return-order-platform">
+              ${safeText(order.platform, "未填平台")}
+              · #${safeText(order.order_id)}
+            </div>
+            <div class="return-order-date">
+              ${formatDate(order.order_time)}
+            </div>
+          </div>
+          <div class="return-order-meta">
+            <span class="return-order-track">
+              單號 ${safeText(order.tracking_number)}
+            </span>
+            <span class="return-order-weight">
+              ${Number(order.weight_kg || 0).toFixed(2)} kg
+            </span>
+          </div>
+        </label>
+      `).join("");
+
+      list
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach(input => input.addEventListener("change", updateReturnSummary));
+
+      updateReturnSummary();
+    }
+
+    function renderPendingReturnRequests() {
+      const section = document.getElementById("pendingReturnSection");
+      const list = document.getElementById("pendingReturnList");
+      const pending = Array.isArray(returnOptions.pending_requests)
+        ? returnOptions.pending_requests
+        : [];
+
+      if (!pending.length) {
+        section.classList.add("hidden");
+        list.innerHTML = "";
+        return;
+      }
+
+      section.classList.remove("hidden");
+      list.innerHTML = pending.map(req => `
+        <div class="pending-request-card">
+          <div class="pending-request-head">
+            <strong>申請 #${safeText(req.request_id)}</strong>
+            <span class="pending-request-status">待處理</span>
+          </div>
+          <div class="pending-request-meta">
+            ${safeText(req.selected_shipping_batch)}<br>
+            ${safeText(req.delivery_method)}
+            · ${Number(req.total_count || 0)} 件
+            · ${Number(req.total_weight || 0).toFixed(2)} kg
+            · NT$${Math.round(Number(req.estimated_fee || 0)).toLocaleString("zh-TW")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function loadReturnOptions() {
+      const loading = document.getElementById("returnRequestLoading");
+      const content = document.getElementById("returnRequestContent");
+      const status = document.getElementById("returnSubmitStatus");
+
+      loading.classList.remove("hidden");
+      content.classList.add("hidden");
+      status.textContent = "";
+
+      try {
+        const res = await fetch("/api/get-return-options", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "運回資料讀取失敗");
+        }
+
+        returnOptions = {
+          batches: Array.isArray(result.batches) ? result.batches : [],
+          orders: Array.isArray(result.orders) ? result.orders : [],
+          pending_requests: Array.isArray(result.pending_requests)
+            ? result.pending_requests
+            : []
+        };
+
+        renderReturnBatchOptions();
+        renderReturnOrders();
+        renderPendingReturnRequests();
+
+        loading.classList.add("hidden");
+        content.classList.remove("hidden");
+      } catch (err) {
+        console.error("get-return-options error:", err);
+        loading.innerHTML = `
+          <div class="empty-title">運回資料讀取失敗</div>
+          <div class="empty-desc">請稍後重新進入此頁。</div>
+        `;
+      }
+    }
+
+    async function openReturnRequest() {
+      showPage("member");
+      closeMemberSubpages(false);
+      memberMainView.style.display = "none";
+      returnRequestSubpage.classList.add("active");
+      scrollTop();
+      await loadReturnOptions();
+    }
+
+    async function submitReturnRequest() {
+      const selected = selectedReturnOrders();
+      const batchId = Number(
+        document.getElementById("returnShippingBatch")?.value || 0
+      );
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "";
+      const button = document.getElementById("returnSubmitButton");
+      const status = document.getElementById("returnSubmitStatus");
+
+      if (!selected.length || !batchId) return;
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-return-request", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName,
+            order_ids: selected.map(order => Number(order.order_id)),
+            shipping_batch_id: batchId,
+            delivery_type: deliveryType
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        status.textContent =
+          `✅ 申請 #${result.request_id} 已送出，預估國際運費 NT$${Math.round(
+            Number(result.estimated_fee || 0)
+          ).toLocaleString("zh-TW")}。`;
+
+        showToast("運回申請已送出");
+        await loadReturnOptions();
+      } catch (err) {
+        console.error("submit-return-request error:", err);
+        status.textContent = `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+        updateReturnSummary();
+      }
+    }
 
     function formatMoney(value) {
       const n = Number(value || 0);
@@ -3473,7 +4131,7 @@
 
         case "return-request":
           if (!requireBinding("運回申請")) return;
-          showToast("運回申請會在下一階段製作");
+          openReturnRequest();
           break;
 
         case "forward-register":
