@@ -2355,6 +2355,62 @@
       }
     }
 
+  
+    /* ===== v4.9 公告 / 優惠活動 ===== */
+    .content-list-wrap {
+      display: grid;
+      gap: 11px;
+    }
+
+    .content-list-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .content-list-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .content-list-tag {
+      color: var(--accent-strong);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .09em;
+    }
+
+    .content-list-title {
+      margin-top: 5px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .content-list-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .content-list-date {
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid #f1f1f1;
+      color: #aaa;
+      font-size: 9px;
+    }
+
   </style>
 </head>
 
@@ -2418,10 +2474,10 @@
       <button class="announcement" type="button" data-action="announcements">
         <div class="announcement-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a2 2 0 0 0 2 2h2l3 4h2l-1-4h2l7 3V6l-7 3H5a2 2 0 0 0-2 2Z"/></svg></div>
         <div class="announcement-main">
-          <div class="announcement-tag">NOTICE</div>
-          <div class="announcement-title">公告內容之後會與後台資料連動</div>
-          <div class="announcement-desc">
-            第一版先確認首頁版型與跳轉方式，下一階段再加入後台公告管理。
+          <div id="homeAnnouncementTag" class="announcement-tag">NOTICE</div>
+          <div id="homeAnnouncementTitle" class="announcement-title">目前沒有新公告</div>
+          <div id="homeAnnouncementDesc" class="announcement-desc">
+            有最新消息時會顯示在這裡。
           </div>
         </div>
         <div class="chevron">›</div>
@@ -2502,10 +2558,10 @@
 
       <button class="announcement promo-card" type="button" data-action="promotions">
         <div class="announcement-main">
-          <span class="promo-badge">PROMOTION</span>
-          <div class="promo-title">活動資訊會顯示在這裡</div>
-          <div class="promo-desc">
-            之後可放生日活動、優惠匯率、免代購費、抽獎等活動。
+          <span id="homePromotionTag" class="promo-badge">PROMOTION</span>
+          <div id="homePromotionTitle" class="promo-title">目前沒有進行中的優惠活動</div>
+          <div id="homePromotionDesc" class="promo-desc">
+            有新活動時會顯示在這裡。
           </div>
         </div>
         <div class="chevron">›</div>
@@ -3113,6 +3169,19 @@
       </div>
     </section>
 
+    <!-- ==================== 公告 / 活動列表 ==================== -->
+    <section id="page-content" class="page">
+      <div class="sub-head">
+        <button id="contentBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2 id="contentPageTitle">最新公告</h2>
+          <p id="contentPageSubtitle">橘貓代購最新消息</p>
+        </div>
+      </div>
+
+      <div id="contentListWrap" class="content-list-wrap"></div>
+    </section>
+
     <!-- ==================== 更多 ==================== -->
     <section id="page-more" class="page">
       <div class="page-title">
@@ -3197,6 +3266,8 @@
   <script>
     let publicPurchaseRate = null;
     let publicPaymentRate = null;
+    let publicAnnouncements = [];
+    let publicPromotions = [];
 
     // =========================================================
     // 橘貓代購 LIFF V2 - STEP 1
@@ -3302,6 +3373,10 @@
         showPage(btn.dataset.page);
       });
     });
+
+    document
+      .getElementById("contentBackButton")
+      .addEventListener("click", () => showPage("home"));
 
     // ---------- Preview UI 假資料 ----------
     function enterPreviewMode() {
@@ -3494,6 +3569,102 @@
         }
       });
 
+
+    function renderHomePublicContent() {
+      const announcement = publicAnnouncements[0] || null;
+      const promotion = publicPromotions[0] || null;
+
+      const aTag = document.getElementById("homeAnnouncementTag");
+      const aTitle = document.getElementById("homeAnnouncementTitle");
+      const aDesc = document.getElementById("homeAnnouncementDesc");
+
+      if (announcement) {
+        aTag.textContent = safeText(announcement.tag_label, "NOTICE");
+        aTitle.textContent = safeText(announcement.title, "重要公告");
+        aDesc.textContent = safeText(announcement.description, "");
+      } else {
+        aTag.textContent = "NOTICE";
+        aTitle.textContent = "目前沒有新公告";
+        aDesc.textContent = "有最新消息時會顯示在這裡。";
+      }
+
+      const pTag = document.getElementById("homePromotionTag");
+      const pTitle = document.getElementById("homePromotionTitle");
+      const pDesc = document.getElementById("homePromotionDesc");
+
+      if (promotion) {
+        pTag.textContent = safeText(promotion.tag_label, "PROMOTION");
+        pTitle.textContent = safeText(promotion.title, "優惠活動");
+        pDesc.textContent = safeText(promotion.description, "");
+      } else {
+        pTag.textContent = "PROMOTION";
+        pTitle.textContent = "目前沒有進行中的優惠活動";
+        pDesc.textContent = "有新活動時會顯示在這裡。";
+      }
+    }
+
+    function renderContentList(type) {
+      const list =
+        type === "promotion"
+          ? publicPromotions
+          : publicAnnouncements;
+
+      const title =
+        type === "promotion"
+          ? "優惠活動"
+          : "最新公告";
+
+      const subtitle =
+        type === "promotion"
+          ? "目前顯示中的會員優惠與活動"
+          : "物流、匯率與服務更新";
+
+      document.getElementById("contentPageTitle").textContent = title;
+      document.getElementById("contentPageSubtitle").textContent = subtitle;
+
+      const wrap = document.getElementById("contentListWrap");
+
+      if (!list.length) {
+        wrap.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">目前沒有${title}</div>
+            <div class="empty-desc">有新內容時會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = list.map(item => `
+        <article class="content-list-card">
+          <div class="content-list-tag">
+            ${escapeHtml(
+              safeText(
+                item.tag_label,
+                type === "promotion" ? "PROMOTION" : "NOTICE"
+              )
+            )}
+          </div>
+          <div class="content-list-title">
+            ${escapeHtml(safeText(item.title))}
+          </div>
+          ${
+            item.description
+              ? `<div class="content-list-desc">${escapeHtml(item.description)}</div>`
+              : ""
+          }
+          <div class="content-list-date">
+            更新 ${escapeHtml(formatDate(item.updated_at || item.created_at))}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function openPublicContent(type) {
+      showPage("content");
+      renderContentList(type);
+      scrollTop();
+    }
+
     // ---------- 首頁公開設定 ----------
     async function loadHomeConfig() {
       try {
@@ -3557,6 +3728,16 @@
 
         updatePricingCalculator();
 
+        publicAnnouncements = Array.isArray(result.announcements)
+          ? result.announcements
+          : [];
+
+        publicPromotions = Array.isArray(result.promotions)
+          ? result.promotions
+          : [];
+
+        renderHomePublicContent();
+
         const shippingEl = document.getElementById("shippingValue");
         if (shippingEl) {
           shippingEl.textContent =
@@ -3585,6 +3766,9 @@
         document.getElementById("exchangeRateValue").textContent = "讀取失敗";
         document.getElementById("updatedValue").textContent = "讀取失敗";
         document.getElementById("shippingValue").textContent = "讀取失敗";
+        publicAnnouncements = [];
+        publicPromotions = [];
+        renderHomePublicContent();
         const pp = document.getElementById("pricingPurchaseRate");
         const py = document.getElementById("pricingPaymentRate");
         if (pp) pp.textContent = "讀取失敗";
@@ -4752,11 +4936,11 @@
           break;
 
         case "announcements":
-          showToast("公告列表會在下一階段製作");
+          openPublicContent("announcement");
           break;
 
         case "promotions":
-          showToast("優惠活動頁會在下一階段製作");
+          openPublicContent("promotion");
           break;
 
         case "faq":
