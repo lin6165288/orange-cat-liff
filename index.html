@@ -2158,6 +2158,20 @@
       }
     }
 
+  
+    .return-static-info {
+      min-height: 44px;
+      border: 1px solid #f1dfc7;
+      border-radius: 11px;
+      background: var(--surface-tint);
+      color: var(--muted-deep);
+      padding: 11px 12px;
+      font-size: 11px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+    }
+
   </style>
 </head>
 
@@ -2656,7 +2670,7 @@
           <button id="returnRequestBackButton" class="back-btn" type="button">‹</button>
           <div class="sub-title">
             <h2>運回申請</h2>
-            <p>選擇可運回包裹與近期船班。</p>
+            <p>已到倉的包裹即可申請提前運回。</p>
           </div>
         </div>
 
@@ -2675,7 +2689,7 @@
           <div class="return-flow-card">
             <div class="return-step-title">
               <span class="return-step-no">1</span>
-              選擇台灣端寄送與船班
+              選擇台灣端寄送方式
             </div>
 
             <div class="return-form-grid">
@@ -2687,9 +2701,16 @@
                 </select>
               </div>
 
-              <div class="return-field">
+              <div id="returnBatchField" class="return-field hidden">
                 <label for="returnShippingBatch">近期船班</label>
                 <select id="returnShippingBatch"></select>
+              </div>
+
+              <div id="returnHomeInfo" class="return-field">
+                <label>宅配時效</label>
+                <div class="return-static-info">
+                  每天皆可申請｜預計 4–6 天到貨
+                </div>
               </div>
             </div>
           </div>
@@ -2707,7 +2728,7 @@
             <div id="returnNoOrders" class="empty-state hidden" style="margin-top:12px;">
               <div class="empty-title">目前沒有可申請運回的包裹</div>
               <div class="empty-desc">
-                尚未全部到倉的訂單，除非已標記提前運回，暫時不會列入。
+                只要包裹已到倉且尚未運回，即可在這裡申請提前運回。
               </div>
             </div>
           </div>
@@ -3773,7 +3794,24 @@
 
     function renderReturnBatchOptions() {
       const select = document.getElementById("returnShippingBatch");
-      if (!select) return;
+      const batchField = document.getElementById("returnBatchField");
+      const homeInfo = document.getElementById("returnHomeInfo");
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
+      if (!select || !batchField || !homeInfo) return;
+
+      if (deliveryType === "home_delivery") {
+        batchField.classList.add("hidden");
+        homeInfo.classList.remove("hidden");
+        select.innerHTML = `<option value="">宅配每日皆可申請</option>`;
+        select.disabled = true;
+        updateReturnSummary();
+        return;
+      }
+
+      batchField.classList.remove("hidden");
+      homeInfo.classList.add("hidden");
 
       const batches = filteredReturnBatches();
 
@@ -3822,12 +3860,18 @@
       document.getElementById("returnEstimatedFee").textContent =
         `NT$${fee.toLocaleString("zh-TW")}`;
 
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
       const batchId =
         document.getElementById("returnShippingBatch")?.value || "";
 
+      const hasValidShippingChoice =
+        deliveryType === "home_delivery" || Boolean(batchId);
+
       const submit = document.getElementById("returnSubmitButton");
       if (submit) {
-        submit.disabled = count === 0 || !batchId;
+        submit.disabled = count === 0 || !hasValidShippingChoice;
       }
     }
 
@@ -3965,15 +4009,19 @@
 
     async function submitReturnRequest() {
       const selected = selectedReturnOrders();
-      const batchId = Number(
-        document.getElementById("returnShippingBatch")?.value || 0
-      );
       const deliveryType =
         document.getElementById("returnDeliveryMethod")?.value || "";
+
+      const batchId =
+        deliveryType === "shop_delivery"
+          ? Number(document.getElementById("returnShippingBatch")?.value || 0)
+          : null;
+
       const button = document.getElementById("returnSubmitButton");
       const status = document.getElementById("returnSubmitStatus");
 
-      if (!selected.length || !batchId) return;
+      if (!selected.length) return;
+      if (deliveryType === "shop_delivery" && !batchId) return;
 
       button.disabled = true;
       status.textContent = "送出中...";
