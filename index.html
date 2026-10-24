@@ -2411,6 +2411,107 @@
       font-size: 9px;
     }
 
+  
+    /* ===== v4.11 匿名回饋 ===== */
+    .feedback-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .feedback-card textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1px solid var(--line-strong);
+      border-radius: 13px;
+      background: #fff;
+      color: var(--text);
+      padding: 13px 14px;
+      outline: none;
+      resize: vertical;
+      font: inherit;
+      line-height: 1.65;
+    }
+
+    .feedback-card textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .feedback-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .feedback-privacy {
+      margin-top: 12px;
+      border: 1px solid #f1dfc7;
+      border-radius: 14px;
+      background: var(--surface-tint);
+      padding: 11px 12px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .feedback-submit {
+      width: 100%;
+      height: 46px;
+      margin-top: 13px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .feedback-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .feedback-success-card {
+      border: 1px solid #cfe7d5;
+      border-radius: 18px;
+      background: #f2faf4;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    .feedback-success-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto;
+      border-radius: 15px;
+      background: #e5f5e9;
+      color: #3c7b4d;
+      display: grid;
+      place-items: center;
+    }
+
+    .feedback-success-card strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .feedback-success-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
   </style>
 </head>
 
@@ -3182,6 +3283,53 @@
       <div id="contentListWrap" class="content-list-wrap"></div>
     </section>
 
+    <!-- ==================== 匿名回饋 ==================== -->
+    <section id="page-feedback" class="page">
+      <div class="sub-head">
+        <button id="feedbackBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>匿名回饋</h2>
+          <p>留下建議、使用心得或希望改善的地方。</p>
+        </div>
+      </div>
+
+      <div id="feedbackFormCard" class="feedback-card">
+        <textarea
+          id="feedbackContent"
+          maxlength="2000"
+          placeholder="輸入回饋內容"
+        ></textarea>
+
+        <div class="feedback-meta-row">
+          <span>不需要登入或綁定會員</span>
+          <span id="feedbackCounter">0 / 2000</span>
+        </div>
+
+        <div class="feedback-privacy">
+          此表單不會把你的會員姓名、LINE User ID 或訂單資料寫入匿名回饋紀錄。
+        </div>
+
+        <button id="feedbackSubmitButton" class="feedback-submit" type="button">
+          送出匿名回饋
+        </button>
+
+        <div id="feedbackStatus" class="form-status"></div>
+      </div>
+
+      <div id="feedbackSuccessCard" class="feedback-success-card hidden">
+        <div class="feedback-success-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="m5 12 4 4L19 6"/>
+          </svg>
+        </div>
+        <strong>回饋已送出</strong>
+        <p>謝謝你的建議，橘貓會在後台查看。</p>
+        <button id="feedbackAgainButton" class="primary-btn" type="button" style="margin-top:14px;">
+          再留一則回饋
+        </button>
+      </div>
+    </section>
+
     <!-- ==================== 更多 ==================== -->
     <section id="page-more" class="page">
       <div class="page-title">
@@ -3230,7 +3378,7 @@
       <div style="height:12px"></div>
 
       <div class="coming-note">
-        「更多」不放 LINE 客服入口。之後會在這裡完成 FAQ、交易須知、匿名回饋與系統問題回報。
+        FAQ、交易須知與系統問題回報會陸續補上。
       </div>
     </section>
   </main>
@@ -3377,6 +3525,22 @@
     document
       .getElementById("contentBackButton")
       .addEventListener("click", () => showPage("home"));
+
+    document
+      .getElementById("feedbackBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("feedbackContent")
+      .addEventListener("input", updateFeedbackCounter);
+
+    document
+      .getElementById("feedbackSubmitButton")
+      .addEventListener("click", submitAnonymousFeedback);
+
+    document
+      .getElementById("feedbackAgainButton")
+      .addEventListener("click", () => resetFeedbackForm(true));
 
     // ---------- Preview UI 假資料 ----------
     function enterPreviewMode() {
@@ -4857,6 +5021,86 @@
       scrollTop();
     }
 
+
+    function openFeedbackPage() {
+      showPage("feedback");
+      resetFeedbackForm(false);
+      scrollTop();
+    }
+
+    function resetFeedbackForm(shouldFocus = true) {
+      const form = document.getElementById("feedbackFormCard");
+      const success = document.getElementById("feedbackSuccessCard");
+      const content = document.getElementById("feedbackContent");
+      const status = document.getElementById("feedbackStatus");
+
+      form.classList.remove("hidden");
+      success.classList.add("hidden");
+      status.textContent = "";
+      content.value = "";
+      updateFeedbackCounter();
+
+      if (shouldFocus) {
+        setTimeout(() => content.focus(), 80);
+      }
+    }
+
+    function updateFeedbackCounter() {
+      const content = document.getElementById("feedbackContent");
+      const counter = document.getElementById("feedbackCounter");
+
+      if (!content || !counter) return;
+
+      counter.textContent = `${content.value.length} / 2000`;
+    }
+
+    async function submitAnonymousFeedback() {
+      const contentEl = document.getElementById("feedbackContent");
+      const button = document.getElementById("feedbackSubmitButton");
+      const status = document.getElementById("feedbackStatus");
+      const content = contentEl.value.trim();
+
+      if (content.length < 2) {
+        status.textContent = "❌ 請輸入回饋內容。";
+        contentEl.focus();
+        return;
+      }
+
+      if (content.length > 2000) {
+        status.textContent = "❌ 回饋內容最多 2000 個字。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ content })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document.getElementById("feedbackFormCard").classList.add("hidden");
+        document.getElementById("feedbackSuccessCard").classList.remove("hidden");
+        showToast("匿名回饋已送出");
+      } catch (err) {
+        console.error("submit-feedback error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
     // ---------- 快捷功能 ----------
     function requireBinding(actionName) {
       if (isPreviewMode) return true;
@@ -4953,7 +5197,7 @@
           break;
 
         case "feedback":
-          showToast("匿名回饋會接回你原本的回饋功能");
+          openFeedbackPage();
           break;
 
         case "bug-report":
