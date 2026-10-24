@@ -37,6 +37,8 @@ export default async function handler(req, res) {
     let shippingBatches = [];
     let announcements = [];
     let promotions = [];
+    let faqs = [];
+    let terms = [];
 
     try {
       const [batchRows] = await conn.execute(`
@@ -83,6 +85,14 @@ export default async function handler(req, res) {
       promotions = contentRows.filter(
         row => row.content_type === "promotion"
       );
+
+      faqs = contentRows.filter(
+        row => row.content_type === "faq"
+      );
+
+      terms = contentRows.filter(
+        row => row.content_type === "terms"
+      );
     } catch (err) {
       console.warn("frontend contents unavailable:", err.message);
     }
@@ -100,7 +110,9 @@ export default async function handler(req, res) {
           ? shippingBatches[0].batch_text
           : null,
       announcements,
-      promotions
+      promotions,
+      faqs,
+      terms
     });
 
   } catch (err) {
