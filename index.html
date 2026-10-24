@@ -3986,90 +3986,58 @@
 
 
     function renderFaqList() {
-      const list = document.getElementById("faqQuestionList");
-      const answer = document.getElementById("faqAnswerPanel");
+      const wrap = document.getElementById("faqList");
 
       if (!publicFaqs.length) {
-        list.innerHTML = `
+        wrap.innerHTML = `
           <div class="empty-state">
             <div class="empty-title">目前沒有 FAQ</div>
             <div class="empty-desc">常見問題整理完成後會顯示在這裡。</div>
           </div>
         `;
-        answer.innerHTML = `
-          <div class="faq-answer-placeholder">
-            <div>
-              <strong>目前沒有可查看的答案</strong>
-              FAQ 新增後會自動出現在這裡。
-            </div>
-          </div>
-        `;
         return;
       }
 
-      list.innerHTML = publicFaqs.map((item, index) => `
-        <button
-          type="button"
-          class="faq-question-btn"
-          data-faq-index="${index}"
-        >${escapeHtml(safeText(item.title, "未命名問題"))}</button>
-      `).join("");
+      wrap.innerHTML = publicFaqs.map((item, index) => `
+        <article class="faq-accordion-item" data-faq-index="${index}">
+          <button
+            class="faq-question-row"
+            type="button"
+            aria-expanded="false"
+            onclick="toggleFaqAccordion(${index})"
+          >
+            <span class="faq-question-text">${escapeHtml(safeText(item.title, "未命名問題"))}</span>
+            <span class="faq-question-icon" aria-hidden="true">+</span>
+          </button>
 
-      answer.innerHTML = `
-        <div class="faq-answer-placeholder">
-          <div>
-            <strong>請選擇一個問題</strong>
-            點選問題後，答案才會顯示。
-          </div>
-        </div>
-      `;
-
-      list.querySelectorAll(".faq-question-btn").forEach(button => {
-        button.addEventListener("click", () => {
-          const index = Number(button.dataset.faqIndex);
-          const item = publicFaqs[index];
-          if (!item) return;
-
-          list.querySelectorAll(".faq-question-btn").forEach(btn => {
-            btn.classList.toggle("is-active", btn === button);
-          });
-
-          answer.innerHTML = `
-            <div class="faq-answer-content" key="${index}-${Date.now()}">
-              <span class="faq-answer-kicker">FAQ ANSWER</span>
-              <h3 class="faq-answer-title">${escapeHtml(safeText(item.title, "未命名問題"))}</h3>
-              <div class="faq-answer-body">${escapeHtml(safeText(item.description, "尚無回答"))}</div>
+          <div class="faq-answer-panel">
+            <div class="faq-answer-inner">
+              <div class="faq-answer-content">${escapeHtml(safeText(item.description, "尚無回答"))}</div>
             </div>
-          `;
-
-          if (window.innerWidth <= 720) {
-            setTimeout(() => {
-              answer.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 30);
-          }
-        });
-      });
-    }
-
-    function renderTermsList() {
-      const wrap = document.getElementById("termsList");
-
-      if (!publicTerms.length) {
-        wrap.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-title">目前沒有交易須知</div>
-            <div class="empty-desc">交易規則整理完成後會顯示在這裡。</div>
           </div>
-        `;
-        return;
-      }
-
-      wrap.innerHTML = publicTerms.map(item => `
-        <article class="terms-card">
-          <div class="terms-title">${escapeHtml(safeText(item.title, "交易須知"))}</div>
-          <div class="terms-body">${escapeHtml(safeText(item.description, ""))}</div>
         </article>
       `).join("");
+    }
+
+    function toggleFaqAccordion(index) {
+      const items = Array.from(
+        document.querySelectorAll("#faqList .faq-accordion-item")
+      );
+
+      items.forEach((item, itemIndex) => {
+        const button = item.querySelector(".faq-question-row");
+        const shouldOpen =
+          itemIndex === index && !item.classList.contains("is-open");
+
+        item.classList.toggle("is-open", shouldOpen);
+
+        if (button) {
+          button.setAttribute(
+            "aria-expanded",
+            shouldOpen ? "true" : "false"
+          );
+        }
+      });
     }
 
     function openFaqPage() {
