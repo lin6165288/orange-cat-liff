@@ -2172,6 +2172,189 @@
       align-items: center;
     }
 
+  
+    /* ===== v4.8 集運登記 ===== */
+    .forwarding-form-card,
+    .forwarding-history-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .forwarding-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 13px;
+    }
+
+    .forwarding-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .forwarding-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .forwarding-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .forwarding-field input,
+    .forwarding-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+      resize: vertical;
+      font: inherit;
+    }
+
+    .forwarding-field input {
+      height: 44px;
+    }
+
+    .forwarding-field textarea {
+      min-height: 84px;
+      line-height: 1.55;
+    }
+
+    .forwarding-field input:focus,
+    .forwarding-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .forwarding-submit {
+      width: 100%;
+      margin-top: 13px;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .forwarding-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .forwarding-note {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .forwarding-history-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .forwarding-record {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 13px;
+    }
+
+    .forwarding-record-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .forwarding-record-title {
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .forwarding-status {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .forwarding-status.pending {
+      background: #fff4df;
+      color: #a86913;
+    }
+
+    .forwarding-status.processed {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .forwarding-status.cancelled {
+      background: var(--gray-bg);
+      color: var(--gray);
+    }
+
+    .forwarding-record-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .forwarding-record-meta > div {
+      border-radius: 12px;
+      background: #fafafa;
+      padding: 9px 10px;
+    }
+
+    .forwarding-record-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .forwarding-record-meta strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 11px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .forwarding-record-remarks {
+      margin-top: 9px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 520px) {
+      .forwarding-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .forwarding-field.full {
+        grid-column: auto;
+      }
+    }
+
   </style>
 </head>
 
@@ -2664,6 +2847,109 @@
         </div>
       </div>
 
+      <!-- 集運登記子頁 -->
+      <div id="forwardingSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="forwardingBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>集運登記</h2>
+            <p>登記寄往橘貓中國倉的物流包裹。</p>
+          </div>
+        </div>
+
+        <div id="forwardingFormSection" class="forwarding-form-card">
+          <div class="return-step-title">
+            <span class="return-step-no">1</span>
+            填寫包裹資料
+          </div>
+
+          <div class="forwarding-form-grid">
+            <div class="forwarding-field full">
+              <label for="forwardTrackingNumber">中國快遞單號</label>
+              <input
+                id="forwardTrackingNumber"
+                type="text"
+                maxlength="255"
+                autocomplete="off"
+                placeholder="請輸入完整物流單號"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardItemName">內容物</label>
+              <input
+                id="forwardItemName"
+                type="text"
+                maxlength="255"
+                placeholder="例如：衣服、娃娃、飾品"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardQuantity">數量</label>
+              <input
+                id="forwardQuantity"
+                type="number"
+                min="1"
+                max="999"
+                step="1"
+                value="1"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardUnitPrice">商品單價（RMB）</label>
+              <input
+                id="forwardUnitPrice"
+                type="number"
+                min="0"
+                max="99999999"
+                step="0.01"
+                value="0"
+              >
+            </div>
+
+            <div class="forwarding-field full">
+              <label for="forwardRemarks">備註（選填）</label>
+              <textarea
+                id="forwardRemarks"
+                maxlength="1000"
+                placeholder="例如：易碎、合併包裹、商品辨識資訊"
+              ></textarea>
+            </div>
+          </div>
+
+          <button id="forwardingSubmitButton" class="forwarding-submit" type="button">
+            送出集運登記
+          </button>
+
+          <div class="forwarding-note">
+            送出後會先顯示「待處理」；後台確認後會自動建立一筆集運訂單，之後可在「我的訂單」查看入庫狀態。
+          </div>
+
+          <div id="forwardingSubmitStatus" class="form-status"></div>
+        </div>
+
+        <div class="section-head" id="forwardingHistorySection">
+          <h2>我的集運包裹</h2>
+          <span class="section-note">最近登記</span>
+        </div>
+
+        <div class="forwarding-history-card">
+          <div id="forwardingHistoryLoading" class="empty-state">
+            <div class="empty-title">正在讀取集運登記</div>
+            <div class="empty-desc">請稍候。</div>
+          </div>
+
+          <div id="forwardingHistoryList" class="forwarding-history-list hidden"></div>
+
+          <div id="forwardingHistoryEmpty" class="empty-state hidden">
+            <div class="empty-title">目前還沒有集運登記</div>
+            <div class="empty-desc">填寫上方資料後即可送出第一筆登記。</div>
+          </div>
+        </div>
+      </div>
+
       <!-- 運回申請子頁 -->
       <div id="returnRequestSubpage" class="subpage">
         <div class="sub-head">
@@ -2944,8 +3230,11 @@
     const memberLevelEl = document.getElementById("memberLevel");
 
     const ordersSubpage = document.getElementById("ordersSubpage");
+    const forwardingSubpage = document.getElementById("forwardingSubpage");
     const returnRequestSubpage = document.getElementById("returnRequestSubpage");
     const couponsSubpage = document.getElementById("couponsSubpage");
+
+    let forwardingRecords = [];
     const vipSubpage = document.getElementById("vipSubpage");
 
     let returnOptions = {
@@ -3485,6 +3774,10 @@
     }
 
     document
+      .getElementById("forwardingSubmitButton")
+      .addEventListener("click", submitForwardingRegister);
+
+    document
       .getElementById("returnDeliveryMethod")
       .addEventListener("change", renderReturnBatchOptions);
 
@@ -3614,6 +3907,7 @@
 
     function closeMemberSubpages(shouldScroll = true) {
       ordersSubpage.classList.remove("active");
+      forwardingSubpage.classList.remove("active");
       returnRequestSubpage.classList.remove("active");
       couponsSubpage.classList.remove("active");
       vipSubpage.classList.remove("active");
@@ -3628,6 +3922,10 @@
 
     document
       .getElementById("ordersBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("forwardingBackButton")
       .addEventListener("click", () => closeMemberSubpages(true));
 
     document
@@ -3758,6 +4056,227 @@
     }
 
 
+
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function forwardingStatusLabel(status) {
+      return {
+        pending: "待處理",
+        processed: "已處理",
+        cancelled: "已取消"
+      }[status] || safeText(status);
+    }
+
+    function renderForwardingHistory() {
+      const loading = document.getElementById("forwardingHistoryLoading");
+      const list = document.getElementById("forwardingHistoryList");
+      const empty = document.getElementById("forwardingHistoryEmpty");
+
+      loading.classList.add("hidden");
+
+      if (!forwardingRecords.length) {
+        list.classList.add("hidden");
+        list.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      list.classList.remove("hidden");
+
+      list.innerHTML = forwardingRecords.map(row => {
+        const unitPrice = Number(row.unit_price_rmb || 0);
+        const remarks = String(row.remarks || "").trim();
+
+        return `
+          <article class="forwarding-record">
+            <div class="forwarding-record-head">
+              <div class="forwarding-record-title">
+                ${escapeHtml(row.tracking_number)}
+              </div>
+              <span class="forwarding-status ${escapeHtml(row.status)}">
+                ${escapeHtml(forwardingStatusLabel(row.status))}
+              </span>
+            </div>
+
+            <div class="forwarding-record-meta">
+              <div>
+                <span>內容物</span>
+                <strong>${escapeHtml(row.item_name)}</strong>
+              </div>
+              <div>
+                <span>數量</span>
+                <strong>${Number(row.quantity || 1)} 件</strong>
+              </div>
+              <div>
+                <span>商品單價</span>
+                <strong>¥${unitPrice.toFixed(2)}</strong>
+              </div>
+              <div>
+                <span>登記時間</span>
+                <strong>${escapeHtml(formatDate(row.created_at))}</strong>
+              </div>
+            </div>
+
+            ${
+              remarks
+                ? `<div class="forwarding-record-remarks">備註：${escapeHtml(remarks)}</div>`
+                : ""
+            }
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadForwardingRecords() {
+      const loading = document.getElementById("forwardingHistoryLoading");
+      const list = document.getElementById("forwardingHistoryList");
+      const empty = document.getElementById("forwardingHistoryEmpty");
+
+      loading.classList.remove("hidden");
+      list.classList.add("hidden");
+      empty.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/get-forwarding-registers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "集運登記讀取失敗");
+        }
+
+        forwardingRecords = Array.isArray(result.registers)
+          ? result.registers
+          : [];
+
+        renderForwardingHistory();
+      } catch (err) {
+        console.error("get-forwarding-registers error:", err);
+        loading.innerHTML = `
+          <div class="empty-title">集運登記讀取失敗</div>
+          <div class="empty-desc">請稍後重新進入此頁。</div>
+        `;
+      }
+    }
+
+    async function openForwarding(mode = "register") {
+      showPage("member");
+      closeMemberSubpages(false);
+
+      memberMainView.style.display = "none";
+      forwardingSubpage.classList.add("active");
+      scrollTop();
+
+      await loadForwardingRecords();
+
+      if (mode === "history") {
+        setTimeout(() => {
+          document.getElementById("forwardingHistorySection")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 120);
+      }
+    }
+
+    async function submitForwardingRegister() {
+      const trackingNumber =
+        document.getElementById("forwardTrackingNumber").value.trim();
+      const itemName =
+        document.getElementById("forwardItemName").value.trim();
+      const quantity =
+        Number(document.getElementById("forwardQuantity").value || 0);
+      const unitPrice =
+        Number(document.getElementById("forwardUnitPrice").value || 0);
+      const remarks =
+        document.getElementById("forwardRemarks").value.trim();
+
+      const button =
+        document.getElementById("forwardingSubmitButton");
+      const status =
+        document.getElementById("forwardingSubmitStatus");
+
+      if (!trackingNumber) {
+        status.textContent = "❌ 請輸入中國快遞單號。";
+        return;
+      }
+
+      if (!itemName) {
+        status.textContent = "❌ 請輸入內容物。";
+        return;
+      }
+
+      if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
+        status.textContent = "❌ 數量請輸入 1～999 的整數。";
+        return;
+      }
+
+      if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+        status.textContent = "❌ 商品單價格式不正確。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-forwarding-register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName,
+            tracking_number: trackingNumber,
+            item_name: itemName,
+            quantity,
+            unit_price_rmb: unitPrice,
+            remarks
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document.getElementById("forwardTrackingNumber").value = "";
+        document.getElementById("forwardItemName").value = "";
+        document.getElementById("forwardQuantity").value = "1";
+        document.getElementById("forwardUnitPrice").value = "0";
+        document.getElementById("forwardRemarks").value = "";
+
+        status.textContent =
+          `✅ 集運登記 #${result.register_id} 已送出，等待後台確認。`;
+
+        showToast("集運登記已送出");
+        await loadForwardingRecords();
+      } catch (err) {
+        console.error("submit-forwarding-register error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
 
     function returnDeliveryLabel(value) {
       return value === "shop_delivery" ? "賣貨便" : "宅配";
@@ -4184,12 +4703,12 @@
 
         case "forward-register":
           if (!requireBinding("集運登記")) return;
-          showToast("集運登記會在後續步驟製作");
+          openForwarding("register");
           break;
 
         case "forward-list":
           if (!requireBinding("集運包裹")) return;
-          showToast("集運包裹列表會在後續步驟製作");
+          openForwarding("history");
           break;
 
         case "coupons":
