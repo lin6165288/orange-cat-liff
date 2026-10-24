@@ -11,36 +11,49 @@ function dbConfig() {
 }
 
 async function findFeedbackTable(conn) {
-  for (const tableName of ["anonymous_feedbacks", "feedbacks"]) {
-    const [tables] = await conn.execute(
-      "SHOW TABLES LIKE ?",
+  const candidates = ["anonymous_feedbacks", "feedbacks"];
+  const required = new Set([
+    "id",
+    "content",
+    "status",
+    "staff_note",
+    "created_at"
+  ]);
+
+  const [tableRows] = await conn.execute(`
+    SELECT TABLE_NAME
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME IN ('anonymous_feedbacks', 'feedbacks')
+  `);
+
+  const existing = new Set(
+    tableRows.map(row => String(row.TABLE_NAME || row.table_name || ""))
+  );
+
+  for (const tableName of candidates) {
+    if (!existing.has(tableName)) continue;
+
+    const [columnRows] = await conn.execute(
+      `
+      SELECT COLUMN_NAME
+      FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = ?
+      `,
       [tableName]
     );
 
-    if (!tables.length) continue;
-
-    const [columns] = await conn.query(
-      `SHOW COLUMNS FROM \`${tableName}\``
-    );
-
     const names = new Set(
-      columns.map(row => String(row.Field))
+      columnRows.map(row => String(row.COLUMN_NAME || row.column_name || ""))
     );
 
-    const required = [
-      "id",
-      "content",
-      "status",
-      "staff_note",
-      "created_at"
-    ];
-
-    if (required.every(name => names.has(name))) {
+    if ([...required].every(name => names.has(name))) {
       return tableName;
     }
   }
 
-  await conn.execute(`
+  await conn.query(`
     CREATE TABLE IF NOT EXISTS anonymous_feedbacks (
       id INT AUTO_INCREMENT PRIMARY KEY,
       content TEXT NOT NULL,
@@ -106,9 +119,19 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error("submit-feedback error:", err);
 
+    const code = String(err?.code || "");
+    const safeMessage =
+      code === "ER_NO_SUCH_TABLE"
+        ? "匿名回饋資料表尚未建立"
+        : code === "ER_BAD_FIELD_ERROR"
+          ? "匿名回饋資料表欄位不相容"
+          : code === "ER_DBACCESS_DENIED_ERROR" || code === "ER_TABLEACCESS_DENIED_ERROR"
+            ? "資料庫帳號沒有匿名回饋資料表權限"
+            : "回饋送出失敗，請稍後再試";
+
     return res.status(500).json({
       success: false,
-      error: "回饋送出失敗，請稍後再試"
+      error: safeMessage
     });
   } finally {
     if (conn) await conn.end();
