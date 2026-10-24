@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import nodemailer from "nodemailer";
 
 function dbConfig() {
   return {
@@ -49,6 +50,141 @@ function calculateFee(orders) {
 
 function deliveryLabel(value) {
   return value === "shop_delivery" ? "賣貨便" : "宅配";
+}
+
+function taipeiTimeText() {
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).format(new Date());
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+async function sendReturnRequestNotification({
+  requestId,
+  customerName,
+  selectedShippingBatch,
+  deliveryMethod,
+  totalCount,
+  totalWeight,
+  estimatedFee,
+  orders
+}) {
+  const smtpUser = String(process.env.SMTP_USER || "").trim();
+  const smtpPassword = String(process.env.SMTP_PASSWORD || "").trim();
+  const notifyEmail = String(
+    process.env.NOTIFY_EMAIL || smtpUser
+  ).trim();
+
+  if (!smtpUser || !smtpPassword || !notifyEmail) {
+    console.warn(
+      "Return request email skipped: SMTP_USER / SMTP_PASSWORD / NOTIFY_EMAIL not configured."
+    );
+    return false;
+  }
+
+  const host = String(
+    process.env.SMTP_HOST || "smtp.gmail.com"
+  ).trim();
+
+  const port = Number(process.env.SMTP_PORT || 465);
+  const secure = String(
+    process.env.SMTP_SECURE || (port === 465 ? "true" : "false")
+  ).toLowerCase() === "true";
+
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: {
+      user: smtpUser,
+      pass: smtpPassword
+    }
+  });
+
+  const rows = orders.map(order => `
+    <tr>
+      <td style="padding:8px;border-bottom:1px solid #eee;">#${escapeHtml(order.order_id)}</td>
+      <td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(order.platform || "—")}</td>
+      <td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(order.tracking_number || "—")}</td>
+      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right;">${Number(order.weight_kg || 0).toFixed(2)} kg</td>
+    </tr>
+  `).join("");
+
+  const subject =
+    `[橘貓代購] 新運回申請 #${requestId}｜${customerName}`;
+
+  const text = [
+    `橘貓代購收到新的前台運回申請`,
+    ``,
+    `申請編號：#${requestId}`,
+    `客戶：${customerName}`,
+    `申請時間（台灣）：${taipeiTimeText()}`,
+    `台灣端寄送：${deliveryMethod}`,
+    `船班 / 時效：${selectedShippingBatch}`,
+    `件數：${totalCount}`,
+    `總重量：${Number(totalWeight || 0).toFixed(2)} kg`,
+    `預估國際運費：NT$${Math.round(Number(estimatedFee || 0))}`,
+    ``,
+    `訂單：`,
+    ...orders.map(
+      order =>
+        `#${order.order_id}｜${order.platform || "—"}｜${order.tracking_number || "—"}｜${Number(order.weight_kg || 0).toFixed(2)} kg`
+    )
+  ].join("\n");
+
+  const html = `
+    <div style="font-family:Arial,'Microsoft JhengHei',sans-serif;color:#262626;line-height:1.6;">
+      <h2 style="margin:0 0 16px;color:#f08300;">新的前台運回申請</h2>
+      <table style="border-collapse:collapse;width:100%;max-width:680px;">
+        <tr><td style="padding:6px 0;color:#888;width:150px;">申請編號</td><td><strong>#${requestId}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#888;">客戶</td><td>${escapeHtml(customerName)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">申請時間（台灣）</td><td>${escapeHtml(taipeiTimeText())}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">台灣端寄送</td><td>${escapeHtml(deliveryMethod)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">船班 / 時效</td><td>${escapeHtml(selectedShippingBatch)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">件數</td><td>${totalCount} 件</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">總重量</td><td>${Number(totalWeight || 0).toFixed(2)} kg</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">預估國際運費</td><td><strong>NT$${Math.round(Number(estimatedFee || 0))}</strong></td></tr>
+      </table>
+
+      <h3 style="margin:22px 0 8px;">申請包裹</h3>
+      <table style="border-collapse:collapse;width:100%;max-width:680px;border:1px solid #eee;">
+        <thead>
+          <tr style="background:#fafafa;">
+            <th style="padding:8px;text-align:left;">訂單</th>
+            <th style="padding:8px;text-align:left;">平台</th>
+            <th style="padding:8px;text-align:left;">快遞單號</th>
+            <th style="padding:8px;text-align:right;">重量</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"橘貓代購" <${smtpUser}>`,
+    to: notifyEmail,
+    subject,
+    text,
+    html
+  });
+
+  return true;
 }
 
 export default async function handler(req, res) {
@@ -239,12 +375,30 @@ export default async function handler(req, res) {
 
     await conn.commit();
 
+    let notificationSent = false;
+
+    try {
+      notificationSent = await sendReturnRequestNotification({
+        requestId,
+        customerName,
+        selectedShippingBatch,
+        deliveryMethod: deliveryLabel(deliveryType),
+        totalCount: orders.length,
+        totalWeight,
+        estimatedFee,
+        orders
+      });
+    } catch (mailErr) {
+      console.error("return request email notification failed:", mailErr);
+    }
+
     return res.status(200).json({
       success: true,
       request_id: requestId,
       total_count: orders.length,
       total_weight: totalWeight,
-      estimated_fee: estimatedFee
+      estimated_fee: estimatedFee,
+      notification_sent: notificationSent
     });
 
   } catch (err) {
