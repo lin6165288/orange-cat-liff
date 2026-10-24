@@ -35,6 +35,8 @@ export default async function handler(req, res) {
     }
 
     let shippingBatches = [];
+    let announcements = [];
+    let promotions = [];
 
     try {
       const [batchRows] = await conn.execute(`
@@ -54,6 +56,37 @@ export default async function handler(req, res) {
       console.warn("shipping batches unavailable:", err.message);
     }
 
+    try {
+      const [contentRows] = await conn.execute(`
+        SELECT
+          content_id,
+          content_type,
+          title,
+          description,
+          tag_label,
+          sort_order,
+          updated_at,
+          created_at
+        FROM frontend_contents
+        WHERE is_active = 1
+        ORDER BY
+          content_type ASC,
+          sort_order ASC,
+          content_id DESC
+        LIMIT 100
+      `);
+
+      announcements = contentRows.filter(
+        row => row.content_type === "announcement"
+      );
+
+      promotions = contentRows.filter(
+        row => row.content_type === "promotion"
+      );
+    } catch (err) {
+      console.warn("frontend contents unavailable:", err.message);
+    }
+
     return res.status(200).json({
       success: true,
       exchange_rate: settings.current_exchange_rate ?? null,
@@ -65,7 +98,9 @@ export default async function handler(req, res) {
       shipping_value:
         shippingBatches.length > 0
           ? shippingBatches[0].batch_text
-          : null
+          : null,
+      announcements,
+      promotions
     });
 
   } catch (err) {
