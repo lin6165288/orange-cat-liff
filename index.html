@@ -3098,7 +3098,10 @@
               <span>會員點數</span>
               <strong id="memberPointsValue">—</strong>
             </div>
-            
+            <div class="member-wallet-item">
+              <span>可用優惠券</span>
+              <strong id="memberCouponsValue">—</strong>
+            </div>
           </div>
         </div>
 
@@ -4471,12 +4474,20 @@
       const points = Number(member.points_balance || 0);
       const couponCount = Number(member.available_coupon_count || 0);
 
-      memberBalanceValue.textContent =
-        `NT$${Math.round(balance).toLocaleString("zh-TW")}`;
-      memberPointsValue.textContent =
-        Math.round(points).toLocaleString("zh-TW");
-      memberCouponsValue.textContent =
-        couponCount.toLocaleString("zh-TW");
+      if (memberBalanceValue) {
+        memberBalanceValue.textContent =
+          `NT$${Math.round(balance).toLocaleString("zh-TW")}`;
+      }
+
+      if (memberPointsValue) {
+        memberPointsValue.textContent =
+          Math.round(points).toLocaleString("zh-TW");
+      }
+
+      if (memberCouponsValue) {
+        memberCouponsValue.textContent =
+          couponCount.toLocaleString("zh-TW");
+      }
 
       const couponMenuDesc = document.getElementById("couponMenuDesc");
 
@@ -4501,9 +4512,9 @@
       document.getElementById("homeStatArrived").textContent = "—";
       document.getElementById("homeStatReturnable").textContent = "—";
 
-      memberBalanceValue.textContent = "NT$—";
-      memberPointsValue.textContent = "—";
-      memberCouponsValue.textContent = "—";
+      if (memberBalanceValue) memberBalanceValue.textContent = "NT$—";
+      if (memberPointsValue) memberPointsValue.textContent = "—";
+      if (memberCouponsValue) memberCouponsValue.textContent = "—";
 
       memberCard.classList.add("hidden");
       bindArea.classList.remove("hidden");
