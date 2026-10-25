@@ -2900,21 +2900,6 @@
           <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10v16H4z"/><path d="m14 14 6-6 2 2-6 6-3 1 1-3Z"/></svg></span>
           <span class="quick-label">集運登記</span>
         </button>
-
-        <button class="quick-btn" type="button" data-action="calculator">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></span>
-          <span class="quick-label">匯率試算</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="announcements">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11v2a2 2 0 0 0 2 2h2l2 4h2l-1-4h2l7 3V6l-7 3H6a2 2 0 0 0-2 2Z"/></svg></span>
-          <span class="quick-label">最新公告</span>
-        </button>
-
-        <button class="quick-btn" type="button" data-action="promotions">
-          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h16v10H4z"/><path d="M3 7h18v3H3z"/><path d="M12 7v13"/><path d="M12 7H8.5A2.5 2.5 0 1 1 11 4.5L12 7Z"/><path d="M12 7h3.5A2.5 2.5 0 1 0 13 4.5L12 7Z"/></svg></span>
-          <span class="quick-label">優惠活動</span>
-        </button>
       </div>
 
       <div class="section-head">
@@ -3091,7 +3076,7 @@
       <div id="memberMainView">
         <div class="page-title">
           <h1>會員中心</h1>
-          <p>訂單、運回、集運與會員服務。</p>
+          <p>管理自己的訂單、包裹與優惠資料。</p>
         </div>
 
         <!-- 已綁定會員卡 -->
@@ -3113,25 +3098,7 @@
               <span>會員點數</span>
               <strong id="memberPointsValue">—</strong>
             </div>
-            <div class="member-wallet-item">
-              <span>可用優惠券</span>
-              <strong id="memberCouponsValue">—</strong>
-            </div>
-          </div>
-
-          <div class="member-stats">
-            <div class="member-stat">
-              <strong id="memberStatProgress">—</strong>
-              <span>進行中</span>
-            </div>
-            <div class="member-stat">
-              <strong id="memberStatArrived">—</strong>
-              <span>已到倉</span>
-            </div>
-            <div class="member-stat">
-              <strong id="memberStatReturnable">—</strong>
-              <span>可運回</span>
-            </div>
+            
           </div>
         </div>
 
@@ -3201,7 +3168,7 @@
         </div>
 
         <div class="section-head">
-          <h2>會員服務</h2>
+          <h2>我的優惠</h2>
           <span></span>
         </div>
 
@@ -3215,32 +3182,11 @@
             <span class="chevron">›</span>
           </button>
 
-          <button class="menu-row" type="button" data-action="vip">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 8 4 4 4-6 4 6 4-4-2 10H6L4 8Z"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">VIP 專區</span>
-              <span id="vipMenuDesc" class="row-desc">查看目前等級、儲值金與會員權益</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
+          
 
-          <button class="menu-row" type="button" data-action="announcements">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11v2a2 2 0 0 0 2 2h2l2 4h2l-1-4h2l7 3V6l-7 3H6a2 2 0 0 0-2 2Z"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">最新公告</span>
-              <span class="row-desc">查看物流、匯率與活動公告</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
+          
 
-          <button class="menu-row" type="button" data-action="faq">
-            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.65 2.5c-.95.63-1.75 1.24-1.75 2.5"/><path d="M12 17h.01"/></svg></span>
-            <span class="row-content">
-              <span class="row-title">常見問題</span>
-              <span class="row-desc">快速查看常見使用問題</span>
-            </span>
-            <span class="chevron">›</span>
-          </button>
+          
         </div>
       </div>
 
@@ -3499,40 +3445,7 @@
       </div>
 
       <!-- VIP 子頁 -->
-      <div id="vipSubpage" class="subpage">
-        <div class="sub-head">
-          <button id="vipBackButton" class="back-btn" type="button">‹</button>
-          <div class="sub-title">
-            <h2>VIP 專區</h2>
-            <p>查看會員等級、VIP 儲值金與目前權益。</p>
-          </div>
-        </div>
-
-        <div class="member-subpage-card">
-          <div class="member-overview-grid">
-            <div class="member-overview-item">
-              <span>目前會員等級</span>
-              <strong id="vipDetailLevel">—</strong>
-            </div>
-            <div class="member-overview-item">
-              <span>VIP 儲值金</span>
-              <strong id="vipDetailBalance">NT$—</strong>
-            </div>
-            <div class="member-overview-item">
-              <span>會員點數</span>
-              <strong id="vipDetailPoints">—</strong>
-            </div>
-            <div class="member-overview-item">
-              <span>可用優惠券</span>
-              <strong id="vipDetailCoupons">—</strong>
-            </div>
-          </div>
-
-          <div id="vipBenefitText" class="member-benefit-note">
-            VIP 儲值金扣款時，手續費會依目前會員等級套用優惠。
-          </div>
-        </div>
-      </div>
+      
     </section>
 
     <!-- ==================== 公告 / 活動列表 ==================== -->
@@ -3707,7 +3620,7 @@
     <section id="page-more" class="page">
       <div class="page-title">
         <h1>更多</h1>
-        <p>使用說明、回饋與其他服務。</p>
+        <p>使用說明、交易規則與問題回報。</p>
       </div>
 
       <div class="menu-list">
@@ -3824,7 +3737,6 @@
     const couponsSubpage = document.getElementById("couponsSubpage");
 
     let forwardingRecords = [];
-    const vipSubpage = document.getElementById("vipSubpage");
 
     let returnOptions = {
       batches: [],
@@ -3957,9 +3869,6 @@
       memberNameEl.textContent = "測試會員";
       memberLevelEl.textContent = "VIP 2";
 
-      document.getElementById("memberStatProgress").textContent = "12";
-      document.getElementById("memberStatArrived").textContent = "4";
-      document.getElementById("memberStatReturnable").textContent = "3";
 
       memberBalanceValue.textContent = "NT$3,000";
       memberPointsValue.textContent = "18";
@@ -4515,7 +4424,6 @@
         couponCount.toLocaleString("zh-TW");
 
       const couponMenuDesc = document.getElementById("couponMenuDesc");
-      const vipMenuDesc = document.getElementById("vipMenuDesc");
 
       if (couponMenuDesc) {
         couponMenuDesc.textContent =
@@ -4524,10 +4432,6 @@
             : "目前沒有可使用優惠券";
       }
 
-      if (vipMenuDesc) {
-        vipMenuDesc.textContent =
-          `${memberLevel}｜VIP 儲值金 NT$${Math.round(balance).toLocaleString("zh-TW")}`;
-      }
 
       memberCard.classList.remove("hidden");
       bindArea.classList.add("hidden");
@@ -4696,9 +4600,6 @@
       document.getElementById("homeStatArrived").textContent = stats.arrived;
       document.getElementById("homeStatReturnable").textContent = stats.returnable;
 
-      document.getElementById("memberStatProgress").textContent = stats.progress;
-      document.getElementById("memberStatArrived").textContent = stats.arrived;
-      document.getElementById("memberStatReturnable").textContent = stats.returnable;
     }
 
     async function openOrders(filterMode = "unreturned") {
@@ -4735,7 +4636,6 @@
       forwardingSubpage.classList.remove("active");
       returnRequestSubpage.classList.remove("active");
       couponsSubpage.classList.remove("active");
-      vipSubpage.classList.remove("active");
       memberMainView.style.display = "";
 
       if (shouldScroll) scrollTop();
@@ -4761,9 +4661,6 @@
       .getElementById("couponsBackButton")
       .addEventListener("click", () => closeMemberSubpages(true));
 
-    document
-      .getElementById("vipBackButton")
-      .addEventListener("click", () => closeMemberSubpages(true));
 
     function setOrderFilter(mode) {
       document.querySelectorAll(".filter-chip").forEach(chip => {
@@ -5467,36 +5364,6 @@
       scrollTop();
     }
 
-    function renderVipPanel() {
-      const level = safeText(currentMember?.member_level, "一般會員");
-      const balance = Number(currentMember?.balance_twd || 0);
-      const points = Number(currentMember?.points_balance || 0);
-      const coupons = Number(currentMember?.available_coupon_count || 0);
-
-      document.getElementById("vipDetailLevel").textContent = level;
-      document.getElementById("vipDetailBalance").textContent = formatMoney(balance);
-      document.getElementById("vipDetailPoints").textContent =
-        Math.round(points).toLocaleString("zh-TW");
-      document.getElementById("vipDetailCoupons").textContent =
-        coupons.toLocaleString("zh-TW");
-
-      const discountText = {
-        "VIP1": "VIP 儲值金扣款時，代購手續費享 9 折。",
-        "VIP2": "VIP 儲值金扣款時，代購手續費享 85 折。",
-        "VIP3": "VIP 儲值金扣款時，代購手續費享 8 折。"
-      }[level] || "一般會員目前不套用 VIP 手續費折扣。";
-
-      document.getElementById("vipBenefitText").textContent = discountText;
-    }
-
-    function openVipPanel() {
-      showPage("member");
-      closeMemberSubpages(false);
-      memberMainView.style.display = "none";
-      vipSubpage.classList.add("active");
-      renderVipPanel();
-      scrollTop();
-    }
 
 
 
@@ -5508,7 +5375,6 @@
       forwarding: "集運登記",
       "return-request": "運回申請",
       coupons: "優惠券 / VIP",
-      vip: "優惠券 / VIP",
       content: "公告 / 優惠活動",
       faq: "FAQ / 交易須知",
       terms: "FAQ / 交易須知",
@@ -5746,10 +5612,6 @@
           openCoupons();
           break;
 
-        case "vip":
-          if (!requireBinding("VIP 專區")) return;
-          openVipPanel();
-          break;
 
         case "calculator":
           showPage("pricing");
