@@ -4370,23 +4370,65 @@
     }
 
     // ---------- 查會員 ----------
+    async function requestMemberData(attempt = 1) {
+      const res = await fetch("/api/get-member", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          line_user_id: lineUserId
+        })
+      });
+
+      const raw = await res.text();
+      let result = null;
+
+      try {
+        result = raw ? JSON.parse(raw) : null;
+      } catch (parseError) {
+        console.error(
+          "get-member non-JSON response:",
+          res.status,
+          raw.slice(0, 500)
+        );
+
+        throw new Error(
+          `MEMBER_API_INVALID_RESPONSE_${res.status}`
+        );
+      }
+
+      if (!res.ok || !result?.success) {
+        const detail =
+          result?.error ||
+          `MEMBER_API_HTTP_${res.status}`;
+
+        throw new Error(detail);
+      }
+
+      return result;
+    }
+
     async function checkMember() {
       try {
-        const res = await fetch("/api/get-member", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            line_user_id: lineUserId
-          })
-        });
+        let result;
 
-        const result = await res.json();
+        try {
+          result = await requestMemberData(1);
+        } catch (firstError) {
+          console.warn(
+            "get-member first attempt failed:",
+            firstError
+          );
 
-        if (result.success && result.bound) {
+          await new Promise(resolve => setTimeout(resolve, 350));
+          result = await requestMemberData(2);
+        }
+
+        if (result.bound) {
           currentMember = result.member;
-          currentCustomerName = result.member.customer_name;
+          currentCustomerName =
+            safeText(result.member?.customer_name, "");
 
           renderBoundMember(result.member);
           await fetchOrders();
@@ -4397,8 +4439,21 @@
         }
       } catch (err) {
         console.error("get-member error:", err);
-        heroHelper.textContent = "會員資料讀取失敗，請稍後再試";
-        showToast("會員資料讀取失敗");
+
+        currentMember = null;
+        currentCustomerName = "";
+
+        heroName.textContent =
+          lineName || "歡迎來到橘貓代購";
+
+        heroHelper.textContent =
+          "會員資料暫時無法讀取，請稍後重新整理";
+
+        document.getElementById("homeStatProgress").textContent = "—";
+        document.getElementById("homeStatArrived").textContent = "—";
+        document.getElementById("homeStatReturnable").textContent = "—";
+
+        showToast("會員資料暫時無法讀取");
       }
     }
 
