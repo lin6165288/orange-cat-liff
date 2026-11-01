@@ -40,6 +40,9 @@ export default async function handler(req, res) {
         sort_order
       FROM shipping_batches
       WHERE is_active = 1
+        AND delivery_type = 'shop_delivery'
+          AND ship_date IS NOT NULL
+          AND ship_date >= CURDATE()
       ORDER BY
         delivery_type ASC,
         sort_order ASC,
