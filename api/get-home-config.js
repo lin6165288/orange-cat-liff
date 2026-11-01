@@ -112,7 +112,8 @@ export default async function handler(req, res) {
       announcements,
       promotions,
       faqs,
-      terms
+      terms,
+      terms_document: terms.length ? terms[0] : null
     });
 
   } catch (err) {
