@@ -2605,41 +2605,73 @@
       white-space: pre-line;
     }
 
-    .terms-list {
-      display: grid;
-      gap: 11px;
-    }
-
-    .terms-card {
-      position: relative;
+    .terms-document {
       border: 1px solid var(--line);
       border-radius: 18px;
       background: #fff;
-      padding: 15px 16px 15px 18px;
+      padding: 18px 17px 20px;
       box-shadow: var(--shadow-soft);
     }
 
-    .terms-card::before {
-      content: "";
-      position: absolute;
-      inset: 14px auto 14px 0;
-      width: 3px;
-      border-radius: 0 3px 3px 0;
-      background: var(--accent);
+    .terms-document-intro {
+      margin: 0 0 11px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.85;
     }
 
-    .terms-title {
-      font-size: 14px;
-      font-weight: 850;
+    .terms-section-title {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin: 22px 0 9px;
+      color: var(--text);
+      font-size: 16px;
       line-height: 1.45;
+      font-weight: 850;
     }
 
-    .terms-body {
-      margin-top: 7px;
+    .terms-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .terms-section-no {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
+
+    .terms-section-divider {
+      color: var(--muted);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .terms-bullets {
+      margin: 0 0 8px;
+      padding-left: 21px;
       color: var(--muted-deep);
+      font-size: 12px;
+      line-height: 1.85;
+    }
+
+    .terms-bullets li {
+      padding-left: 2px;
+      margin: 3px 0;
+    }
+
+    .terms-spacer {
+      height: 6px;
+    }
+
+    .terms-empty {
+      border: 1px dashed var(--line-strong);
+      border-radius: 16px;
+      background: #fff;
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
       font-size: 11px;
-      line-height: 1.75;
-      white-space: pre-line;
+      line-height: 1.7;
     }
 
     .content-guide-card {
@@ -3487,11 +3519,7 @@
         </div>
       </div>
 
-      <div class="content-guide-card">
-        實際服務內容以橘貓代購後台最新公告與訂單資料為準；規則更新時，本頁會同步顯示最新版本。
-      </div>
-
-      <div id="termsList" class="terms-list"></div>
+      <div id="termsDocumentWrap"></div>
     </section>
 
     <!-- ==================== 匿名回饋 ==================== -->
@@ -3701,7 +3729,7 @@
     let publicAnnouncements = [];
     let publicPromotions = [];
     let publicFaqs = [];
-    let publicTerms = [];
+    let publicTermsDocument = null;
 
     // =========================================================
     // 橘貓代購 LIFF V2 - STEP 1
@@ -4107,9 +4135,94 @@
       scrollTop();
     }
 
+
+    function renderTermsDocument() {
+      const wrap = document.getElementById("termsDocumentWrap");
+      if (!wrap) return;
+
+      const content = safeText(
+        publicTermsDocument?.description,
+        ""
+      ).trim();
+
+      if (!content) {
+        wrap.innerHTML = `
+          <div class="terms-empty">
+            目前尚未公布交易須知。
+          </div>
+        `;
+        return;
+      }
+
+      const lines = content.split(/\r?\n/);
+      const parts = [];
+      let bulletOpen = false;
+
+      const closeBullets = () => {
+        if (bulletOpen) {
+          parts.push("</ul>");
+          bulletOpen = false;
+        }
+      };
+
+      lines.forEach(rawLine => {
+        const line = rawLine.trim();
+
+        if (!line) {
+          closeBullets();
+          parts.push('<div class="terms-spacer"></div>');
+          return;
+        }
+
+        const heading = line.match(/^(\d{1,2})\s*[|｜]\s*(.+)$/);
+
+        if (heading) {
+          closeBullets();
+          const no = heading[1].padStart(2, "0");
+          const title = heading[2];
+
+          parts.push(`
+            <h3 class="terms-section-title">
+              <span class="terms-section-no">${escapeHtml(no)}</span>
+              <em class="terms-section-divider">｜</em>
+              <span>${escapeHtml(title)}</span>
+            </h3>
+          `);
+          return;
+        }
+
+        const bullet = line.match(/^[•●▪︎▪\-]\s*(.+)$/);
+
+        if (bullet) {
+          if (!bulletOpen) {
+            parts.push('<ul class="terms-bullets">');
+            bulletOpen = true;
+          }
+
+          parts.push(
+            `<li>${escapeHtml(bullet[1])}</li>`
+          );
+          return;
+        }
+
+        closeBullets();
+        parts.push(
+          `<p class="terms-document-intro">${escapeHtml(line)}</p>`
+        );
+      });
+
+      closeBullets();
+
+      wrap.innerHTML = `
+        <article class="terms-document">
+          ${parts.join("")}
+        </article>
+      `;
+    }
+
     function openTermsPage() {
       showPage("terms");
-      renderTermsList();
+      renderTermsDocument();
       scrollTop();
     }
 
@@ -4283,9 +4396,11 @@
           ? result.faqs
           : [];
 
-        publicTerms = Array.isArray(result.terms)
-          ? result.terms
-          : [];
+        publicTermsDocument =
+          result.terms_document ||
+          (Array.isArray(result.terms) && result.terms.length
+            ? result.terms[0]
+            : null);
 
         renderHomePublicContent();
 
@@ -4320,7 +4435,7 @@
         publicAnnouncements = [];
         publicPromotions = [];
         publicFaqs = [];
-        publicTerms = [];
+        publicTermsDocument = null;
         renderHomePublicContent();
         const pp = document.getElementById("pricingPurchaseRate");
         const py = document.getElementById("pricingPaymentRate");
