@@ -2951,7 +2951,6 @@
     <section id="page-pricing" class="page">
       <div class="page-title">
         <h1>價目表</h1>
-        <p>即時匯率、客戶付款方式、國際運費與費用試算。</p>
       </div>
 
       <div class="pricing-rate-grid">
@@ -3453,7 +3452,6 @@
         <button id="contentBackButton" class="back-btn" type="button">‹</button>
         <div class="sub-title">
           <h2 id="contentPageTitle">最新公告</h2>
-          <p id="contentPageSubtitle">橘貓代購最新消息</p>
         </div>
       </div>
 
@@ -3466,7 +3464,6 @@
         <button id="faqBackButton" class="back-btn" type="button">‹</button>
         <div class="sub-title">
           <h2>常見問題 FAQ</h2>
-          <p>點選問題後，答案會在該題下方展開。</p>
         </div>
       </div>
 
@@ -3503,13 +3500,9 @@
           placeholder="輸入回饋內容"
         ></textarea>
 
-        <div class="feedback-meta-row">
-          <span>不需要登入或綁定會員</span>
+        <div class="feedback-meta-row feedback-meta-counter-only">
+          <span></span>
           <span id="feedbackCounter">0 / 2000</span>
-        </div>
-
-        <div class="feedback-privacy">
-          此表單不會把你的會員姓名、LINE User ID 或訂單資料寫入匿名回饋紀錄。
         </div>
 
         <button id="feedbackSubmitButton" class="feedback-submit" type="button">
@@ -3580,15 +3573,6 @@
             placeholder="請描述你剛剛做了什麼、畫面出現什麼情況，以及你原本預期會看到什麼。"
           ></textarea>
         </label>
-
-        <div class="issue-helper">
-          建議盡量寫清楚操作步驟，方便更快找到問題。
-          <span id="issueCounter">0 / 2000</span>
-        </div>
-
-        <div id="issueIdentityNote" class="issue-identity">
-          如果目前已登入 LINE，回報會附上 LINE User ID；若已綁定會員，也會附上會員姓名，方便核對問題。
-        </div>
 
         <button id="issueSubmitButton" class="issue-submit" type="button">
           送出問題回報
@@ -4229,13 +4213,7 @@
           ? "優惠活動"
           : "最新公告";
 
-      const subtitle =
-        type === "promotion"
-          ? "目前顯示中的會員優惠與活動"
-          : "物流、匯率與服務更新";
-
       document.getElementById("contentPageTitle").textContent = title;
-      document.getElementById("contentPageSubtitle").textContent = subtitle;
 
       const wrap = document.getElementById("contentListWrap");
 
