@@ -2,114 +2,4397 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>橘貓代購會員中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f8fa" />
+  <title>橘貓代購</title>
+
+  <link rel="icon" type="image/png" href="./assets/orange-cat-icon.png" />
+  <link rel="apple-touch-icon" href="./assets/orange-cat-logo.png" />
+
+  <!-- LINE LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
-    body {
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      background: #fff7f0;
-      color: #2f3340;
-      padding: 20px;
+
+    :root {
+      --bg: #f7f8fa;
+      --surface: #ffffff;
+      --surface-soft: #fafafa;
+      --surface-tint: #fff7ee;
+      --surface-accent: #fff1df;
+      --line: #ececec;
+      --line-strong: #e3e3e3;
+
+      --accent: #f29a38;
+      --accent-strong: #f08300;
+      --accent-deep: #ba6800;
+
+      --text: #262626;
+      --muted: #8c8c8c;
+      --muted-deep: #666666;
+
+      --green-bg: #edf8f0;
+      --green: #35784a;
+      --red-bg: #fff0f0;
+      --red: #bd5555;
+      --gray-bg: #f4f4f4;
+      --gray: #757575;
+
+      --shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
+      --shadow-soft: 0 4px 14px rgba(17, 24, 39, 0.03);
+
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+
+      --nav-height: 70px;
     }
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    }
-
-    h1 {
-      font-size: 24px;
-    }
-
-    h2 {
-      font-size: 20px;
-      margin-top: 0;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 12px;
+    * {
       box-sizing: border-box;
-      margin-top: 10px;
+      -webkit-tap-highlight-color: transparent;
     }
 
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "PingFang TC",
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
+
+    body {
+      padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 10px);
+      background:
+        radial-gradient(circle at top right, rgba(242, 154, 56, 0.07), transparent 28%),
+        var(--bg);
+    }
+
+    button,
     input {
-      border: 1px solid #ddd;
+      font: inherit;
     }
 
     button {
-      border: none;
-      background: #ff8a3d;
-      color: white;
-      font-weight: bold;
+      cursor: pointer;
     }
 
-    .status {
-      line-height: 1.7;
+    .app {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 18px 16px 28px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding: 4px 2px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+    }
+
+    .brand-logo,
+    .announcement-icon,
+    .mini-icon,
+    .row-icon,
+    .member-avatar,
+    .info-emoji,
+    .nav-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-strong);
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand-logo svg,
+    .announcement-icon svg,
+    .mini-icon svg,
+    .row-icon svg,
+    .member-avatar svg,
+    .info-emoji svg,
+    .nav-icon svg {
+      display: block;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .brand-subtitle {
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .top-pill {
+      flex: 0 0 auto;
+      max-width: 46%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted-deep);
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn .22s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: .5; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+      margin: 2px 2px 20px;
+    }
+
+    .page-title h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: .01em;
+    }
+
+    .page-title p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 22px 2px 10px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .hero-card,
+    .surface-card,
+    .bind-card,
+    .member-card,
+    .empty-state,
+    .promo-card,
+    .price-intro,
+    .coming-note {
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 16px;
+      background: linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
+      color: var(--text);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    .hero-name {
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: .01em;
+    }
+
+    .hero-helper {
+      margin-top: 7px;
+      max-width: 92%;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .stats,
+    .info-grid,
+    .quick-grid,
+    .member-stats {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .stat-button {
+      appearance: none;
+      border: 1px solid #f1e3cf;
+      min-width: 0;
+      border-radius: 16px;
+      background: rgba(255,255,255,.9);
+      color: var(--text);
+      padding: 12px 6px 11px;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 20px;
+      line-height: 1.1;
+      font-weight: 800;
+    }
+
+    .stat-label {
+      display: block;
+      margin-top: 5px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .bind-banner {
+      margin-top: 14px;
+      border: 1px solid #f1dfc7;
+      border-radius: var(--radius-lg);
+      background: var(--surface-tint);
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .bind-banner-title {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .bind-banner-text,
+    .announcement-desc,
+    .promo-desc,
+    .bind-desc,
+    .row-desc,
+    .empty-desc,
+    .coming-note,
+    .page-title p,
+    .sub-title p,
+    .form-status,
+    .price-intro p,
+    .order-summary {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .bind-banner-text {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .inline-btn,
+    .primary-btn {
+      appearance: none;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(240, 131, 0, .16);
+    }
+
+    .inline-btn {
+      width: auto;
+      margin-top: 12px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px;
+      font-size: 14px;
+    }
+
+    .announcement,
+    .menu-row {
+      width: 100%;
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: inherit;
+      padding: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .announcement {
+      align-items: center;
+    }
+
+    .announcement-icon,
+    .mini-icon,
+    .row-icon,
+    .member-avatar,
+    .info-emoji {
+      flex: 0 0 auto;
+      background: var(--surface-tint);
+      border: 1px solid #f1dfc7;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .announcement-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+    }
+
+    .announcement-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .announcement-tag,
+    .promo-badge,
+    .vip-pill,
+    .badge {
+      letter-spacing: .04em;
+      font-weight: 800;
+    }
+
+    .announcement-tag {
+      color: var(--accent-strong);
+      font-size: 10px;
+    }
+
+    .announcement-title,
+    .promo-title,
+    .row-title,
+    .empty-title,
+    .sub-title h2,
+    .bind-title {
+      font-weight: 800;
+    }
+
+    .announcement-title {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .announcement-desc {
+      margin-top: 4px;
+      font-size: 11px;
+    }
+
+    .chevron {
+      align-self: center;
+      color: #b3b3b3;
+      font-size: 22px;
+      line-height: 1;
+      margin-left: auto;
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .info-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      padding: 14px 8px 12px;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .info-emoji {
+      width: 36px;
+      height: 36px;
+      margin: 0 auto;
+      border-radius: 12px;
+    }
+
+    .info-label {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .info-value {
+      margin-top: 4px;
+      min-height: 17px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .quick-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .quick-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      min-width: 0;
+      min-height: 92px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .quick-btn:active,
+    .menu-row:active,
+    .nav-btn:active,
+    .announcement:active,
+    .stat-button:active,
+    .inline-btn:active,
+    .primary-btn:active,
+    .back-btn:active,
+    .filter-chip:active {
+      transform: scale(.985);
+    }
+
+    .mini-icon,
+    .row-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      font-size: 19px;
+    }
+
+    .quick-label {
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .promo-card {
+      background: linear-gradient(135deg, #fff7ee 0%, #ffffff 100%);
+      padding: 16px;
+      align-items: flex-start;
+    }
+
+    .promo-badge,
+    .vip-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      padding: 5px 9px;
+      font-size: 10px;
+    }
+
+    .promo-title {
+      margin-top: 9px;
+      font-size: 16px;
+    }
+
+    .promo-desc {
+      margin-top: 5px;
+      font-size: 11px;
+    }
+
+    .surface-card {
+      border-radius: 20px;
+      background: var(--surface);
+      padding: 16px;
+    }
+
+    .menu-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .menu-row {
+      align-items: center;
+      padding: 15px;
+    }
+
+    .row-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-title {
+      font-size: 14px;
+    }
+
+    .row-desc {
+      margin-top: 3px;
+      font-size: 11px;
+    }
+
+    .member-card {
+      overflow: hidden;
+      position: relative;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
+      padding: 18px;
+    }
+
+    .member-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    }
+
+    .member-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .member-avatar {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
+      border-radius: 18px;
+      font-size: 28px;
+    }
+
+    .member-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .member-name {
+      font-size: 19px;
+      font-weight: 850;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .member-stats {
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    .member-stat {
+      text-align: center;
+    }
+
+    .member-stat + .member-stat {
+      border-left: 1px solid var(--line);
+    }
+
+    .member-stat strong {
+      display: block;
+      font-size: 20px;
+    }
+
+    .member-stat span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .bind-card {
+      border-radius: 20px;
+      background: var(--surface);
+      padding: 18px;
+    }
+
+    .bind-title {
+      font-size: 18px;
+    }
+
+    .bind-desc {
+      margin: 7px 0 14px;
+      font-size: 12px;
+    }
+
+    .text-input {
+      width: 100%;
+      appearance: none;
+      border: 1px solid var(--line-strong);
+      outline: none;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 13px 14px;
+      font-size: 15px;
+      transition: .16s ease;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242, 154, 56, .12);
+    }
+
+    .form-status {
+      min-height: 18px;
+      margin-top: 9px;
+      font-size: 11px;
+    }
+
+    .price-intro {
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff7ee 0%, #fff 100%);
+      padding: 15px;
+      margin-bottom: 14px;
+    }
+
+    .price-intro strong {
+      font-size: 15px;
+    }
+
+    .price-intro p {
+      margin: 6px 0 0;
+      font-size: 11px;
+    }
+
+    .subpage {
+      display: none;
+    }
+
+    .subpage.active {
+      display: block;
+      animation: fadeIn .22s ease;
+    }
+
+    .sub-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      font-size: 21px;
+      line-height: 1;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .sub-title {
+      min-width: 0;
+    }
+
+    .sub-title h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .sub-title p {
+      margin: 4px 0 0;
+      font-size: 11px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 12px;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      flex: 0 0 auto;
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted-deep);
+      padding: 9px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .filter-chip.active {
+      border-color: #f1dfc7;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+    }
+
+    .order-summary {
+      border: 1px solid #f1dfc7;
+      border-radius: 16px;
+      background: var(--surface-tint);
+      padding: 13px 14px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .order-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .order-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 13px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .order-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .order-platform {
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .order-date,
+    .order-id,
+    .order-field-label {
+      color: var(--muted);
+    }
+
+    .order-date,
+    .order-id {
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .order-id {
+      margin-top: 4px;
+    }
+
+    .order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 13px;
+    }
+
+    .order-field {
+      min-width: 0;
+      border: 1px solid #f1f1f1;
+      border-radius: 13px;
+      background: var(--surface-soft);
+      padding: 10px;
+    }
+
+    .order-field-label {
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .order-field-value {
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 750;
       word-break: break-all;
     }
 
-    .order {
-      border-top: 1px solid #eee;
-      padding-top: 12px;
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
       margin-top: 12px;
-      line-height: 1.7;
     }
 
     .badge {
-      display: inline-block;
-      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
       border-radius: 999px;
-      background: #f3f3f3;
-      margin-right: 4px;
+      padding: 5px 9px;
+      font-size: 9px;
+    }
+
+    .badge.orange {
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+    }
+
+    .badge.green {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .badge.gray {
+      background: var(--gray-bg);
+      color: var(--gray);
+    }
+
+    .badge.red {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .empty-state {
+      border-radius: 20px;
+      background: #fff;
+      padding: 34px 18px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto;
+      border-radius: 18px;
+      background: var(--surface-tint);
+      border: 1px solid #f1dfc7;
+      display: grid;
+      place-items: center;
+      color: var(--accent-strong);
+      font-size: 26px;
+    }
+
+    .empty-title {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .empty-desc {
+      margin-top: 5px;
+      font-size: 11px;
+    }
+
+    .coming-note {
+      border: 1px dashed #e1d7ca;
+      border-radius: 16px;
+      background: #fbfbfb;
+      color: var(--muted-deep);
+      padding: 13px 14px;
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 2000;
+      left: 50%;
+      bottom: calc(var(--nav-height) + 18px + env(safe-area-inset-bottom));
+      transform: translate(-50%, 12px);
+      width: calc(100% - 34px);
+      max-width: 480px;
+      border-radius: 14px;
+      background: #303030;
+      color: white;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transition: .18s ease;
+      box-shadow: 0 10px 28px rgba(0,0,0,.18);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .bottom-nav-shell {
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 720px;
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(247,248,250,0) 0%, rgba(247,248,250,.95) 26%, rgba(247,248,250,.98) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .bottom-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.96);
+      padding: 5px;
+      box-shadow: 0 6px 22px rgba(17, 24, 39, .06);
+    }
+
+    .nav-btn {
+      appearance: none;
+      border: 0;
+      min-width: 0;
+      min-height: 50px;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      line-height: 1;
+      color: currentColor;
+    }
+
+    .nav-btn.active {
+      background: var(--surface-accent);
+      color: var(--accent-strong);
+    }
+
+    @media (max-width: 560px) {
+      .page-title h1 {
+        font-size: 26px;
+      }
+
+      .stats,
+      .member-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 420px) {
+      .app {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .quick-grid,
+      .info-grid {
+        gap: 8px;
+      }
+
+      .quick-btn {
+        min-height: 88px;
+      }
+
+      .hero-name {
+        font-size: 21px;
+      }
+
+      .order-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .top-pill {
+        max-width: 42%;
+      }
+    }
+
+
+    /* ===== v4.1 Premium polish ===== */
+    body {
+      background:
+        radial-gradient(circle at 12% -4%, rgba(242,154,56,.08), transparent 24%),
+        radial-gradient(circle at 88% 8%, rgba(0,0,0,.025), transparent 20%),
+        var(--bg);
+    }
+
+    .app {
+      padding-top: 20px;
+    }
+
+    .topbar {
+      margin-bottom: 22px;
+    }
+
+    .brand-logo {
+      position: relative;
+      background: linear-gradient(180deg, #fff 0%, #fffaf4 100%);
+      border-color: #eadfce;
+      box-shadow: 0 8px 20px rgba(34,34,34,.045);
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(242,154,56,.12);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .brand-title {
+      letter-spacing: .04em;
+    }
+
+    .brand-subtitle {
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 10px;
+    }
+
+    .top-pill {
+      border-color: #e9e3dc;
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero-card {
+      padding: 22px 20px 18px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.98) 0%, rgba(255,250,244,.98) 100%);
+      border-color: #ebe5df;
+      box-shadow: 0 18px 38px rgba(28, 25, 23, .055);
+    }
+
+    .hero-card::before {
+      height: 3px;
+      background: linear-gradient(90deg, #f29a38 0%, #f08300 52%, #d9b78a 100%);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -82px;
+      top: -88px;
+      border-radius: 50%;
+      border: 1px solid rgba(242,154,56,.12);
+      box-shadow:
+        0 0 0 24px rgba(242,154,56,.035),
+        0 0 0 48px rgba(242,154,56,.018);
+      pointer-events: none;
+    }
+
+    .hero-brandline {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 11px;
+      color: #a17749;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+
+    .hero-kicker,
+    .hero-name,
+    .hero-helper,
+    .stats {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-kicker {
+      padding: 4px 8px;
+      background: #fff7ed;
+      color: #b36a15;
+      border: 1px solid #f2dfc6;
+    }
+
+    .hero-name {
+      margin-top: 11px;
+      font-size: 25px;
+      letter-spacing: .025em;
+    }
+
+    .hero-helper {
+      color: #85807a;
+    }
+
+    .stat-button {
+      position: relative;
+      overflow: hidden;
+      border-color: #ede6de;
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 5px 14px rgba(17,24,39,.028);
+    }
+
+    .stat-button::before {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242,154,56,.5), transparent);
+    }
+
+    .stat-value {
+      color: #222;
+      font-size: 21px;
+    }
+
+    .section-head {
+      margin-top: 26px;
+      align-items: flex-end;
+    }
+
+    .section-head-stacked > div:first-child {
+      min-width: 0;
+    }
+
+    .section-subtitle {
+      margin-top: 4px;
+      color: #aaa39c;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .section-head h2 {
+      letter-spacing: .02em;
+    }
+
+    .announcement {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border-color: #e9e5e0;
+      box-shadow: 0 9px 22px rgba(17,24,39,.035);
+    }
+
+    .announcement::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: linear-gradient(180deg, #f29a38, #f08300);
+    }
+
+    .announcement-icon,
+    .mini-icon,
+    .row-icon,
+    .info-emoji,
+    .member-avatar {
+      background: linear-gradient(180deg, #fffaf4 0%, #fff5e9 100%);
+      border-color: #efddc5;
+      color: #e98516;
+    }
+
+    .announcement-tag {
+      color: #d97809;
+      letter-spacing: .12em;
+    }
+
+    .announcement-title {
+      color: #252525;
+    }
+
+    .info-card {
+      position: relative;
+      overflow: hidden;
+      padding-top: 16px;
+      border-color: #e9e6e2;
+      box-shadow: 0 8px 20px rgba(17,24,39,.032);
+    }
+
+    .info-card::after {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242,154,56,.35), transparent);
+    }
+
+    .info-value {
+      color: #242424;
       font-size: 13px;
     }
+
+    .quick-grid {
+      gap: 11px;
+    }
+
+    .quick-btn {
+      position: relative;
+      min-height: 98px;
+      border-color: #e9e6e2;
+      box-shadow: 0 8px 20px rgba(17,24,39,.032);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .quick-btn:hover {
+      border-color: #e7d3b7;
+      box-shadow: 0 11px 24px rgba(17,24,39,.05);
+    }
+
+    .quick-btn .mini-icon {
+      transition: transform .16s ease;
+    }
+
+    .quick-btn:hover .mini-icon {
+      transform: translateY(-1px);
+    }
+
+    .promo-card {
+      background:
+        radial-gradient(circle at 92% 10%, rgba(242,154,56,.09), transparent 26%),
+        linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
+      border-color: #eadfce;
+    }
+
+    .member-card {
+      border-color: #e9e5e0;
+      box-shadow: 0 16px 32px rgba(17,24,39,.045);
+    }
+
+    .menu-row {
+      border-color: #e9e6e2;
+      box-shadow: 0 7px 18px rgba(17,24,39,.028);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .menu-row:hover {
+      border-color: #e7d3b7;
+      box-shadow: 0 10px 22px rgba(17,24,39,.045);
+    }
+
+    .bottom-nav-shell {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+
+    .bottom-nav {
+      border-color: #e5e2df;
+      border-radius: 20px;
+      padding: 6px;
+      box-shadow: 0 12px 34px rgba(17,24,39,.09);
+    }
+
+    .nav-btn {
+      min-height: 52px;
+      border-radius: 14px;
+      transition: background .16s ease, color .16s ease, transform .16s ease;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(180deg, #fff4e6 0%, #ffedda 100%);
+      color: #df7d0c;
+      box-shadow: inset 0 0 0 1px rgba(242,154,56,.08);
+    }
+
+    .nav-btn.active .nav-icon {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 420px) {
+      .hero-card {
+        padding: 20px 16px 16px;
+      }
+
+      .hero-brandline {
+        font-size: 8px;
+        letter-spacing: .13em;
+      }
+
+      .section-head {
+        margin-top: 23px;
+      }
+    }
+
+
+
+    /* ===== v4.2 Brand logo ===== */
+    .brand-logo {
+      overflow: hidden;
+      padding: 0;
+      background: #fff4e6;
+      border-color: #eadfce;
+    }
+
+    .brand-logo::after {
+      content: none;
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+  
+    /* ===== v4.3 正式價目表 ===== */
+    .pricing-rate-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .pricing-rate-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-rate-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .pricing-rate-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .pricing-rate-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+
+    .pricing-rate-card small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .pricing-panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-panel-head {
+      padding: 15px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .pricing-panel-head strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .pricing-panel-head span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .fee-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .fee-table th,
+    .fee-table td {
+      padding: 12px 14px;
+      border-top: 1px solid #f2f2f2;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .fee-table th {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .fee-table td:last-child {
+      text-align: right;
+      font-weight: 800;
+    }
+
+    .payment-rule-grid,
+    .shipping-rate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .payment-rule-card,
+    .shipping-rate-card {
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+      padding: 14px 12px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .payment-rule-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-tint);
+      border: 1px solid #f1dfc7;
+      color: var(--accent-strong);
+      margin-bottom: 10px;
+    }
+
+    .payment-rule-card strong,
+    .shipping-rate-card strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .payment-rule-card p,
+    .shipping-rate-card p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .shipping-price {
+      display: block;
+      margin-top: 8px;
+      color: var(--accent-deep);
+      font-size: 19px;
+      font-weight: 850;
+    }
+
+    .vip-discount-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .vip-discount-item {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      padding: 10px 6px;
+      text-align: center;
+    }
+
+    .vip-discount-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .vip-discount-item strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .calculator-card {
+      border: 1px solid #efd8ba;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fffaf4 0%, #fff 100%);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .calculator-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .calculator-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .calculator-field input,
+    .calculator-field select {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 11px;
+      outline: none;
+    }
+
+    .calculator-field input:focus,
+    .calculator-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .calculator-result {
+      margin-top: 14px;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .calculator-result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 13px;
+      border-top: 1px solid #f2f2f2;
+      font-size: 12px;
+    }
+
+    .calculator-result-row:first-child {
+      border-top: 0;
+    }
+
+    .calculator-result-row span {
+      color: var(--muted);
+    }
+
+    .calculator-result-row strong {
+      font-weight: 800;
+    }
+
+    .calculator-total {
+      background: var(--surface-tint);
+    }
+
+    .calculator-total strong {
+      color: var(--accent-deep);
+      font-size: 19px;
+    }
+
+    .pricing-footnote {
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .payment-rule-grid,
+      .shipping-rate-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  
+    .pricing-formula-card {
+      border: 1px solid #efd8ba;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fffaf4 0%, #ffffff 100%);
+      padding: 18px 16px;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+
+    .pricing-formula-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .pricing-formula-main {
+      margin-top: 10px;
+      font-size: 17px;
+      line-height: 1.7;
+      font-weight: 850;
+      color: var(--text);
+    }
+
+    .pricing-formula-main span {
+      color: var(--accent-strong);
+      padding: 0 3px;
+    }
+
+    .pricing-formula-equal {
+      margin-top: 5px;
+      color: var(--accent-deep);
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .pricing-formula-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+  
+    /* ===== v4.5 貨到付款限制 / 會員中心 ===== */
+    .calc-warning {
+      display: none;
+      margin-top: 10px;
+      border: 1px solid #efcccc;
+      border-radius: 12px;
+      background: #fff6f6;
+      color: #a84c4c;
+      padding: 10px 12px;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .calc-warning.show {
+      display: block;
+    }
+
+    .calculator-total.unsupported strong {
+      color: #b94f4f;
+      font-size: 14px;
+    }
+
+    .member-wallet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .member-wallet-item {
+      min-width: 0;
+      border: 1px solid #efe6db;
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      padding: 11px 8px;
+      text-align: center;
+    }
+
+    .member-wallet-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .member-wallet-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .member-subpage-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .member-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .member-overview-item {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fafafa;
+      padding: 13px;
+    }
+
+    .member-overview-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .member-overview-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .member-benefit-note {
+      margin-top: 12px;
+      border: 1px solid #f1dfc7;
+      border-radius: 14px;
+      background: var(--surface-tint);
+      padding: 12px 13px;
+      color: var(--muted-deep);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .coupon-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .coupon-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .coupon-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .coupon-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .coupon-name {
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.4;
+    }
+
+    .coupon-status {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .coupon-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .coupon-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 12px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f1f1;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    @media (max-width: 420px) {
+      .member-wallet-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .member-wallet-item {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .member-wallet-item strong {
+        font-size: 12px;
+      }
+    }
+
+  
+    /* ===== v4.6 運回申請 ===== */
+    .return-flow-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .return-step-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .return-step-no {
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .return-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 13px;
+    }
+
+    .return-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .return-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .return-field select {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 11px;
+      outline: none;
+    }
+
+    .return-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .return-order-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 13px;
+    }
+
+    .return-order-card {
+      position: relative;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 13px 13px 13px 43px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .return-order-card:has(input:checked) {
+      border-color: #efc792;
+      background: #fffaf4;
+      box-shadow: 0 0 0 2px rgba(242,154,56,.06);
+    }
+
+    .return-order-card input {
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--accent);
+    }
+
+    .return-order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .return-order-platform {
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .return-order-date {
+      color: var(--muted);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .return-order-meta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .return-order-track {
+      overflow-wrap: anywhere;
+    }
+
+    .return-order-weight {
+      color: var(--text);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .return-summary {
+      margin-top: 13px;
+      border: 1px solid #f1dfc7;
+      border-radius: 15px;
+      background: var(--surface-tint);
+      overflow: hidden;
+    }
+
+    .return-summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(239,216,186,.65);
+      font-size: 11px;
+    }
+
+    .return-summary-row:first-child {
+      border-top: 0;
+    }
+
+    .return-summary-row span {
+      color: var(--muted);
+    }
+
+    .return-summary-row strong {
+      font-weight: 850;
+    }
+
+    .return-summary-row.total strong {
+      color: var(--accent-deep);
+      font-size: 16px;
+    }
+
+    .return-submit {
+      width: 100%;
+      margin-top: 13px;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .return-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .return-help {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .pending-request-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .pending-request-card {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+      padding: 12px 13px;
+    }
+
+    .pending-request-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pending-request-head strong {
+      font-size: 12px;
+    }
+
+    .pending-request-status {
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #fff4df;
+      color: #a86913;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .pending-request-meta {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .return-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  
+    .return-static-info {
+      min-height: 44px;
+      border: 1px solid #f1dfc7;
+      border-radius: 11px;
+      background: var(--surface-tint);
+      color: var(--muted-deep);
+      padding: 11px 12px;
+      font-size: 11px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+    }
+
+  
+    /* ===== v4.8 集運登記 ===== */
+    .forwarding-form-card,
+    .forwarding-history-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .forwarding-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 13px;
+    }
+
+    .forwarding-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .forwarding-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .forwarding-field label {
+      color: var(--muted-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .forwarding-field input,
+    .forwarding-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+      resize: vertical;
+      font: inherit;
+    }
+
+    .forwarding-field input {
+      height: 44px;
+    }
+
+    .forwarding-field textarea {
+      min-height: 84px;
+      line-height: 1.55;
+    }
+
+    .forwarding-field input:focus,
+    .forwarding-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .forwarding-submit {
+      width: 100%;
+      margin-top: 13px;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .forwarding-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .forwarding-note {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .forwarding-history-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .forwarding-record {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 13px;
+    }
+
+    .forwarding-record-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .forwarding-record-title {
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .forwarding-status {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .forwarding-status.pending {
+      background: #fff4df;
+      color: #a86913;
+    }
+
+    .forwarding-status.processed {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .forwarding-status.cancelled {
+      background: var(--gray-bg);
+      color: var(--gray);
+    }
+
+    .forwarding-record-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .forwarding-record-meta > div {
+      border-radius: 12px;
+      background: #fafafa;
+      padding: 9px 10px;
+    }
+
+    .forwarding-record-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .forwarding-record-meta strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 11px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .forwarding-record-remarks {
+      margin-top: 9px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 520px) {
+      .forwarding-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .forwarding-field.full {
+        grid-column: auto;
+      }
+    }
+
+  
+    /* ===== v4.9 公告 / 優惠活動 ===== */
+    .content-list-wrap {
+      display: grid;
+      gap: 11px;
+    }
+
+    .content-list-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .content-list-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+
+    .content-list-tag {
+      color: var(--accent-strong);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .09em;
+    }
+
+    .content-list-title {
+      margin-top: 5px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .content-list-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .content-list-date {
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid #f1f1f1;
+      color: #aaa;
+      font-size: 9px;
+    }
+
+  
+    /* ===== v4.11 匿名回饋 ===== */
+    .feedback-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .feedback-card textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1px solid var(--line-strong);
+      border-radius: 13px;
+      background: #fff;
+      color: var(--text);
+      padding: 13px 14px;
+      outline: none;
+      resize: vertical;
+      font: inherit;
+      line-height: 1.65;
+    }
+
+    .feedback-card textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.1);
+    }
+
+    .feedback-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .feedback-privacy {
+      margin-top: 12px;
+      border: 1px solid #f1dfc7;
+      border-radius: 14px;
+      background: var(--surface-tint);
+      padding: 11px 12px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .feedback-submit {
+      width: 100%;
+      height: 46px;
+      margin-top: 13px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .feedback-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .feedback-success-card {
+      border: 1px solid #cfe7d5;
+      border-radius: 18px;
+      background: #f2faf4;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    .feedback-success-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto;
+      border-radius: 15px;
+      background: #e5f5e9;
+      color: #3c7b4d;
+      display: grid;
+      place-items: center;
+    }
+
+    .feedback-success-card strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .feedback-success-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* ===== v4.16 單一展開式 FAQ ===== */
+    .faq-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .faq-accordion-item {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .faq-accordion-item.is-open {
+      border-color: #edc996;
+      box-shadow: 0 8px 22px rgba(88, 61, 28, .06);
+    }
+
+    .faq-question-row {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 15px;
+      border: 0;
+      background: #fff;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .faq-question-row:hover {
+      background: #fffaf4;
+    }
+
+    .faq-question-text {
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.55;
+    }
+
+    .faq-question-icon {
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: var(--surface-tint);
+      color: var(--accent-deep);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      line-height: 1;
+      transition: transform .22s ease, background .22s ease;
+    }
+
+    .faq-accordion-item.is-open .faq-question-icon {
+      transform: rotate(45deg);
+      background: #fff0dc;
+    }
+
+    .faq-answer-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .24s ease;
+    }
+
+    .faq-accordion-item.is-open .faq-answer-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-answer-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .faq-answer-content {
+      margin: 0 14px 14px;
+      padding: 13px 14px;
+      border: 1px solid #f0ddc3;
+      border-radius: 12px;
+      background: #fff9f1;
+      color: var(--muted-deep);
+      font-size: 11px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .terms-document {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 18px 17px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .terms-document-intro {
+      margin: 0 0 11px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.85;
+    }
+
+    .terms-section-title {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin: 22px 0 9px;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 850;
+    }
+
+    .terms-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .terms-section-no {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
+
+    .terms-section-divider {
+      color: var(--muted);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .terms-bullets {
+      margin: 0 0 8px;
+      padding-left: 21px;
+      color: var(--muted-deep);
+      font-size: 12px;
+      line-height: 1.85;
+    }
+
+    .terms-bullets li {
+      padding-left: 2px;
+      margin: 3px 0;
+    }
+
+    .terms-spacer {
+      height: 6px;
+    }
+
+    .terms-empty {
+      border: 1px dashed var(--line-strong);
+      border-radius: 16px;
+      background: #fff;
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .content-guide-card {
+      border: 1px solid #f1dfc7;
+      border-radius: 16px;
+      background: var(--surface-tint);
+      padding: 12px 13px;
+      margin-bottom: 12px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+  
+    /* ===== v4.17 系統問題回報 ===== */
+    .issue-report-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .issue-field {
+      display: block;
+      margin-bottom: 13px;
+    }
+
+    .issue-field > span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .issue-field select,
+    .issue-field input,
+    .issue-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      font: inherit;
+    }
+
+    .issue-field select,
+    .issue-field input {
+      height: 43px;
+    }
+
+    .issue-field textarea {
+      min-height: 170px;
+      padding: 12px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .issue-field select:focus,
+    .issue-field input:focus,
+    .issue-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,154,56,.09);
+    }
+
+    .issue-helper {
+      margin-top: -5px;
+      margin-bottom: 13px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.6;
+    }
+
+    .issue-identity {
+      border: 1px solid #f1dfc7;
+      border-radius: 13px;
+      background: var(--surface-tint);
+      padding: 11px 12px;
+      margin-bottom: 13px;
+      color: var(--muted-deep);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .issue-submit {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .issue-submit:disabled {
+      border-color: #ddd;
+      background: #e8e8e8;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .issue-success {
+      border: 1px solid #cfe7d5;
+      border-radius: 18px;
+      background: #f2faf4;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    .issue-success .success-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: #e5f5e9;
+      color: #3c7b4d;
+    }
+
+    .issue-success strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .issue-success p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>🧡 橘貓代購會員中心</h1>
-    <div id="status" class="status">載入中...</div>
-  </div>
+  <main class="app">
+    <!-- 共用頂部 -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo"><img src="./assets/orange-cat-logo.png" alt="橘貓代購 Logo"></div>
+        <div class="brand-text">
+          <div class="brand-title">橘貓代購</div>
+        </div>
+      </div>
 
-  <div id="memberArea" class="card" style="display:none;">
-    <h2>會員資料</h2>
-    <div id="memberInfo"></div>
-    <button onclick="loadOrders('unreturned')">📦 查看未運回訂單</button>
-    <button onclick="loadOrders('all')">📋 查看全部訂單</button>
-  </div>
+      <div id="topStatus" class="top-pill">初始化中</div>
+    </header>
 
-  <div id="ordersArea" class="card" style="display:none;">
-    <h2>我的訂單</h2>
-    <div id="ordersInfo">載入中...</div>
-  </div>
+    <!-- ==================== 首頁 ==================== -->
+    <section id="page-home" class="page active">
+      <div class="hero-card">
+        <div class="hero-brandline">ORANGE CAT · MEMBER SPACE</div>
+        <div class="hero-kicker">歡迎回來</div>
+        <div id="heroName" class="hero-name">正在載入...</div>
+        <div id="heroHelper" class="hero-helper">正在確認會員狀態</div>
 
-  <div id="bindArea" class="card" style="display:none;">
-    <p>請輸入你登記包裹時使用的名稱，完成 LINE 綁定。</p>
-    <input id="customerName" type="text" placeholder="例如：王小明" />
-    <button onclick="bindLine()">立即綁定</button>
-    <div id="bindStatus" class="status"></div>
-  </div>
+        <div class="stats">
+          <button class="stat-button" type="button" data-action="orders-unreturned">
+            <span id="homeStatProgress" class="stat-value">—</span>
+            <span class="stat-label">進行中</span>
+          </button>
+
+          <button class="stat-button" type="button" data-action="orders-arrived">
+            <span id="homeStatArrived" class="stat-value">—</span>
+            <span class="stat-label">已到倉</span>
+          </button>
+
+          <button class="stat-button" type="button" data-action="return-request">
+            <span id="homeStatReturnable" class="stat-value">—</span>
+            <span class="stat-label">可運回</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="homeBindBanner" class="bind-banner hidden">
+        <div class="bind-banner-title">先完成會員綁定</div>
+        <div class="bind-banner-text">
+          綁定後就可以查看自己的訂單、包裹狀態與會員等級。
+        </div>
+        <button id="goBindButton" class="inline-btn" type="button">立即綁定</button>
+      </div>
+
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>重要公告</h2>
+        </div>
+        <span class="section-note">最新消息</span>
+      </div>
+
+      <button class="announcement" type="button" data-action="announcements">
+        <div class="announcement-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a2 2 0 0 0 2 2h2l3 4h2l-1-4h2l7 3V6l-7 3H5a2 2 0 0 0-2 2Z"/></svg></div>
+        <div class="announcement-main">
+          <div id="homeAnnouncementTag" class="announcement-tag">NOTICE</div>
+          <div id="homeAnnouncementTitle" class="announcement-title">目前沒有新公告</div>
+          <div id="homeAnnouncementDesc" class="announcement-desc">
+            有最新消息時會顯示在這裡。
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </button>
+
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>今日資訊</h2>
+        </div>
+        <span class="section-note">即時資訊</span>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10l-3-3"/><path d="M17 17H7l3 3"/><path d="M8 12h8"/></svg></div>
+          <div class="info-label">代購匯率</div>
+          <div id="exchangeRateValue" class="info-value">—</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h18l-3 5H6l-3-5Z"/><path d="M7 14V8h10v6"/><path d="M10 8V5h4v3"/></svg></div>
+          <div class="info-label">近期船班</div>
+          <div id="shippingValue" class="info-value">—</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-emoji"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div class="info-label">資料更新</div>
+          <div id="updatedValue" class="info-value">—</div>
+        </div>
+      </div>
+
+      <div class="section-head section-head-stacked">
+        <div>
+          <h2>快速功能</h2>
+        </div>
+        <span class="section-note">常用服務</span>
+      </div>
+
+      <div class="quick-grid">
+        <button class="quick-btn" type="button" data-action="orders-unreturned">
+          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
+          <span class="quick-label">查詢訂單</span>
+        </button>
+
+        <button class="quick-btn" type="button" data-action="return-request">
+          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+          <span class="quick-label">運回申請</span>
+        </button>
+
+        <button class="quick-btn" type="button" data-action="forward-register">
+          <span class="mini-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10v16H4z"/><path d="m14 14 6-6 2 2-6 6-3 1 1-3Z"/></svg></span>
+          <span class="quick-label">集運登記</span>
+        </button>
+      </div>
+
+      <div class="section-head">
+        <h2>優惠活動</h2>
+        <span class="section-note">查看更多</span>
+      </div>
+
+      <button class="announcement promo-card" type="button" data-action="promotions">
+        <div class="announcement-main">
+          <span id="homePromotionTag" class="promo-badge">PROMOTION</span>
+          <div id="homePromotionTitle" class="promo-title">目前沒有進行中的優惠活動</div>
+          <div id="homePromotionDesc" class="promo-desc">
+            有新活動時會顯示在這裡。
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </button>
+    </section>
+
+    <!-- ==================== 價目表 ==================== -->
+    <section id="page-pricing" class="page">
+      <div class="page-title">
+        <h1>價目表</h1>
+      </div>
+
+      <div class="pricing-rate-grid">
+        <div class="pricing-rate-card">
+          <span>代購定價匯率</span>
+          <strong id="pricingPurchaseRate">—</strong>
+        </div>
+        <div class="pricing-rate-card">
+          <span>代付定價匯率</span>
+          <strong id="pricingPaymentRate">—</strong>
+        </div>
+      </div>
+
+      <div class="section-head" id="purchasePricingSection">
+        <h2>台幣金額計算</h2>
+      </div>
+
+      <div class="pricing-formula-card">
+        <div class="pricing-formula-main">
+          商品人民幣金額 <span>×</span> 適用匯率 <span>＋</span> 手續費
+        </div>
+        <div class="pricing-formula-equal">＝ 台幣金額</div>
+      </div>
+
+      <div class="section-head">
+        <h2>客戶付款方式</h2>
+      </div>
+
+      <div class="payment-rule-grid">
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h18"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8"/><path d="M2 20h20M12 3l9 5H3l9-5Z"/></svg>
+          </div>
+          <strong>銀行轉帳</strong>
+          <p>依一般手續費計算。</p>
+        </div>
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h3"/></svg>
+          </div>
+          <strong>VIP 儲值金扣款</strong>
+          <p>使用 VIP 儲值金付款，依會員等級套用手續費優惠。</p>
+        </div>
+        <div class="payment-rule-card">
+          <div class="payment-rule-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h11v10H4z"/><path d="M15 10h3l3 3v4h-6z"/><circle cx="8" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+          </div>
+          <strong>貨到付款</strong>
+          <p>固定手續費 NT$60；限台幣 NT$500 以內訂單。</p>
+        </div>
+      </div>
+
+      <div class="section-head" id="forwardPricingSection">
+        <h2>國際運費</h2>
+      </div>
+
+      <div class="shipping-rate-grid">
+        <div class="shipping-rate-card">
+          <strong>集運包裹</strong>
+          <span class="shipping-price">NT$90 / kg</span>
+        </div>
+        <div class="shipping-rate-card">
+          <strong>代購平台包裹</strong>
+          <span class="shipping-price">NT$70 / kg</span>
+        </div>
+        <div class="shipping-rate-card">
+          <strong>重量計算</strong>
+          <span class="shipping-price">0.5 kg 級距</span>
+        </div>
+      </div>
+
+      <div class="section-head" id="pricingCalculatorSection">
+        <h2>費用試算</h2>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calculator-grid">
+          <div class="calculator-field">
+            <label for="calcOrderType">訂單類型</label>
+            <select id="calcOrderType">
+              <option value="purchase">代購</option>
+              <option value="payment">代付</option>
+            </select>
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcAmount">人民幣金額</label>
+            <input id="calcAmount" type="number" min="0" step="0.01" placeholder="例如 399">
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcCustomerPayment">客戶付款方式</label>
+            <select id="calcCustomerPayment">
+              <option value="bank">銀行轉帳</option>
+              <option value="balance">VIP 儲值金扣款</option>
+              <option value="cod">貨到付款</option>
+            </select>
+          </div>
+
+          <div class="calculator-field">
+            <label for="calcMemberLevel">會員等級</label>
+            <select id="calcMemberLevel">
+              <option value="normal">一般會員</option>
+              <option value="vip1">VIP1</option>
+              <option value="vip2">VIP2</option>
+              <option value="vip3">VIP3</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calculator-result">
+          <div class="calculator-result-row">
+            <span>適用匯率</span>
+            <strong id="calcRateResult">—</strong>
+          </div>
+          <div class="calculator-result-row">
+            <span>本單手續費</span>
+            <strong id="calcFeeResult">NT$0</strong>
+          </div>
+          <div class="calculator-result-row calculator-total">
+            <span>預估應收台幣</span>
+            <strong id="calcTotalResult">NT$0</strong>
+          </div>
+        </div>
+
+        <div id="calcCodWarning" class="calc-warning">
+          此筆訂單超過 NT$500，不支援貨到付款，請改用銀行轉帳或 VIP 儲值金扣款。
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== 會員中心 ==================== -->
+    <section id="page-member" class="page">
+      <div id="memberMainView">
+        <div class="page-title">
+          <h1>會員中心</h1>
+        </div>
+
+        <!-- 已綁定會員卡 -->
+        <div id="memberCard" class="member-card hidden">
+          <div class="member-top">
+            <div class="member-avatar"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9 4.5 5.5 8 7l2-1h4l2 1 3.5-1.5L18 9a7 7 0 0 1 1 3.6C19 17.2 15.9 20 12 20s-7-2.8-7-7.4A7 7 0 0 1 6 9Z"/><path d="M9.5 13h.01M14.5 13h.01"/><path d="M10 16c1 .8 3 .8 4 0"/></svg></div>
+            <div class="member-meta">
+              <div id="memberName" class="member-name">會員</div>
+              <div id="memberLevel" class="vip-pill">一般會員</div>
+            </div>
+          </div>
+
+          <div class="member-wallet-grid">
+            <div class="member-wallet-item">
+              <span>VIP 儲值金</span>
+              <strong id="memberBalanceValue">NT$—</strong>
+            </div>
+            <div class="member-wallet-item">
+              <span>會員點數</span>
+              <strong id="memberPointsValue">—</strong>
+            </div>
+            <div class="member-wallet-item">
+              <span>可用優惠券</span>
+              <strong id="memberCouponsValue">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 尚未綁定 -->
+        <div id="bindArea" class="bind-card hidden">
+          <div class="bind-title">綁定橘貓會員</div>
+          <div class="bind-desc">
+            請輸入之前向橘貓代購下單或登記包裹時使用的姓名。
+          </div>
+
+          <input
+            id="customerName"
+            class="text-input"
+            type="text"
+            autocomplete="name"
+            placeholder="例如：王小明"
+          />
+
+          <button id="bindButton" class="primary-btn" type="button">
+            確認綁定
+          </button>
+
+          <div id="bindStatus" class="form-status"></div>
+        </div>
+
+        <div class="section-head">
+          <h2>我的交易</h2>
+          <span></span>
+        </div>
+
+        <div class="menu-list">
+          <button class="menu-row" type="button" data-action="orders-unreturned">
+            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
+            <span class="row-content">
+              <span class="row-title">我的訂單</span>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+
+          <button class="menu-row" type="button" data-action="return-request">
+            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <span class="row-content">
+              <span class="row-title">運回申請</span>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+
+
+          <button class="menu-row" type="button" data-action="forward-register">
+            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10v16H4z"/><path d="m14 14 6-6 2 2-6 6-3 1 1-3Z"/></svg></span>
+            <span class="row-content">
+              <span class="row-title">集運登記</span>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+        </div>
+
+        <div class="section-head">
+          <h2>我的優惠</h2>
+          <span></span>
+        </div>
+
+        <div class="menu-list">
+          <button class="menu-row" type="button" data-action="coupons">
+            <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M12 7v10"/></svg></span>
+            <span class="row-content">
+              <span class="row-title">我的優惠券</span>
+              <span id="couponMenuDesc" class="row-desc">查看目前可使用優惠券</span>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+
+          
+
+          
+
+          
+        </div>
+      </div>
+
+      <!-- 訂單子頁 -->
+      <div id="ordersSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="ordersBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>我的訂單</h2>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <button class="filter-chip active" type="button" data-filter="unreturned">未運回</button>
+          <button class="filter-chip" type="button" data-filter="arrived">已到倉</button>
+          <button class="filter-chip" type="button" data-filter="all">全部</button>
+        </div>
+
+        <div id="ordersInfo">
+          <div class="empty-state">
+            <div class="empty-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></div>
+            <div class="empty-title">準備載入訂單</div>
+            <div class="empty-desc">進入 LIFF 並完成會員綁定後即可讀取。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 集運登記子頁 -->
+      <div id="forwardingSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="forwardingBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>集運登記</h2>
+            <p>登記寄往橘貓中國倉的物流包裹。</p>
+          </div>
+        </div>
+
+        <div id="forwardingFormSection" class="forwarding-form-card">
+          <div class="return-step-title">
+            <span class="return-step-no">1</span>
+            填寫包裹資料
+          </div>
+
+          <div class="forwarding-form-grid">
+            <div class="forwarding-field full">
+              <label for="forwardTrackingNumber">中國快遞單號</label>
+              <input
+                id="forwardTrackingNumber"
+                type="text"
+                maxlength="255"
+                autocomplete="off"
+                placeholder="請輸入完整物流單號"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardItemName">內容物</label>
+              <input
+                id="forwardItemName"
+                type="text"
+                maxlength="255"
+                placeholder="例如：衣服、娃娃、飾品"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardQuantity">數量</label>
+              <input
+                id="forwardQuantity"
+                type="number"
+                min="1"
+                max="999"
+                step="1"
+                value="1"
+              >
+            </div>
+
+            <div class="forwarding-field">
+              <label for="forwardUnitPrice">商品單價（RMB）</label>
+              <input
+                id="forwardUnitPrice"
+                type="number"
+                min="0"
+                max="99999999"
+                step="0.01"
+                value="0"
+              >
+            </div>
+
+            <div class="forwarding-field full">
+              <label for="forwardRemarks">備註（選填）</label>
+              <textarea
+                id="forwardRemarks"
+                maxlength="1000"
+                placeholder=""
+              ></textarea>
+            </div>
+          </div>
+
+          <button id="forwardingSubmitButton" class="forwarding-submit" type="button">
+            送出集運登記
+          </button>
+
+          <div class="forwarding-note">
+            送出後會先顯示「待處理」；後台確認後會自動建立一筆集運訂單，之後可在「我的訂單」查看入庫狀態。
+          </div>
+
+          <div id="forwardingSubmitStatus" class="form-status"></div>
+        </div>
+
+        <div class="section-head" id="forwardingHistorySection">
+          <h2>我的集運包裹</h2>
+          <span class="section-note">最近登記</span>
+        </div>
+
+        <div class="forwarding-history-card">
+          <div id="forwardingHistoryLoading" class="empty-state">
+            <div class="empty-title">正在讀取集運登記</div>
+            <div class="empty-desc">請稍候。</div>
+          </div>
+
+          <div id="forwardingHistoryList" class="forwarding-history-list hidden"></div>
+
+          <div id="forwardingHistoryEmpty" class="empty-state hidden">
+            <div class="empty-title">目前還沒有集運登記</div>
+            <div class="empty-desc">填寫上方資料後即可送出第一筆登記。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 運回申請子頁 -->
+      <div id="returnRequestSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="returnRequestBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>運回申請</h2>
+            <p>已到倉的包裹即可申請提前運回。</p>
+          </div>
+        </div>
+
+        <div id="returnRequestLoading" class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </div>
+          <div class="empty-title">正在讀取可運回包裹</div>
+          <div class="empty-desc">請稍候。</div>
+        </div>
+
+        <div id="returnRequestContent" class="hidden">
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">1</span>
+              選擇台灣端寄送方式
+            </div>
+
+            <div class="return-form-grid">
+              <div class="return-field">
+                <label for="returnDeliveryMethod">台灣端寄送</label>
+                <select id="returnDeliveryMethod">
+                  <option value="home_delivery">宅配</option>
+                  <option value="shop_delivery">賣貨便</option>
+                </select>
+              </div>
+
+              <div id="returnBatchField" class="return-field hidden">
+                <label for="returnShippingBatch">近期船班</label>
+                <select id="returnShippingBatch"></select>
+              </div>
+
+              <div id="returnHomeInfo" class="return-field">
+                <label>宅配時效</label>
+                <div class="return-static-info">
+                  每天皆可申請｜預計 4–6 天到貨
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">2</span>
+              選擇要運回的包裹
+            </div>
+
+            <div id="returnOrdersList" class="return-order-list"></div>
+
+            <div id="returnNoOrders" class="empty-state hidden" style="margin-top:12px;">
+              <div class="empty-title">目前沒有可申請運回的包裹</div>
+              <div class="empty-desc">
+                只要包裹已到倉且尚未運回，即可在這裡申請提前運回。
+              </div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="return-flow-card">
+            <div class="return-step-title">
+              <span class="return-step-no">3</span>
+              確認申請
+            </div>
+
+            <div class="return-summary">
+              <div class="return-summary-row">
+                <span>已選包裹</span>
+                <strong id="returnSelectedCount">0 件</strong>
+              </div>
+              <div class="return-summary-row">
+                <span>實際重量</span>
+                <strong id="returnSelectedWeight">0.00 kg</strong>
+              </div>
+              <div class="return-summary-row total">
+                <span>預估國際運費</span>
+                <strong id="returnEstimatedFee">NT$0</strong>
+              </div>
+            </div>
+
+            <button id="returnSubmitButton" class="return-submit" type="button" disabled>
+              送出運回申請
+            </button>
+
+            <div id="returnSubmitStatus" class="form-status"></div>
+          </div>
+
+          <div id="pendingReturnSection" class="hidden">
+            <div class="section-head">
+              <h2>待處理申請</h2>
+              <span class="section-note">已送出</span>
+            </div>
+            <div id="pendingReturnList" class="pending-request-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 優惠券子頁 -->
+      <div id="couponsSubpage" class="subpage">
+        <div class="sub-head">
+          <button id="couponsBackButton" class="back-btn" type="button">‹</button>
+          <div class="sub-title">
+            <h2>我的優惠券</h2>
+          </div>
+        </div>
+
+        <div id="couponsInfo" class="coupon-list"></div>
+      </div>
+
+      <!-- VIP 子頁 -->
+      
+    </section>
+
+    <!-- ==================== 公告 / 活動列表 ==================== -->
+    <section id="page-content" class="page">
+      <div class="sub-head">
+        <button id="contentBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2 id="contentPageTitle">最新公告</h2>
+        </div>
+      </div>
+
+      <div id="contentListWrap" class="content-list-wrap"></div>
+    </section>
+
+    <!-- ==================== FAQ ==================== -->
+    <section id="page-faq" class="page">
+      <div class="sub-head">
+        <button id="faqBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>常見問題 FAQ</h2>
+        </div>
+      </div>
+
+      <div id="faqList" class="faq-list"></div>
+    </section>
+
+    <!-- ==================== 交易須知 ==================== -->
+    <section id="page-terms" class="page">
+      <div class="sub-head">
+        <button id="termsBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>交易須知</h2>
+          <p>下單前請先閱讀目前的交易與服務規則。</p>
+        </div>
+      </div>
+
+      <div id="termsDocumentWrap"></div>
+    </section>
+
+    <!-- ==================== 匿名回饋 ==================== -->
+    <section id="page-feedback" class="page">
+      <div class="sub-head">
+        <button id="feedbackBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>匿名回饋</h2>
+          <p>留下建議、使用心得或希望改善的地方。</p>
+        </div>
+      </div>
+
+      <div id="feedbackFormCard" class="feedback-card">
+        <textarea
+          id="feedbackContent"
+          maxlength="2000"
+          placeholder="輸入回饋內容"
+        ></textarea>
+
+        <div class="feedback-meta-row feedback-meta-counter-only">
+          <span></span>
+          <span id="feedbackCounter">0 / 2000</span>
+        </div>
+
+        <button id="feedbackSubmitButton" class="feedback-submit" type="button">
+          送出匿名回饋
+        </button>
+
+        <div id="feedbackStatus" class="form-status"></div>
+      </div>
+
+      <div id="feedbackSuccessCard" class="feedback-success-card hidden">
+        <div class="feedback-success-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="m5 12 4 4L19 6"/>
+          </svg>
+        </div>
+        <strong>回饋已送出</strong>
+        <p>謝謝你的建議，橘貓會在後台查看。</p>
+        <button id="feedbackAgainButton" class="primary-btn" type="button" style="margin-top:14px;">
+          再留一則回饋
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 系統問題回報 ==================== -->
+    <section id="page-bug-report" class="page">
+      <div class="sub-head">
+        <button id="issueReportBackButton" class="back-btn" type="button">‹</button>
+        <div class="sub-title">
+          <h2>系統問題回報</h2>
+          <p>頁面異常、資料錯誤或操作問題都可以在這裡回報。</p>
+        </div>
+      </div>
+
+      <div id="issueReportFormCard" class="issue-report-card">
+        <label class="issue-field">
+          <span>問題類型</span>
+          <select id="issueType">
+            <option value="頁面無法操作">頁面無法操作</option>
+            <option value="資料顯示異常">資料顯示異常</option>
+            <option value="訂單資料問題">訂單資料問題</option>
+            <option value="付款或金額問題">付款或金額問題</option>
+            <option value="會員資料問題">會員資料問題</option>
+            <option value="其他">其他</option>
+          </select>
+        </label>
+
+        <label class="issue-field">
+          <span>發生頁面</span>
+          <select id="issuePageName">
+            <option value="首頁">首頁</option>
+            <option value="價目表">價目表</option>
+            <option value="會員中心">會員中心</option>
+            <option value="我的訂單">我的訂單</option>
+            <option value="運回申請">運回申請</option>
+            <option value="集運登記">集運登記</option>
+            <option value="優惠券 / VIP">優惠券 / VIP</option>
+            <option value="公告 / 優惠活動">公告 / 優惠活動</option>
+            <option value="FAQ / 交易須知">FAQ / 交易須知</option>
+            <option value="其他">其他</option>
+          </select>
+        </label>
+
+        <label class="issue-field">
+          <span>問題描述</span>
+          <textarea
+            id="issueDescription"
+            maxlength="2000"
+            placeholder="請描述你剛剛做了什麼、畫面出現什麼情況，以及你原本預期會看到什麼。"
+          ></textarea>
+        </label>
+
+        <button id="issueSubmitButton" class="issue-submit" type="button">
+          送出問題回報
+        </button>
+
+        <div id="issueStatus" class="form-status"></div>
+      </div>
+
+      <div id="issueSuccessCard" class="issue-success hidden">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="m5 12 4 4L19 6"/>
+          </svg>
+        </div>
+        <strong>問題回報已送出</strong>
+        <p id="issueSuccessText">已收到你的問題回報。</p>
+        <button id="issueAgainButton" class="primary-btn" type="button" style="margin-top:14px;">
+          再回報一個問題
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 更多 ==================== -->
+    <section id="page-more" class="page">
+      <div class="page-title">
+        <h1>更多</h1>
+      </div>
+
+      <div class="menu-list">
+        <button class="menu-row" type="button" data-action="faq">
+          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.65 2.5c-.95.63-1.75 1.24-1.75 2.5"/><path d="M12 17h.01"/></svg></span>
+          <span class="row-content">
+            <span class="row-title">常見問題 FAQ</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+
+        <button class="menu-row" type="button" data-action="terms">
+          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v15.5a.5.5 0 0 1-.5.5H6.5A2.5 2.5 0 0 0 4 22V6.5Z"/><path d="M8 4v16"/></svg></span>
+          <span class="row-content">
+            <span class="row-title">交易須知</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+
+        <button class="menu-row" type="button" data-action="feedback">
+          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
+          <span class="row-content">
+            <span class="row-title">匿名回饋</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+
+        <button class="menu-row" type="button" data-action="bug-report">
+          <span class="row-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.2 2.2-1.5-1.5 2.2-2.2Z"/></svg></span>
+          <span class="row-content">
+            <span class="row-title">系統問題回報</span>
+          </span>
+          <span class="chevron">›</span>
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- 底部導覽 -->
+  <nav class="bottom-nav-shell" aria-label="主要導覽">
+    <div class="bottom-nav">
+      <button class="nav-btn active" type="button" data-page="home">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 10v10h14V10"/></svg></span>
+        <span>首頁</span>
+      </button>
+
+      <button class="nav-btn" type="button" data-page="pricing">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8"/><path d="M12 4v16"/><path d="M8 10h8"/><path d="M8 14h8"/></svg></span>
+        <span>價目表</span>
+      </button>
+
+      <button class="nav-btn" type="button" data-page="member">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M6 20a6 6 0 0 1 12 0"/></svg></span>
+        <span>會員中心</span>
+      </button>
+
+      <button class="nav-btn" type="button" data-page="more">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span>
+        <span>更多</span>
+      </button>
+    </div>
+  </nav>
 
   <script>
-    const LIFF_ID = "2010286756-yeXtJpY6";
+    let publicPurchaseRate = null;
+    let publicPaymentRate = null;
+    let publicAnnouncements = [];
+    let publicPromotions = [];
+    let publicFaqs = [];
+    let publicTermsDocument = null;
+
+    // =========================================================
+    // 橘貓代購 LIFF V2 - STEP 1
+    // UI 骨架 + 保留既有 LIFF / 會員綁定 / 訂單 API
+    // =========================================================
+
+    const LIFF_ID = "2010286756-vFt0pTVk";
+    const PRODUCTION_HOST = "orange-cat-liff.vercel.app";
 
     let lineUserId = "";
     let lineName = "";
     let currentCustomerName = "";
+    let currentMember = null;
+    let allOrders = [];
+    let currentPage = "home";
 
+    // Preview 分支網址不屬於目前正式 LIFF Endpoint。
+    // 因此 Preview 先進入 UI 測試模式，避免自動登入跳回正式站。
+    const isPreviewMode = false;
+
+    // ---------- DOM ----------
+    const topStatus = document.getElementById("topStatus");
+    const heroName = document.getElementById("heroName");
+    const heroHelper = document.getElementById("heroHelper");
+
+    const memberCard = document.getElementById("memberCard");
+    const bindArea = document.getElementById("bindArea");
+    const homeBindBanner = document.getElementById("homeBindBanner");
+
+    const memberNameEl = document.getElementById("memberName");
+    const memberLevelEl = document.getElementById("memberLevel");
+
+    const ordersSubpage = document.getElementById("ordersSubpage");
+    const forwardingSubpage = document.getElementById("forwardingSubpage");
+    const returnRequestSubpage = document.getElementById("returnRequestSubpage");
+    const couponsSubpage = document.getElementById("couponsSubpage");
+
+    let forwardingRecords = [];
+
+    let returnOptions = {
+      batches: [],
+      orders: [],
+      pending_requests: []
+    };
+    const memberMainView = document.getElementById("memberMainView");
+    const ordersInfo = document.getElementById("ordersInfo");
+    const couponsInfo = document.getElementById("couponsInfo");
+
+    const memberBalanceValue = document.getElementById("memberBalanceValue");
+    const memberPointsValue = document.getElementById("memberPointsValue");
+    const memberCouponsValue = document.getElementById("memberCouponsValue");
+
+    // ---------- 工具 ----------
+    function safeText(value, fallback = "—") {
+      if (value === null || value === undefined || value === "") return fallback;
+      return String(value);
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "—";
+      return d.toLocaleDateString("zh-TW");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function scrollTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ---------- 主頁切換 ----------
+    function showPage(pageName) {
+      currentPage = pageName;
+
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === "page-" + pageName);
+      });
+
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === pageName);
+      });
+
+      if (pageName !== "member") {
+        closeMemberSubpages(false);
+      }
+
+      scrollTop();
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        showPage(btn.dataset.page);
+      });
+    });
+
+    document
+      .getElementById("contentBackButton")
+      .addEventListener("click", () => showPage("home"));
+
+    document
+      .getElementById("faqBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("termsBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("issueReportBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("issueDescription")
+      .addEventListener("input", updateIssueCounter);
+
+    document
+      .getElementById("issueSubmitButton")
+      .addEventListener("click", submitIssueReport);
+
+    document
+      .getElementById("issueAgainButton")
+      .addEventListener("click", () => resetIssueReportForm(true));
+
+    document
+      .getElementById("feedbackBackButton")
+      .addEventListener("click", () => showPage("more"));
+
+    document
+      .getElementById("feedbackContent")
+      .addEventListener("input", updateFeedbackCounter);
+
+    document
+      .getElementById("feedbackSubmitButton")
+      .addEventListener("click", submitAnonymousFeedback);
+
+    document
+      .getElementById("feedbackAgainButton")
+      .addEventListener("click", () => resetFeedbackForm(true));
+
+    // ---------- Preview UI 假資料 ----------
+    function enterPreviewMode() {
+      topStatus.textContent = "測試版";
+      heroName.textContent = "新版介面測試";
+      heroHelper.textContent = "目前先確認 UI、底部導覽與操作流程";
+
+      document.getElementById("homeStatProgress").textContent = "12";
+      document.getElementById("homeStatArrived").textContent = "4";
+      document.getElementById("homeStatReturnable").textContent = "3";
+
+      document.getElementById("exchangeRateValue").textContent = "待串接";
+      document.getElementById("shippingValue").textContent = "待串接";
+      document.getElementById("updatedValue").textContent = "待串接";
+
+      memberCard.classList.remove("hidden");
+      bindArea.classList.add("hidden");
+      homeBindBanner.classList.add("hidden");
+
+      memberNameEl.textContent = "測試會員";
+      memberLevelEl.textContent = "VIP 2";
+
+
+      memberBalanceValue.textContent = "NT$3,000";
+      memberPointsValue.textContent = "18";
+      memberCouponsValue.textContent = "2";
+
+      currentMember = {
+        customer_name: "測試會員",
+        member_level: "VIP2",
+        balance_twd: 3000,
+        points_balance: 18,
+        available_coupon_count: 2,
+        coupons: [
+          {
+            member_coupon_id: 1,
+            coupon_name: "代購手續費折抵",
+            description: "測試優惠券",
+            expires_at: null
+          },
+          {
+            member_coupon_id: 2,
+            coupon_name: "會員活動優惠",
+            description: "測試優惠券",
+            expires_at: "2026-12-31"
+          }
+        ]
+      };
+
+      allOrders = [
+        {
+          order_id: "V2-TEST-001",
+          order_time: new Date().toISOString(),
+          platform: "淘寶",
+          tracking_number: "TEST123456789",
+          amount_rmb: 399,
+          weight_kg: 0.85,
+          is_arrived: 1,
+          is_returned: 0
+        },
+        {
+          order_id: "V2-TEST-002",
+          order_time: new Date(Date.now() - 86400000 * 2).toISOString(),
+          platform: "拼多多",
+          tracking_number: "TEST987654321",
+          amount_rmb: 158,
+          weight_kg: 0.42,
+          is_arrived: 0,
+          is_returned: 0
+        },
+        {
+          order_id: "V2-TEST-003",
+          order_time: new Date(Date.now() - 86400000 * 8).toISOString(),
+          platform: "閒魚",
+          tracking_number: "TEST555555555",
+          amount_rmb: 720,
+          weight_kg: 1.2,
+          is_arrived: 1,
+          is_returned: 1
+        }
+      ];
+    }
+
+
+    // ---------- 價目表試算 ----------
+    function roundHalfEven(value) {
+      if (!Number.isFinite(value)) return 0;
+      const floor = Math.floor(value);
+      const fraction = value - floor;
+      if (fraction > 0.500000001) return floor + 1;
+      if (fraction < 0.499999999) return floor;
+      return floor % 2 === 0 ? floor : floor + 1;
+    }
+
+    function roundTwd(value) {
+      if (!Number.isFinite(value) || value <= 0) return 0;
+      return Math.floor(value + 0.5);
+    }
+
+    function calculateBaseServiceFee(amount) {
+      if (!Number.isFinite(amount) || amount <= 0) return 0;
+      if (amount < 500) return 30;
+      return Math.floor(amount / 500) * 50;
+    }
+
+    function updatePricingCalculator() {
+      const typeEl = document.getElementById("calcOrderType");
+      const amountEl = document.getElementById("calcAmount");
+      const paymentEl = document.getElementById("calcCustomerPayment");
+      const memberEl = document.getElementById("calcMemberLevel");
+
+      if (!typeEl || !amountEl || !paymentEl || !memberEl) return;
+
+      const amount = Number(amountEl.value || 0);
+      const rate =
+        typeEl.value === "payment"
+          ? publicPaymentRate
+          : publicPurchaseRate;
+
+      const baseFee = calculateBaseServiceFee(amount);
+      let fee = baseFee;
+
+      if (paymentEl.value === "cod") {
+        fee = amount > 0 ? 60 : 0;
+      } else if (paymentEl.value === "balance") {
+        const discounts = {
+          normal: 1,
+          vip1: 0.90,
+          vip2: 0.85,
+          vip3: 0.80
+        };
+        fee = roundHalfEven(baseFee * (discounts[memberEl.value] || 1));
+      }
+
+      const total =
+        rate !== null && Number.isFinite(rate)
+          ? roundTwd(amount * rate + fee)
+          : 0;
+
+      const codUnsupported =
+        paymentEl.value === "cod" &&
+        rate !== null &&
+        Number.isFinite(rate) &&
+        total > 500;
+
+      const codWarning = document.getElementById("calcCodWarning");
+      const totalRow = document
+        .getElementById("calcTotalResult")
+        ?.closest(".calculator-result-row");
+
+      if (codWarning) {
+        codWarning.classList.toggle("show", codUnsupported);
+        if (codUnsupported) {
+          codWarning.textContent =
+            `此筆試算為 NT$${total.toLocaleString("zh-TW")}，超過貨到付款 NT$500 上限，請改用銀行轉帳或 VIP 儲值金扣款。`;
+        }
+      }
+
+      if (totalRow) {
+        totalRow.classList.toggle("unsupported", codUnsupported);
+      }
+
+      document.getElementById("calcRateResult").textContent =
+        rate !== null && Number.isFinite(rate)
+          ? rate.toFixed(2)
+          : "匯率讀取中";
+
+      document.getElementById("calcFeeResult").textContent =
+        `NT$${fee.toLocaleString("zh-TW")}`;
+
+      document.getElementById("calcTotalResult").textContent =
+        codUnsupported
+          ? "不支援貨到付款"
+          : (
+              rate !== null && Number.isFinite(rate)
+                ? `NT$${total.toLocaleString("zh-TW")}`
+                : "—"
+            );
+    }
+
+    ["calcOrderType", "calcAmount", "calcCustomerPayment", "calcMemberLevel"]
+      .forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("input", updatePricingCalculator);
+          el.addEventListener("change", updatePricingCalculator);
+        }
+      });
+
+
+
+    function renderFaqList() {
+      const wrap = document.getElementById("faqList");
+      if (!wrap) return;
+
+      if (!publicFaqs.length) {
+        wrap.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">目前沒有 FAQ</div>
+            <div class="empty-desc">常見問題整理完成後會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = publicFaqs.map((item, index) => `
+        <article class="faq-accordion-item" data-faq-index="${index}">
+          <button
+            class="faq-question-row"
+            type="button"
+            aria-expanded="false"
+            onclick="toggleFaqAccordion(${index})"
+          >
+            <span class="faq-question-text">${escapeHtml(safeText(item.title, "未命名問題"))}</span>
+            <span class="faq-question-icon" aria-hidden="true">+</span>
+          </button>
+
+          <div class="faq-answer-panel">
+            <div class="faq-answer-inner">
+              <div class="faq-answer-content">${escapeHtml(safeText(item.description, "尚無回答"))}</div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function toggleFaqAccordion(index) {
+      const items = Array.from(
+        document.querySelectorAll("#faqList .faq-accordion-item")
+      );
+
+      const target = items[index];
+      const targetWasOpen =
+        target ? target.classList.contains("is-open") : false;
+
+      items.forEach((item, itemIndex) => {
+        const button = item.querySelector(".faq-question-row");
+        const shouldOpen =
+          itemIndex === index && !targetWasOpen;
+
+        item.classList.toggle("is-open", shouldOpen);
+
+        if (button) {
+          button.setAttribute(
+            "aria-expanded",
+            shouldOpen ? "true" : "false"
+          );
+        }
+      });
+    }
+
+    function openFaqPage() {
+      showPage("faq");
+      renderFaqList();
+      scrollTop();
+    }
+
+
+    function renderTermsDocument() {
+      const wrap = document.getElementById("termsDocumentWrap");
+      if (!wrap) return;
+
+      const content = safeText(
+        publicTermsDocument?.description,
+        ""
+      ).trim();
+
+      if (!content) {
+        wrap.innerHTML = `
+          <div class="terms-empty">
+            目前尚未公布交易須知。
+          </div>
+        `;
+        return;
+      }
+
+      const lines = content.split(/\r?\n/);
+      const parts = [];
+      let bulletOpen = false;
+
+      const closeBullets = () => {
+        if (bulletOpen) {
+          parts.push("</ul>");
+          bulletOpen = false;
+        }
+      };
+
+      lines.forEach(rawLine => {
+        const line = rawLine.trim();
+
+        if (!line) {
+          closeBullets();
+          parts.push('<div class="terms-spacer"></div>');
+          return;
+        }
+
+        const heading = line.match(/^(\d{1,2})\s*[|｜]\s*(.+)$/);
+
+        if (heading) {
+          closeBullets();
+          const no = heading[1].padStart(2, "0");
+          const title = heading[2];
+
+          parts.push(`
+            <h3 class="terms-section-title">
+              <span class="terms-section-no">${escapeHtml(no)}</span>
+              <em class="terms-section-divider">｜</em>
+              <span>${escapeHtml(title)}</span>
+            </h3>
+          `);
+          return;
+        }
+
+        const bullet = line.match(/^[•●▪︎▪\-]\s*(.+)$/);
+
+        if (bullet) {
+          if (!bulletOpen) {
+            parts.push('<ul class="terms-bullets">');
+            bulletOpen = true;
+          }
+
+          parts.push(
+            `<li>${escapeHtml(bullet[1])}</li>`
+          );
+          return;
+        }
+
+        closeBullets();
+        parts.push(
+          `<p class="terms-document-intro">${escapeHtml(line)}</p>`
+        );
+      });
+
+      closeBullets();
+
+      wrap.innerHTML = `
+        <article class="terms-document">
+          ${parts.join("")}
+        </article>
+      `;
+    }
+
+    function openTermsPage() {
+      showPage("terms");
+      renderTermsDocument();
+      scrollTop();
+    }
+
+    function renderHomePublicContent() {
+      const announcement = publicAnnouncements[0] || null;
+      const promotion = publicPromotions[0] || null;
+
+      const aTag = document.getElementById("homeAnnouncementTag");
+      const aTitle = document.getElementById("homeAnnouncementTitle");
+      const aDesc = document.getElementById("homeAnnouncementDesc");
+
+      if (announcement) {
+        aTag.textContent = safeText(announcement.tag_label, "NOTICE");
+        aTitle.textContent = safeText(announcement.title, "重要公告");
+        aDesc.textContent = safeText(announcement.description, "");
+      } else {
+        aTag.textContent = "NOTICE";
+        aTitle.textContent = "目前沒有新公告";
+        aDesc.textContent = "有最新消息時會顯示在這裡。";
+      }
+
+      const pTag = document.getElementById("homePromotionTag");
+      const pTitle = document.getElementById("homePromotionTitle");
+      const pDesc = document.getElementById("homePromotionDesc");
+
+      if (promotion) {
+        pTag.textContent = safeText(promotion.tag_label, "PROMOTION");
+        pTitle.textContent = safeText(promotion.title, "優惠活動");
+        pDesc.textContent = safeText(promotion.description, "");
+      } else {
+        pTag.textContent = "PROMOTION";
+        pTitle.textContent = "目前沒有進行中的優惠活動";
+        pDesc.textContent = "有新活動時會顯示在這裡。";
+      }
+    }
+
+    function renderContentList(type) {
+      const list =
+        type === "promotion"
+          ? publicPromotions
+          : publicAnnouncements;
+
+      const title =
+        type === "promotion"
+          ? "優惠活動"
+          : "最新公告";
+
+      document.getElementById("contentPageTitle").textContent = title;
+
+      const wrap = document.getElementById("contentListWrap");
+
+      if (!list.length) {
+        wrap.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">目前沒有${title}</div>
+            <div class="empty-desc">有新內容時會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = list.map(item => `
+        <article class="content-list-card">
+          <div class="content-list-tag">
+            ${escapeHtml(
+              safeText(
+                item.tag_label,
+                type === "promotion" ? "PROMOTION" : "NOTICE"
+              )
+            )}
+          </div>
+          <div class="content-list-title">
+            ${escapeHtml(safeText(item.title))}
+          </div>
+          ${
+            item.description
+              ? `<div class="content-list-desc">${escapeHtml(item.description)}</div>`
+              : ""
+          }
+          <div class="content-list-date">
+            更新 ${escapeHtml(formatDate(item.updated_at || item.created_at))}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function openPublicContent(type) {
+      showPage("content");
+      renderContentList(type);
+      scrollTop();
+    }
+
+    // ---------- 首頁公開設定 ----------
+    async function loadHomeConfig() {
+      try {
+        const res = await fetch("/api/get-home-config", {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "首頁設定讀取失敗");
+        }
+
+        const exchangeRateEl =
+          document.getElementById("exchangeRateValue");
+
+        const updatedEl =
+          document.getElementById("updatedValue");
+
+        if (
+          result.exchange_rate !== null &&
+          result.exchange_rate !== undefined &&
+          result.exchange_rate !== ""
+        ) {
+          const rate = Number(result.exchange_rate);
+          publicPurchaseRate = Number.isFinite(rate) ? rate : null;
+
+          exchangeRateEl.textContent =
+            Number.isFinite(rate)
+              ? rate.toFixed(2)
+              : String(result.exchange_rate);
+        } else {
+          publicPurchaseRate = null;
+          exchangeRateEl.textContent = "未設定";
+        }
+
+        if (
+          result.payment_exchange_rate !== null &&
+          result.payment_exchange_rate !== undefined &&
+          result.payment_exchange_rate !== ""
+        ) {
+          const paymentRate = Number(result.payment_exchange_rate);
+          publicPaymentRate = Number.isFinite(paymentRate) ? paymentRate : null;
+        } else {
+          publicPaymentRate = publicPurchaseRate;
+        }
+
+        const pricingPurchaseRate = document.getElementById("pricingPurchaseRate");
+        const pricingPaymentRate = document.getElementById("pricingPaymentRate");
+
+        if (pricingPurchaseRate) {
+          pricingPurchaseRate.textContent =
+            publicPurchaseRate !== null ? publicPurchaseRate.toFixed(2) : "未設定";
+        }
+
+        if (pricingPaymentRate) {
+          pricingPaymentRate.textContent =
+            publicPaymentRate !== null ? publicPaymentRate.toFixed(2) : "未設定";
+        }
+
+        updatePricingCalculator();
+
+        publicAnnouncements = Array.isArray(result.announcements)
+          ? result.announcements
+          : [];
+
+        publicPromotions = Array.isArray(result.promotions)
+          ? result.promotions
+          : [];
+
+        publicFaqs = Array.isArray(result.faqs)
+          ? result.faqs
+          : [];
+
+        publicTermsDocument =
+          result.terms_document ||
+          (Array.isArray(result.terms) && result.terms.length
+            ? result.terms[0]
+            : null);
+
+        renderHomePublicContent();
+
+        const shippingEl = document.getElementById("shippingValue");
+        if (shippingEl) {
+          shippingEl.textContent =
+            result.shipping_value
+              ? String(result.shipping_value)
+              : "未設定";
+        }
+
+        if (result.orders_last_update_time) {
+          const raw = String(result.orders_last_update_time);
+
+          const match = raw.match(
+            /^(\d{4})\/(\d{2})\/(\d{2})\s+(\d{2}:\d{2})$/
+          );
+
+          updatedEl.textContent = match
+            ? `${match[2]}/${match[3]} ${match[4]}`
+            : raw;
+        } else {
+          updatedEl.textContent = "未設定";
+        }
+
+      } catch (err) {
+        console.error("loadHomeConfig error:", err);
+
+        document.getElementById("exchangeRateValue").textContent = "讀取失敗";
+        document.getElementById("updatedValue").textContent = "讀取失敗";
+        document.getElementById("shippingValue").textContent = "讀取失敗";
+        publicAnnouncements = [];
+        publicPromotions = [];
+        publicFaqs = [];
+        publicTermsDocument = null;
+        renderHomePublicContent();
+        const pp = document.getElementById("pricingPurchaseRate");
+        const py = document.getElementById("pricingPaymentRate");
+        if (pp) pp.textContent = "讀取失敗";
+        if (py) py.textContent = "讀取失敗";
+      }
+    }
+
+    // ---------- 正式 LIFF 初始化 ----------
     async function main() {
-      const status = document.getElementById("status");
+      loadHomeConfig();
+
+      if (isPreviewMode) {
+        enterPreviewMode();
+        return;
+      }
 
       try {
+        topStatus.textContent = "連線中";
+
         await liff.init({
           liffId: LIFF_ID,
           withLoginOnExternalBrowser: true
@@ -121,19 +4404,28 @@
         }
 
         const profile = await liff.getProfile();
+
         lineUserId = profile.userId;
-        lineName = profile.displayName;
+        lineName = profile.displayName || "LINE 使用者";
 
-        status.innerHTML = "你好，" + lineName + " 🐾";
+        topStatus.textContent = lineName;
+        heroName.textContent = lineName;
+        heroHelper.textContent = "正在確認會員資料...";
 
-        checkMember();
-
+        await checkMember();
       } catch (err) {
-        status.innerHTML = "LIFF 發生錯誤：" + err.message;
+        console.error("LIFF init error:", err);
+
+        topStatus.textContent = "連線異常";
+        heroName.textContent = "歡迎來到橘貓代購";
+        heroHelper.textContent = "LINE 初始化失敗，請重新從官方 LINE 開啟";
+
+        showToast("LIFF 發生錯誤：" + err.message);
       }
     }
 
-    async function checkMember() {
+    // ---------- 查會員 ----------
+    async function requestMemberData(attempt = 1) {
       const res = await fetch("/api/get-member", {
         method: "POST",
         headers: {
@@ -144,155 +4436,1356 @@
         })
       });
 
-      const result = await res.json();
+      const raw = await res.text();
+      let result = null;
 
-      if (result.success && result.bound) {
-        const m = result.member;
-        currentCustomerName = m.customer_name;
+      try {
+        result = raw ? JSON.parse(raw) : null;
+      } catch (parseError) {
+        console.error(
+          "get-member non-JSON response:",
+          res.status,
+          raw.slice(0, 500)
+        );
 
-        document.getElementById("bindArea").style.display = "none";
-        document.getElementById("memberArea").style.display = "block";
+        throw new Error(
+          `MEMBER_API_INVALID_RESPONSE_${res.status}`
+        );
+      }
 
-        document.getElementById("memberInfo").innerHTML =
-          "包裹名稱：" + m.customer_name + "<br>" +
-          "會員等級：" + m.member_level + "<br>" +
-          "LINE 名稱：" + m.line_name;
+      if (!res.ok || !result?.success) {
+        const detail =
+          result?.error ||
+          `MEMBER_API_HTTP_${res.status}`;
 
-      } else {
-        document.getElementById("bindArea").style.display = "block";
+        throw new Error(detail);
+      }
+
+      return result;
+    }
+
+    async function checkMember() {
+      try {
+        let result;
+
+        try {
+          result = await requestMemberData(1);
+        } catch (firstError) {
+          console.warn(
+            "get-member first attempt failed:",
+            firstError
+          );
+
+          await new Promise(resolve => setTimeout(resolve, 350));
+          result = await requestMemberData(2);
+        }
+
+        if (result.bound) {
+          currentMember = result.member;
+          currentCustomerName =
+            safeText(result.member?.customer_name, "");
+
+          renderBoundMember(result.member);
+          await fetchOrders();
+        } else {
+          currentMember = null;
+          currentCustomerName = "";
+          renderUnboundMember();
+        }
+      } catch (err) {
+        console.error("get-member error:", err);
+
+        currentMember = null;
+        currentCustomerName = "";
+
+        heroName.textContent =
+          lineName || "歡迎來到橘貓代購";
+
+        heroHelper.textContent =
+          "會員資料暫時無法讀取，請稍後重新整理";
+
+        document.getElementById("homeStatProgress").textContent = "—";
+        document.getElementById("homeStatArrived").textContent = "—";
+        document.getElementById("homeStatReturnable").textContent = "—";
+
+        showToast("會員資料暫時無法讀取");
       }
     }
 
+    function renderBoundMember(member) {
+      const customerName = safeText(member.customer_name, lineName || "會員");
+      const memberLevel = safeText(member.member_level, "一般會員");
+
+      heroName.textContent = customerName;
+      heroHelper.textContent = "今天也來看看包裹到哪裡了吧！";
+
+      memberNameEl.textContent = customerName;
+      memberLevelEl.textContent = memberLevel;
+
+      const balance = Number(member.balance_twd || 0);
+      const points = Number(member.points_balance || 0);
+      const couponCount = Number(member.available_coupon_count || 0);
+
+      if (memberBalanceValue) {
+        memberBalanceValue.textContent =
+          `NT$${Math.round(balance).toLocaleString("zh-TW")}`;
+      }
+
+      if (memberPointsValue) {
+        memberPointsValue.textContent =
+          Math.round(points).toLocaleString("zh-TW");
+      }
+
+      if (memberCouponsValue) {
+        memberCouponsValue.textContent =
+          couponCount.toLocaleString("zh-TW");
+      }
+
+      const couponMenuDesc = document.getElementById("couponMenuDesc");
+
+      if (couponMenuDesc) {
+        couponMenuDesc.textContent =
+          couponCount > 0
+            ? `目前有 ${couponCount} 張可使用`
+            : "目前沒有可使用優惠券";
+      }
+
+
+      memberCard.classList.remove("hidden");
+      bindArea.classList.add("hidden");
+      homeBindBanner.classList.add("hidden");
+    }
+
+    function renderUnboundMember() {
+      heroName.textContent = lineName || "歡迎來到橘貓代購";
+      heroHelper.textContent = "綁定會員後即可查詢自己的訂單與包裹";
+
+      document.getElementById("homeStatProgress").textContent = "—";
+      document.getElementById("homeStatArrived").textContent = "—";
+      document.getElementById("homeStatReturnable").textContent = "—";
+
+      if (memberBalanceValue) memberBalanceValue.textContent = "NT$—";
+      if (memberPointsValue) memberPointsValue.textContent = "—";
+      if (memberCouponsValue) memberCouponsValue.textContent = "—";
+
+      memberCard.classList.add("hidden");
+      bindArea.classList.remove("hidden");
+      homeBindBanner.classList.remove("hidden");
+    }
+
+    // ---------- 綁定 ----------
     async function bindLine() {
-      const customerName = document.getElementById("customerName").value.trim();
-      const bindStatus = document.getElementById("bindStatus");
+      if (isPreviewMode) {
+        showToast("Preview 模式不會寫入正式會員資料");
+        return;
+      }
+
+      const customerName =
+        document.getElementById("customerName").value.trim();
+
+      const bindStatus =
+        document.getElementById("bindStatus");
 
       if (!customerName) {
-        bindStatus.innerHTML = "請先輸入包裹名稱。";
+        bindStatus.textContent = "請先輸入姓名。";
         return;
       }
 
-      bindStatus.innerHTML = "綁定中...";
+      bindStatus.textContent = "綁定中...";
 
-      const response = await fetch("/api/bind-line", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          customer_name: customerName,
-          line_user_id: lineUserId,
-          line_name: lineName
-        })
-      });
+      try {
+        const response = await fetch("/api/bind-line", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: customerName,
+            line_user_id: lineUserId,
+            line_name: lineName
+          })
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      if (result.success && result.affectedRows === 1) {
-        bindStatus.innerHTML = "✅ 綁定成功，正在載入會員資料...";
-        checkMember();
-      } else {
-        bindStatus.innerHTML = "❌ 綁定失敗，請確認名稱是否正確。";
+        if (result.success && result.affectedRows === 1) {
+          bindStatus.textContent = "✅ 綁定成功，正在載入會員資料...";
+          await checkMember();
+        } else {
+          bindStatus.textContent = "❌ 綁定失敗，請確認姓名是否正確。";
+        }
+      } catch (err) {
+        console.error("bind-line error:", err);
+        bindStatus.textContent = "❌ 系統連線失敗，請稍後再試。";
       }
     }
 
-    async function loadOrders(mode) {
-      const ordersArea = document.getElementById("ordersArea");
-      const ordersInfo = document.getElementById("ordersInfo");
-    
-      ordersArea.style.display = "block";
-      ordersInfo.innerHTML = "載入訂單中...";
-    
-      const res = await fetch("/api/get-orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          customer_name: currentCustomerName
-        })
+    document
+      .getElementById("forwardingSubmitButton")
+      .addEventListener("click", submitForwardingRegister);
+
+    document
+      .getElementById("returnDeliveryMethod")
+      .addEventListener("change", renderReturnBatchOptions);
+
+    document
+      .getElementById("returnShippingBatch")
+      .addEventListener("change", updateReturnSummary);
+
+    document
+      .getElementById("returnSubmitButton")
+      .addEventListener("click", submitReturnRequest);
+
+    document
+      .getElementById("bindButton")
+      .addEventListener("click", bindLine);
+
+    document
+      .getElementById("customerName")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") bindLine();
       });
-    
-      const result = await res.json();
-    
-      if (!result.success) {
-        ordersInfo.innerHTML = "❌ 訂單讀取失敗。";
-        return;
+
+    document
+      .getElementById("goBindButton")
+      .addEventListener("click", () => {
+        showPage("member");
+        setTimeout(() => {
+          document.getElementById("customerName")?.focus();
+        }, 120);
+      });
+
+    // ---------- 訂單 ----------
+    async function fetchOrders() {
+      if (isPreviewMode) {
+        updateOrderStats();
+        return allOrders;
       }
-    
-      let orders = result.orders;
-    
-      if (mode === "unreturned") {
-        orders = orders.filter(order => !order.is_returned);
+
+      if (!currentCustomerName) {
+        return [];
       }
-    
-      if (orders.length === 0) {
-        ordersInfo.innerHTML = "目前查無符合條件的訂單。";
-        return;
+
+      try {
+        const res = await fetch("/api/get-orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "訂單讀取失敗");
+        }
+
+        allOrders = Array.isArray(result.orders) ? result.orders : [];
+        updateOrderStats();
+
+        return allOrders;
+      } catch (err) {
+        console.error("get-orders error:", err);
+        showToast("訂單資料讀取失敗");
+        return [];
       }
-    
-      const arrivedOrders = orders.filter(
-        order => order.is_arrived && !order.is_returned
+    }
+
+    function getOrderStats() {
+      const unreturned = allOrders.filter(order => !Boolean(order.is_returned));
+      const arrived = allOrders.filter(
+        order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
       );
-      
-      const arrivedCount = arrivedOrders.length;
-      
+
+      // 目前資料庫尚無獨立「已申請運回」欄位，
+      // 第一版暫以「已到倉且未運回」視為可運回。
+      const returnable = arrived;
+
+      return {
+        progress: unreturned.length,
+        arrived: arrived.length,
+        returnable: returnable.length
+      };
+    }
+
+    function updateOrderStats() {
+      const stats = getOrderStats();
+
+      document.getElementById("homeStatProgress").textContent = stats.progress;
+      document.getElementById("homeStatArrived").textContent = stats.arrived;
+      document.getElementById("homeStatReturnable").textContent = stats.returnable;
+
+    }
+
+    async function openOrders(filterMode = "unreturned") {
+      if (!isPreviewMode && !currentCustomerName) {
+        showPage("member");
+        showToast("請先完成會員綁定");
+        return;
+      }
+
+      showPage("member");
+      closeMemberSubpages(false);
+
+      memberMainView.style.display = "none";
+      ordersSubpage.classList.add("active");
+
+      if (!allOrders.length && !isPreviewMode) {
+        ordersInfo.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⏳</div>
+            <div class="empty-title">載入訂單中</div>
+            <div class="empty-desc">請稍候...</div>
+          </div>
+        `;
+
+        await fetchOrders();
+      }
+
+      setOrderFilter(filterMode);
+      scrollTop();
+    }
+
+    function closeMemberSubpages(shouldScroll = true) {
+      ordersSubpage.classList.remove("active");
+      forwardingSubpage.classList.remove("active");
+      returnRequestSubpage.classList.remove("active");
+      couponsSubpage.classList.remove("active");
+      memberMainView.style.display = "";
+
+      if (shouldScroll) scrollTop();
+    }
+
+    function closeOrdersSubpage(shouldScroll = true) {
+      closeMemberSubpages(shouldScroll);
+    }
+
+    document
+      .getElementById("ordersBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("forwardingBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("returnRequestBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+    document
+      .getElementById("couponsBackButton")
+      .addEventListener("click", () => closeMemberSubpages(true));
+
+
+    function setOrderFilter(mode) {
+      document.querySelectorAll(".filter-chip").forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.filter === mode);
+      });
+
+      renderOrders(mode);
+    }
+
+    document.querySelectorAll(".filter-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        setOrderFilter(chip.dataset.filter);
+      });
+    });
+
+    function renderOrders(mode = "unreturned") {
+      let orders = [...allOrders];
+
+      if (mode === "unreturned") {
+        orders = orders.filter(order => !Boolean(order.is_returned));
+      }
+
+      if (mode === "arrived") {
+        orders = orders.filter(
+          order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
+        );
+      }
+
+      const arrivedOrders = allOrders.filter(
+        order => Boolean(order.is_arrived) && !Boolean(order.is_returned)
+      );
+
       const arrivedWeight = arrivedOrders.reduce(
         (sum, order) => sum + Number(order.weight_kg || 0),
         0
       );
-      
-      html = `
-      <div style="
-      background:#fff3e8;
-      padding:16px;
-      border-radius:14px;
-      margin-bottom:16px;
-      line-height:1.9;
-      ">
-      
-      <b>📦 可運回包裹統計</b><br>
-      
-       包裹數量：${arrivedCount} 件<br>
-      
-       總重量：${arrivedWeight.toFixed(2)} kg
-      
-      </div>
+
+      let html = `
+        <div class="order-summary">
+          <strong><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg> 可運回包裹</strong><br>
+          ${arrivedOrders.length} 件・約 ${arrivedWeight.toFixed(2)} kg
+        </div>
       `;
-    
-      orders.forEach(order => {
-        const arrived = order.is_arrived ? "✔ 已到貨" : "✘ 未到貨";
-        const returned = order.is_returned ? "✔ 已運回" : "✘ 未運回";
-    
-        const orderDate = order.order_time
-          ? new Date(order.order_time).toLocaleDateString("zh-TW")
-          : "-";
-        
+
+      if (!orders.length) {
         html += `
-          <div class="order">
-        
-            <b>${order.platform || "未填平台"}</b><br>
-        
-             訂單編號：${order.order_id}<br>
-        
-             下單日期：${orderDate}<br>
-        
-             物流單號：${order.tracking_number || "—"}<br>
-        
-             金額：${order.amount_rmb || 0} RMB<br>
-        
-             重量：${order.weight_kg || 0} kg<br><br>
-        
-            <span class="badge">${arrived}</span>
-            <span class="badge">${returned}</span>
-        
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <div class="empty-title">目前沒有符合條件的訂單</div>
+            <div class="empty-desc">可以切換上方篩選查看其他訂單。</div>
           </div>
         `;
+
+        ordersInfo.innerHTML = html;
+        return;
+      }
+
+      html += `<div class="order-list">`;
+
+      orders.forEach(order => {
+        const arrived = Boolean(order.is_arrived);
+        const returned = Boolean(order.is_returned);
+
+        let statusBadge = "";
+
+        if (returned) {
+          statusBadge = `<span class="badge gray">已運回</span>`;
+        } else if (arrived) {
+          statusBadge = `<span class="badge green">已到倉・可運回</span>`;
+        } else {
+          statusBadge = `<span class="badge orange">運送中</span>`;
+        }
+
+        html += `
+          <article class="order-card">
+            <div class="order-card-head">
+              <div>
+                <div class="order-platform">${safeText(order.platform, "未填平台")}</div>
+                <div class="order-id">訂單編號 ${safeText(order.order_id)}</div>
+              </div>
+              <div class="order-date">${formatDate(order.order_time)}</div>
+            </div>
+
+            <div class="order-grid">
+              <div class="order-field">
+                <div class="order-field-label">中國物流單號</div>
+                <div class="order-field-value">${safeText(order.tracking_number)}</div>
+              </div>
+
+              <div class="order-field">
+                <div class="order-field-label">商品金額</div>
+                <div class="order-field-value">¥ ${safeText(order.amount_rmb, "0")}</div>
+              </div>
+
+              <div class="order-field">
+                <div class="order-field-label">目前重量</div>
+                <div class="order-field-value">${safeText(order.weight_kg, "0")} kg</div>
+              </div>
+
+              <div class="order-field">
+                <div class="order-field-label">到貨狀態</div>
+                <div class="order-field-value">${arrived ? "已到倉" : "尚未到貨"}</div>
+              </div>
+            </div>
+
+            <div class="badge-row">
+              ${statusBadge}
+            </div>
+          </article>
+        `;
       });
-    
+
+      html += `</div>`;
       ordersInfo.innerHTML = html;
     }
 
+
+
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function forwardingStatusLabel(status) {
+      return {
+        pending: "待處理",
+        processed: "已處理",
+        cancelled: "已取消"
+      }[status] || safeText(status);
+    }
+
+    function renderForwardingHistory() {
+      const loading = document.getElementById("forwardingHistoryLoading");
+      const list = document.getElementById("forwardingHistoryList");
+      const empty = document.getElementById("forwardingHistoryEmpty");
+
+      loading.classList.add("hidden");
+
+      if (!forwardingRecords.length) {
+        list.classList.add("hidden");
+        list.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      list.classList.remove("hidden");
+
+      list.innerHTML = forwardingRecords.map(row => {
+        const unitPrice = Number(row.unit_price_rmb || 0);
+        const remarks = String(row.remarks || "").trim();
+
+        return `
+          <article class="forwarding-record">
+            <div class="forwarding-record-head">
+              <div class="forwarding-record-title">
+                ${escapeHtml(row.tracking_number)}
+              </div>
+              <span class="forwarding-status ${escapeHtml(row.status)}">
+                ${escapeHtml(forwardingStatusLabel(row.status))}
+              </span>
+            </div>
+
+            <div class="forwarding-record-meta">
+              <div>
+                <span>內容物</span>
+                <strong>${escapeHtml(row.item_name)}</strong>
+              </div>
+              <div>
+                <span>數量</span>
+                <strong>${Number(row.quantity || 1)} 件</strong>
+              </div>
+              <div>
+                <span>商品單價</span>
+                <strong>¥${unitPrice.toFixed(2)}</strong>
+              </div>
+              <div>
+                <span>登記時間</span>
+                <strong>${escapeHtml(formatDate(row.created_at))}</strong>
+              </div>
+            </div>
+
+            ${
+              remarks
+                ? `<div class="forwarding-record-remarks">備註：${escapeHtml(remarks)}</div>`
+                : ""
+            }
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadForwardingRecords() {
+      const loading = document.getElementById("forwardingHistoryLoading");
+      const list = document.getElementById("forwardingHistoryList");
+      const empty = document.getElementById("forwardingHistoryEmpty");
+
+      loading.classList.remove("hidden");
+      list.classList.add("hidden");
+      empty.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/get-forwarding-registers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "集運登記讀取失敗");
+        }
+
+        forwardingRecords = Array.isArray(result.registers)
+          ? result.registers
+          : [];
+
+        renderForwardingHistory();
+      } catch (err) {
+        console.error("get-forwarding-registers error:", err);
+        loading.innerHTML = `
+          <div class="empty-title">集運登記讀取失敗</div>
+          <div class="empty-desc">請稍後重新進入此頁。</div>
+        `;
+      }
+    }
+
+    async function openForwarding(mode = "register") {
+      showPage("member");
+      closeMemberSubpages(false);
+
+      memberMainView.style.display = "none";
+      forwardingSubpage.classList.add("active");
+      scrollTop();
+
+      await loadForwardingRecords();
+
+      if (mode === "history") {
+        setTimeout(() => {
+          document.getElementById("forwardingHistorySection")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 120);
+      }
+    }
+
+    async function submitForwardingRegister() {
+      const trackingNumber =
+        document.getElementById("forwardTrackingNumber").value.trim();
+      const itemName =
+        document.getElementById("forwardItemName").value.trim();
+      const quantity =
+        Number(document.getElementById("forwardQuantity").value || 0);
+      const unitPrice =
+        Number(document.getElementById("forwardUnitPrice").value || 0);
+      const remarks =
+        document.getElementById("forwardRemarks").value.trim();
+
+      const button =
+        document.getElementById("forwardingSubmitButton");
+      const status =
+        document.getElementById("forwardingSubmitStatus");
+
+      if (!trackingNumber) {
+        status.textContent = "❌ 請輸入中國快遞單號。";
+        return;
+      }
+
+      if (!itemName) {
+        status.textContent = "❌ 請輸入內容物。";
+        return;
+      }
+
+      if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
+        status.textContent = "❌ 數量請輸入 1～999 的整數。";
+        return;
+      }
+
+      if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+        status.textContent = "❌ 商品單價格式不正確。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-forwarding-register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName,
+            tracking_number: trackingNumber,
+            item_name: itemName,
+            quantity,
+            unit_price_rmb: unitPrice,
+            remarks
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document.getElementById("forwardTrackingNumber").value = "";
+        document.getElementById("forwardItemName").value = "";
+        document.getElementById("forwardQuantity").value = "1";
+        document.getElementById("forwardUnitPrice").value = "0";
+        document.getElementById("forwardRemarks").value = "";
+
+        status.textContent =
+          `✅ 集運登記 #${result.register_id} 已送出，等待後台確認。`;
+
+        showToast("集運登記已送出");
+        await loadForwardingRecords();
+      } catch (err) {
+        console.error("submit-forwarding-register error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function returnDeliveryLabel(value) {
+      return value === "shop_delivery" ? "賣貨便" : "宅配";
+    }
+
+    function calculateReturnFee(selectedOrders) {
+      const forwardingWeight = selectedOrders
+        .filter(order => order.platform === "集運")
+        .reduce((sum, order) => sum + Number(order.weight_kg || 0), 0);
+
+      const purchaseWeight = selectedOrders
+        .filter(order => order.platform !== "集運")
+        .reduce((sum, order) => sum + Number(order.weight_kg || 0), 0);
+
+      const billWeight = (weight, minWeight) => {
+        if (!Number.isFinite(weight) || weight <= 0) return 0;
+        return Math.max(minWeight, Math.ceil(weight / 0.5) * 0.5);
+      };
+
+      const forwardingBill = billWeight(forwardingWeight, 1);
+      const purchaseBill = billWeight(purchaseWeight, 0.5);
+
+      return Math.round(forwardingBill * 90 + purchaseBill * 70);
+    }
+
+    function filteredReturnBatches() {
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
+      return returnOptions.batches.filter(
+        batch => batch.delivery_type === deliveryType
+      );
+    }
+
+    function renderReturnBatchOptions() {
+      const select = document.getElementById("returnShippingBatch");
+      const batchField = document.getElementById("returnBatchField");
+      const homeInfo = document.getElementById("returnHomeInfo");
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
+      if (!select || !batchField || !homeInfo) return;
+
+      if (deliveryType === "home_delivery") {
+        batchField.classList.add("hidden");
+        homeInfo.classList.remove("hidden");
+        select.innerHTML = `<option value="">宅配每日皆可申請</option>`;
+        select.disabled = true;
+        updateReturnSummary();
+        return;
+      }
+
+      batchField.classList.remove("hidden");
+      homeInfo.classList.add("hidden");
+
+      const batches = filteredReturnBatches();
+
+      if (!batches.length) {
+        select.innerHTML = `<option value="">目前沒有可選船班</option>`;
+        select.disabled = true;
+      } else {
+        select.disabled = false;
+        select.innerHTML = batches
+          .map(batch => `
+            <option value="${batch.batch_id}">
+              ${safeText(batch.batch_text, "未命名船班")}
+            </option>
+          `)
+          .join("");
+      }
+
+      updateReturnSummary();
+    }
+
+    function selectedReturnOrders() {
+      const selectedIds = Array.from(
+        document.querySelectorAll(
+          '#returnOrdersList input[type="checkbox"]:checked'
+        )
+      ).map(input => Number(input.value));
+
+      return returnOptions.orders.filter(
+        order => selectedIds.includes(Number(order.order_id))
+      );
+    }
+
+    function updateReturnSummary() {
+      const selected = selectedReturnOrders();
+      const count = selected.length;
+      const totalWeight = selected.reduce(
+        (sum, order) => sum + Number(order.weight_kg || 0),
+        0
+      );
+      const fee = calculateReturnFee(selected);
+
+      document.getElementById("returnSelectedCount").textContent =
+        `${count} 件`;
+      document.getElementById("returnSelectedWeight").textContent =
+        `${totalWeight.toFixed(2)} kg`;
+      document.getElementById("returnEstimatedFee").textContent =
+        `NT$${fee.toLocaleString("zh-TW")}`;
+
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "home_delivery";
+
+      const batchId =
+        document.getElementById("returnShippingBatch")?.value || "";
+
+      const hasValidShippingChoice =
+        deliveryType === "home_delivery" || Boolean(batchId);
+
+      const submit = document.getElementById("returnSubmitButton");
+      if (submit) {
+        submit.disabled = count === 0 || !hasValidShippingChoice;
+      }
+    }
+
+    function renderReturnOrders() {
+      const list = document.getElementById("returnOrdersList");
+      const empty = document.getElementById("returnNoOrders");
+
+      if (!returnOptions.orders.length) {
+        list.innerHTML = "";
+        empty.classList.remove("hidden");
+        updateReturnSummary();
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      list.innerHTML = returnOptions.orders.map(order => `
+        <label class="return-order-card">
+          <input type="checkbox" value="${order.order_id}">
+          <div class="return-order-head">
+            <div class="return-order-platform">
+              ${safeText(order.platform, "未填平台")}
+              · #${safeText(order.order_id)}
+            </div>
+            <div class="return-order-date">
+              ${formatDate(order.order_time)}
+            </div>
+          </div>
+          <div class="return-order-meta">
+            <span class="return-order-track">
+              單號 ${safeText(order.tracking_number)}
+            </span>
+            <span class="return-order-weight">
+              ${Number(order.weight_kg || 0).toFixed(2)} kg
+            </span>
+          </div>
+        </label>
+      `).join("");
+
+      list
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach(input => input.addEventListener("change", updateReturnSummary));
+
+      updateReturnSummary();
+    }
+
+    function renderPendingReturnRequests() {
+      const section = document.getElementById("pendingReturnSection");
+      const list = document.getElementById("pendingReturnList");
+      const pending = Array.isArray(returnOptions.pending_requests)
+        ? returnOptions.pending_requests
+        : [];
+
+      if (!pending.length) {
+        section.classList.add("hidden");
+        list.innerHTML = "";
+        return;
+      }
+
+      section.classList.remove("hidden");
+      list.innerHTML = pending.map(req => `
+        <div class="pending-request-card">
+          <div class="pending-request-head">
+            <strong>申請 #${safeText(req.request_id)}</strong>
+            <span class="pending-request-status">待處理</span>
+          </div>
+          <div class="pending-request-meta">
+            ${safeText(req.selected_shipping_batch)}<br>
+            ${safeText(req.delivery_method)}
+            · ${Number(req.total_count || 0)} 件
+            · ${Number(req.total_weight || 0).toFixed(2)} kg
+            · NT$${Math.round(Number(req.estimated_fee || 0)).toLocaleString("zh-TW")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function loadReturnOptions() {
+      const loading = document.getElementById("returnRequestLoading");
+      const content = document.getElementById("returnRequestContent");
+      const status = document.getElementById("returnSubmitStatus");
+
+      loading.classList.remove("hidden");
+      content.classList.add("hidden");
+      status.textContent = "";
+
+      try {
+        const res = await fetch("/api/get-return-options", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "運回資料讀取失敗");
+        }
+
+        returnOptions = {
+          batches: Array.isArray(result.batches) ? result.batches : [],
+          orders: Array.isArray(result.orders) ? result.orders : [],
+          pending_requests: Array.isArray(result.pending_requests)
+            ? result.pending_requests
+            : []
+        };
+
+        renderReturnBatchOptions();
+        renderReturnOrders();
+        renderPendingReturnRequests();
+
+        loading.classList.add("hidden");
+        content.classList.remove("hidden");
+      } catch (err) {
+        console.error("get-return-options error:", err);
+        loading.innerHTML = `
+          <div class="empty-title">運回資料讀取失敗</div>
+          <div class="empty-desc">請稍後重新進入此頁。</div>
+        `;
+      }
+    }
+
+    async function openReturnRequest() {
+      showPage("member");
+      closeMemberSubpages(false);
+      memberMainView.style.display = "none";
+      returnRequestSubpage.classList.add("active");
+      scrollTop();
+      await loadReturnOptions();
+    }
+
+    async function submitReturnRequest() {
+      const selected = selectedReturnOrders();
+      const deliveryType =
+        document.getElementById("returnDeliveryMethod")?.value || "";
+
+      const batchId =
+        deliveryType === "shop_delivery"
+          ? Number(document.getElementById("returnShippingBatch")?.value || 0)
+          : null;
+
+      const button = document.getElementById("returnSubmitButton");
+      const status = document.getElementById("returnSubmitStatus");
+
+      if (!selected.length) return;
+      if (deliveryType === "shop_delivery" && !batchId) return;
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-return-request", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name: currentCustomerName,
+            order_ids: selected.map(order => Number(order.order_id)),
+            shipping_batch_id: batchId,
+            delivery_type: deliveryType
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        status.textContent =
+          `✅ 申請 #${result.request_id} 已送出，預估國際運費 NT$${Math.round(
+            Number(result.estimated_fee || 0)
+          ).toLocaleString("zh-TW")}。`;
+
+        showToast("運回申請已送出");
+        await loadReturnOptions();
+      } catch (err) {
+        console.error("submit-return-request error:", err);
+        status.textContent = `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+        updateReturnSummary();
+      }
+    }
+
+    function formatMoney(value) {
+      const n = Number(value || 0);
+      return `NT$${Math.round(n).toLocaleString("zh-TW")}`;
+    }
+
+    function renderCoupons() {
+      const coupons = Array.isArray(currentMember?.coupons)
+        ? currentMember.coupons
+        : [];
+
+      if (!coupons.length) {
+        couponsInfo.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/>
+                <path d="M12 7v10"/>
+              </svg>
+            </div>
+            <div class="empty-title">目前沒有可使用優惠券</div>
+            <div class="empty-desc">之後取得的新優惠券會顯示在這裡。</div>
+          </div>
+        `;
+        return;
+      }
+
+      couponsInfo.innerHTML = coupons.map(coupon => {
+        const expiresText = coupon.expires_at
+          ? `有效期限 ${formatDate(coupon.expires_at)}`
+          : "無指定期限";
+
+        return `
+          <article class="coupon-card">
+            <div class="coupon-card-head">
+              <div>
+                <div class="coupon-name">${safeText(coupon.coupon_name, "會員優惠券")}</div>
+              </div>
+              <span class="coupon-status">可使用</span>
+            </div>
+            <div class="coupon-meta">
+              <span>${expiresText}</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function openCoupons() {
+      showPage("member");
+      closeMemberSubpages(false);
+      memberMainView.style.display = "none";
+      couponsSubpage.classList.add("active");
+      renderCoupons();
+      scrollTop();
+    }
+
+
+
+
+    const issuePageLabelMap = {
+      home: "首頁",
+      pricing: "價目表",
+      member: "會員中心",
+      orders: "我的訂單",
+      forwarding: "集運登記",
+      "return-request": "運回申請",
+      coupons: "優惠券 / VIP",
+      content: "公告 / 優惠活動",
+      faq: "FAQ / 交易須知",
+      terms: "FAQ / 交易須知",
+      more: "其他"
+    };
+
+    function openIssueReportPage() {
+      const sourcePage = currentPage;
+      showPage("bug-report");
+
+      const select = document.getElementById("issuePageName");
+      const guessed = issuePageLabelMap[sourcePage] || "其他";
+
+      if (select) {
+        const hasOption = Array.from(select.options).some(
+          option => option.value === guessed
+        );
+        select.value = hasOption ? guessed : "其他";
+      }
+
+      resetIssueReportForm(false);
+      scrollTop();
+    }
+
+    function resetIssueReportForm(shouldFocus = true) {
+      const form = document.getElementById("issueReportFormCard");
+      const success = document.getElementById("issueSuccessCard");
+      const description = document.getElementById("issueDescription");
+      const status = document.getElementById("issueStatus");
+
+      form.classList.remove("hidden");
+      success.classList.add("hidden");
+      status.textContent = "";
+      description.value = "";
+      updateIssueCounter();
+
+      if (shouldFocus) {
+        setTimeout(() => description.focus(), 80);
+      }
+    }
+
+    function updateIssueCounter() {
+      const description = document.getElementById("issueDescription");
+      const counter = document.getElementById("issueCounter");
+
+      if (!description || !counter) return;
+      counter.textContent = `${description.value.length} / 2000`;
+    }
+
+    async function submitIssueReport() {
+      const issueType = document.getElementById("issueType").value;
+      const pageName = document.getElementById("issuePageName").value;
+      const descriptionEl = document.getElementById("issueDescription");
+      const button = document.getElementById("issueSubmitButton");
+      const status = document.getElementById("issueStatus");
+      const description = descriptionEl.value.trim();
+
+      if (description.length < 5) {
+        status.textContent = "❌ 請再描述詳細一點，至少輸入 5 個字。";
+        descriptionEl.focus();
+        return;
+      }
+
+      if (description.length > 2000) {
+        status.textContent = "❌ 問題描述最多 2000 個字。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-issue-report", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            issue_type: issueType,
+            page_name: pageName,
+            description,
+            customer_name: currentCustomerName || "",
+            line_user_id: lineUserId || "",
+            frontend_version: "v4.17",
+            page_path: window.location.pathname
+          })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document
+          .getElementById("issueReportFormCard")
+          .classList.add("hidden");
+
+        document
+          .getElementById("issueSuccessCard")
+          .classList.remove("hidden");
+
+        document.getElementById("issueSuccessText").textContent =
+          `回報編號 #${result.report_id}，已送到橘貓後台。`;
+
+        showToast("系統問題回報已送出");
+      } catch (err) {
+        console.error("submit-issue-report error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function openFeedbackPage() {
+      showPage("feedback");
+      resetFeedbackForm(false);
+      scrollTop();
+    }
+
+    function resetFeedbackForm(shouldFocus = true) {
+      const form = document.getElementById("feedbackFormCard");
+      const success = document.getElementById("feedbackSuccessCard");
+      const content = document.getElementById("feedbackContent");
+      const status = document.getElementById("feedbackStatus");
+
+      form.classList.remove("hidden");
+      success.classList.add("hidden");
+      status.textContent = "";
+      content.value = "";
+      updateFeedbackCounter();
+
+      if (shouldFocus) {
+        setTimeout(() => content.focus(), 80);
+      }
+    }
+
+    function updateFeedbackCounter() {
+      const content = document.getElementById("feedbackContent");
+      const counter = document.getElementById("feedbackCounter");
+
+      if (!content || !counter) return;
+
+      counter.textContent = `${content.value.length} / 2000`;
+    }
+
+    async function submitAnonymousFeedback() {
+      const contentEl = document.getElementById("feedbackContent");
+      const button = document.getElementById("feedbackSubmitButton");
+      const status = document.getElementById("feedbackStatus");
+      const content = contentEl.value.trim();
+
+      if (content.length < 2) {
+        status.textContent = "❌ 請輸入回饋內容。";
+        contentEl.focus();
+        return;
+      }
+
+      if (content.length > 2000) {
+        status.textContent = "❌ 回饋內容最多 2000 個字。";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/submit-feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ content })
+        });
+
+        const result = await res.json();
+
+        if (!result.success) {
+          throw new Error(result.error || "送出失敗");
+        }
+
+        document.getElementById("feedbackFormCard").classList.add("hidden");
+        document.getElementById("feedbackSuccessCard").classList.remove("hidden");
+        showToast("匿名回饋已送出");
+      } catch (err) {
+        console.error("submit-feedback error:", err);
+        status.textContent =
+          `❌ ${err.message || "送出失敗，請稍後再試。"}`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    // ---------- 快捷功能 ----------
+    function requireBinding(actionName) {
+      if (isPreviewMode) return true;
+
+      if (!currentCustomerName) {
+        showPage("member");
+        showToast("「" + actionName + "」需要先綁定會員");
+        return false;
+      }
+
+      return true;
+    }
+
+    function handleAction(action) {
+      switch (action) {
+        case "orders-unreturned":
+          openOrders("unreturned");
+          break;
+
+        case "orders-arrived":
+          openOrders("arrived");
+          break;
+
+        case "return-request":
+          if (!requireBinding("運回申請")) return;
+          openReturnRequest();
+          break;
+
+        case "forward-register":
+          if (!requireBinding("集運登記")) return;
+          openForwarding("register");
+          break;
+
+
+        case "coupons":
+          if (!requireBinding("我的優惠券")) return;
+          openCoupons();
+          break;
+
+
+        case "calculator":
+          showPage("pricing");
+          setTimeout(() => {
+            document.getElementById("pricingCalculatorSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
+          break;
+
+        case "purchase-price":
+          showPage("pricing");
+          setTimeout(() => {
+            document.getElementById("purchasePricingSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
+          break;
+
+        case "forward-price":
+          showPage("pricing");
+          setTimeout(() => {
+            document.getElementById("forwardPricingSection")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 120);
+          break;
+
+        case "announcements":
+          openPublicContent("announcement");
+          break;
+
+        case "promotions":
+          openPublicContent("promotion");
+          break;
+
+        case "faq":
+          openFaqPage();
+          break;
+
+        case "terms":
+          openTermsPage();
+          break;
+
+        case "feedback":
+          openFeedbackPage();
+          break;
+
+        case "bug-report":
+          openIssueReportPage();
+          break;
+
+        default:
+          showToast("此功能尚未開放");
+      }
+    }
+
+    document.querySelectorAll("[data-action]").forEach(element => {
+      element.addEventListener("click", () => {
+        handleAction(element.dataset.action);
+      });
+    });
+
+    // ---------- 啟動 ----------
     main();
   </script>
 </body>

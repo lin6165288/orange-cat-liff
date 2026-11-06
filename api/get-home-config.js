@@ -24,21 +24,99 @@ export default async function handler(req, res) {
       FROM site_settings
       WHERE setting_key IN (
         'current_exchange_rate',
+        'payment_exchange_rate',
         'orders_last_update_time'
       )
     `);
 
     const settings = {};
-
     for (const row of rows) {
       settings[row.setting_key] = row.setting_value;
+    }
+
+    let shippingBatches = [];
+    let announcements = [];
+    let promotions = [];
+    let faqs = [];
+    let terms = [];
+
+    try {
+      const [batchRows] = await conn.execute(`
+        SELECT
+          batch_id,
+          batch_text,
+          delivery_type,
+          sort_order
+        FROM shipping_batches
+        WHERE is_active = 1
+          AND delivery_type = 'shop_delivery'
+          AND ship_date IS NOT NULL
+          AND ship_date >= CURDATE()
+        ORDER BY sort_order ASC, batch_id DESC
+        LIMIT 12
+      `);
+
+      shippingBatches = batchRows;
+    } catch (err) {
+      console.warn("shipping batches unavailable:", err.message);
+    }
+
+    try {
+      const [contentRows] = await conn.execute(`
+        SELECT
+          content_id,
+          content_type,
+          title,
+          description,
+          tag_label,
+          sort_order,
+          updated_at,
+          created_at
+        FROM frontend_contents
+        WHERE is_active = 1
+        ORDER BY
+          content_type ASC,
+          sort_order ASC,
+          content_id DESC
+        LIMIT 100
+      `);
+
+      announcements = contentRows.filter(
+        row => row.content_type === "announcement"
+      );
+
+      promotions = contentRows.filter(
+        row => row.content_type === "promotion"
+      );
+
+      faqs = contentRows.filter(
+        row => row.content_type === "faq"
+      );
+
+      terms = contentRows.filter(
+        row => row.content_type === "terms"
+      );
+    } catch (err) {
+      console.warn("frontend contents unavailable:", err.message);
     }
 
     return res.status(200).json({
       success: true,
       exchange_rate: settings.current_exchange_rate ?? null,
+      payment_exchange_rate:
+        settings.payment_exchange_rate ?? settings.current_exchange_rate ?? null,
       orders_last_update_time:
-        settings.orders_last_update_time ?? null
+        settings.orders_last_update_time ?? null,
+      shipping_batches: shippingBatches,
+      shipping_value:
+        shippingBatches.length > 0
+          ? shippingBatches[0].batch_text
+          : null,
+      announcements,
+      promotions,
+      faqs,
+      terms,
+      terms_document: terms.length ? terms[0] : null
     });
 
   } catch (err) {

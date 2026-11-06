@@ -5,10 +5,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false });
   }
 
+  let conn;
+
   try {
     const { customer_name } = req.body;
 
-    const conn = await mysql.createConnection({
+    conn = await mysql.createConnection({
       host: process.env.MYSQLHOST,
       port: process.env.MYSQLPORT,
       user: process.env.MYSQLUSER,
@@ -26,15 +28,16 @@ export default async function handler(req, res) {
         amount_rmb,
         weight_kg,
         is_arrived,
-        is_returned
+        is_returned,
+        is_early_returned,
+        COALESCE(order_status, '正常') AS order_status
       FROM orders
       WHERE LOWER(TRIM(customer_name)) = LOWER(TRIM(?))
-      ORDER BY order_time DESC
+        AND COALESCE(order_status, '正常') <> '取消'
+      ORDER BY order_time DESC, order_id DESC
       `,
       [customer_name]
     );
-
-    await conn.end();
 
     return res.status(200).json({
       success: true,
@@ -46,5 +49,7 @@ export default async function handler(req, res) {
       success: false,
       error: err.message
     });
+  } finally {
+    if (conn) await conn.end();
   }
 }
