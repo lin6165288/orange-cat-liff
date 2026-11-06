@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="./assets/orange-cat-logo.png" />
 
   <!-- LINE LIFF SDK -->
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script defer src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
 
@@ -95,6 +95,47 @@
 
     .hidden {
       display: none !important;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .startup-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--muted-deep);
+    }
+
+    .startup-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--surface-accent);
+      border-top-color: var(--accent-strong);
+      border-radius: 50%;
+      animation: startupSpin .8s linear infinite;
+    }
+
+    .startup-loading p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    @keyframes startupSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .startup-spinner { animation: none; }
     }
 
     .topbar {
@@ -2813,7 +2854,12 @@
 </head>
 
 <body>
-  <main class="app">
+  <div id="startupLoading" class="startup-loading" role="status" aria-live="polite" aria-atomic="true">
+    <span class="startup-spinner" aria-hidden="true"></span>
+    <p>載入中…</p>
+  </div>
+
+  <main id="appContent" class="app" hidden>
     <!-- 共用頂部 -->
     <header class="topbar">
       <div class="brand">
@@ -3642,7 +3688,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <!-- 底部導覽 -->
-  <nav class="bottom-nav-shell" aria-label="主要導覽">
+  <nav id="appNavigation" class="bottom-nav-shell" aria-label="主要導覽" hidden>
     <div class="bottom-nav">
       <button class="nav-btn active" type="button" data-page="home">
         <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 10v10h14V10"/></svg></span>
@@ -3693,6 +3739,12 @@
     const requestedStartupPage = readStartupPage();
     let pendingStartupPage = requestedStartupPage;
     let startupNavigationReady = false;
+
+    function finishStartupLoading() {
+      document.getElementById("appContent").hidden = false;
+      document.getElementById("appNavigation").hidden = false;
+      document.getElementById("startupLoading").hidden = true;
+    }
 
     function readStartupPage() {
       const params = new URLSearchParams(window.location.search);
@@ -4437,15 +4489,16 @@
     // ---------- 正式 LIFF 初始化 ----------
     async function main() {
       loadHomeConfig();
-
-      if (isPreviewMode) {
-        enterPreviewMode();
-        startupNavigationReady = true;
-        await applyStartupPage();
-        return;
-      }
+      let redirectingToLogin = false;
 
       try {
+        if (isPreviewMode) {
+          enterPreviewMode();
+          startupNavigationReady = true;
+          await applyStartupPage();
+          return;
+        }
+
         topStatus.textContent = "連線中";
 
         await liff.init({
@@ -4456,6 +4509,7 @@
 
         if (!liff.isLoggedIn()) {
           liff.login({ redirectUri: getStartupLoginRedirectUri() });
+          redirectingToLogin = true;
           return;
         }
 
@@ -4480,6 +4534,10 @@
         heroHelper.textContent = "LINE 初始化失敗，請重新從官方 LINE 開啟";
 
         showToast("LIFF 發生錯誤：" + err.message);
+      } finally {
+        // 目標頁面（或原有錯誤提示）準備完成後才顯示內容。
+        // 前往 LINE 登入時保留載入畫面，避免回跳前閃現首頁。
+        if (!redirectingToLogin) finishStartupLoading();
       }
     }
 
@@ -5850,7 +5908,12 @@
     });
 
     // ---------- 啟動 ----------
-    main();
+    // 等 defer 的 LIFF SDK 載入完成；等待期間先顯示靜態載入畫面。
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", main, { once: true });
+    } else {
+      main();
+    }
   </script>
 </body>
 </html>
