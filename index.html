@@ -3689,6 +3689,59 @@
     let allOrders = [];
     let currentPage = "home";
 
+    // 先讀取目標，但必須等 LIFF 與會員狀態準備好後才開啟。
+    const requestedStartupPage = readStartupPage();
+    let pendingStartupPage = requestedStartupPage;
+    let startupNavigationReady = false;
+
+    function readStartupPage() {
+      const params = new URLSearchParams(window.location.search);
+      let page = params.get("page");
+
+      // LIFF 首次轉址時，附加的 query 可能尚在 liff.state 裡。
+      // 只讀取資料，不在 liff.init() 完成前修改 SDK 的網址。
+      if (page === null) {
+        const state = params.get("liff.state") || "";
+        const queryStart = state.indexOf("?");
+        if (queryStart !== -1) {
+          page = new URLSearchParams(
+            state.slice(queryStart + 1).split("#")[0]
+          ).get("page");
+        }
+      }
+
+      return page === "orders" || page === "forward-register"
+        ? page
+        : "home";
+    }
+
+    function getStartupLoginRedirectUri() {
+      // 只攜帶白名單內的 page，避免將 LIFF/OAuth 暫存參數帶回登入。
+      const url = new URL(window.location.pathname, window.location.origin);
+      if (requestedStartupPage !== "home") {
+        url.searchParams.set("page", requestedStartupPage);
+      }
+      return url.href;
+    }
+
+    async function applyStartupPage() {
+      if (!startupNavigationReady || pendingStartupPage === null) return;
+
+      const page = pendingStartupPage;
+      if (page === "orders") {
+        if (!requireBinding("查詢訂單")) return;
+        pendingStartupPage = null;
+        await openOrders("unreturned");
+      } else if (page === "forward-register") {
+        if (!requireBinding("集運登記")) return;
+        pendingStartupPage = null;
+        await openForwarding("register");
+      } else {
+        pendingStartupPage = null;
+        showPage("home");
+      }
+    }
+
     // Preview 分支網址不屬於目前正式 LIFF Endpoint。
     // 因此 Preview 先進入 UI 測試模式，避免自動登入跳回正式站。
     const isPreviewMode = false;
@@ -4387,6 +4440,8 @@
 
       if (isPreviewMode) {
         enterPreviewMode();
+        startupNavigationReady = true;
+        await applyStartupPage();
         return;
       }
 
@@ -4395,11 +4450,12 @@
 
         await liff.init({
           liffId: LIFF_ID,
-          withLoginOnExternalBrowser: true
+          // 初始化完成後明確登入，讓回跳網址保留目標 page。
+          withLoginOnExternalBrowser: false
         });
 
         if (!liff.isLoggedIn()) {
-          liff.login();
+          liff.login({ redirectUri: getStartupLoginRedirectUri() });
           return;
         }
 
@@ -4412,7 +4468,10 @@
         heroName.textContent = lineName;
         heroHelper.textContent = "正在確認會員資料...";
 
-        await checkMember();
+        if (await checkMember()) {
+          startupNavigationReady = true;
+          await applyStartupPage();
+        }
       } catch (err) {
         console.error("LIFF init error:", err);
 
@@ -4492,6 +4551,7 @@
           currentCustomerName = "";
           renderUnboundMember();
         }
+        return true;
       } catch (err) {
         console.error("get-member error:", err);
 
@@ -4509,6 +4569,7 @@
         document.getElementById("homeStatReturnable").textContent = "—";
 
         showToast("會員資料暫時無法讀取");
+        return false;
       }
     }
 
@@ -4610,7 +4671,10 @@
 
         if (result.success && result.affectedRows === 1) {
           bindStatus.textContent = "✅ 綁定成功，正在載入會員資料...";
-          await checkMember();
+          if (await checkMember()) {
+            startupNavigationReady = true;
+            await applyStartupPage();
+          }
         } else {
           bindStatus.textContent = "❌ 綁定失敗，請確認姓名是否正確。";
         }
