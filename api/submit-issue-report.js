@@ -225,7 +225,7 @@ export default async function handler(req, res) {
     const reportId = Number(result.insertId);
 
     try {
-      await sendIssueNotification({
+      const notified = await sendIssueNotification({
         reportId,
         issueType,
         pageName,
@@ -235,6 +235,12 @@ export default async function handler(req, res) {
         frontendVersion,
         pagePath
       });
+
+      if (notified) {
+        console.log(
+          `issue report email notification sent: #${reportId}`
+        );
+      }
     } catch (mailError) {
       console.error(
         "issue report email notification failed:",

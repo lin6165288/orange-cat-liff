@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import nodemailer from "nodemailer";
 
 function dbConfig() {
   return {
@@ -8,6 +9,112 @@ function dbConfig() {
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE
   };
+}
+
+function taipeiTimeText() {
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).format(new Date());
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function mailConfig() {
+  const smtpUser = String(process.env.SMTP_USER || "").trim();
+  const smtpPassword = String(process.env.SMTP_PASSWORD || "").trim();
+  const notifyEmail = String(
+    process.env.NOTIFY_EMAIL || smtpUser
+  ).trim();
+
+  if (!smtpUser || !smtpPassword || !notifyEmail) {
+    return null;
+  }
+
+  const host = String(
+    process.env.SMTP_HOST || "smtp.gmail.com"
+  ).trim();
+
+  const port = Number(process.env.SMTP_PORT || 465);
+  const secure = String(
+    process.env.SMTP_SECURE || (port === 465 ? "true" : "false")
+  ).toLowerCase() === "true";
+
+  return {
+    smtpUser,
+    notifyEmail,
+    transporter: nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: {
+        user: smtpUser,
+        pass: smtpPassword
+      }
+    })
+  };
+}
+
+
+async function sendFeedbackNotification({
+  feedbackId,
+  content
+}) {
+  const config = mailConfig();
+
+  if (!config) {
+    console.warn(
+      "Feedback email skipped: SMTP_USER / SMTP_PASSWORD / NOTIFY_EMAIL not configured."
+    );
+    return false;
+  }
+
+  const subject =
+    `[橘貓代購] 新匿名回饋 #${feedbackId}`;
+
+  const text = [
+    "橘貓代購收到新的匿名回饋",
+    "",
+    `回饋編號：#${feedbackId}`,
+    `回饋時間（台灣）：${taipeiTimeText()}`,
+    "",
+    "回饋內容：",
+    content
+  ].join("\n");
+
+  const html = `
+    <div style="font-family:Arial,'Microsoft JhengHei',sans-serif;color:#262626;line-height:1.7;">
+      <h2 style="margin:0 0 16px;color:#f08300;">新的匿名回饋</h2>
+      <table style="border-collapse:collapse;width:100%;max-width:680px;">
+        <tr><td style="padding:6px 0;color:#888;width:140px;">回饋編號</td><td><strong>#${feedbackId}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#888;">回饋時間（台灣）</td><td>${escapeHtml(taipeiTimeText())}</td></tr>
+      </table>
+      <div style="margin-top:18px;padding:14px 16px;border:1px solid #eee;border-radius:10px;background:#fafafa;white-space:pre-wrap;">${escapeHtml(content)}</div>
+    </div>
+  `;
+
+  await config.transporter.sendMail({
+    from: `"橘貓代購" <${config.smtpUser}>`,
+    to: config.notifyEmail,
+    subject,
+    text,
+    html
+  });
+
+  return true;
 }
 
 async function findFeedbackTable(conn) {
@@ -111,9 +218,23 @@ export default async function handler(req, res) {
       [content]
     );
 
+    const feedbackId = Number(result.insertId);
+
+    try {
+      await sendFeedbackNotification({
+        feedbackId,
+        content
+      });
+    } catch (mailError) {
+      console.error(
+        "feedback email notification failed:",
+        mailError
+      );
+    }
+
     return res.status(200).json({
       success: true,
-      feedback_id: result.insertId
+      feedback_id: feedbackId
     });
 
   } catch (err) {

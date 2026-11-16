@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import nodemailer from "nodemailer";
 
 function dbConfig() {
   return {
@@ -8,6 +9,129 @@ function dbConfig() {
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE
   };
+}
+
+function taipeiTimeText() {
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).format(new Date());
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function mailConfig() {
+  const smtpUser = String(process.env.SMTP_USER || "").trim();
+  const smtpPassword = String(process.env.SMTP_PASSWORD || "").trim();
+  const notifyEmail = String(
+    process.env.NOTIFY_EMAIL || smtpUser
+  ).trim();
+
+  if (!smtpUser || !smtpPassword || !notifyEmail) {
+    return null;
+  }
+
+  const host = String(
+    process.env.SMTP_HOST || "smtp.gmail.com"
+  ).trim();
+
+  const port = Number(process.env.SMTP_PORT || 465);
+  const secure = String(
+    process.env.SMTP_SECURE || (port === 465 ? "true" : "false")
+  ).toLowerCase() === "true";
+
+  return {
+    smtpUser,
+    notifyEmail,
+    transporter: nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: {
+        user: smtpUser,
+        pass: smtpPassword
+      }
+    })
+  };
+}
+
+
+async function sendForwardingNotification({
+  registerId,
+  customerName,
+  trackingNumber,
+  itemName,
+  quantity,
+  unitPrice,
+  remarks
+}) {
+  const config = mailConfig();
+
+  if (!config) {
+    console.warn(
+      "Forwarding email skipped: SMTP_USER / SMTP_PASSWORD / NOTIFY_EMAIL not configured."
+    );
+    return false;
+  }
+
+  const totalRmb = Number(unitPrice || 0) * Number(quantity || 0);
+
+  const subject =
+    `[橘貓代購] 新集運登記 #${registerId}｜${customerName}`;
+
+  const text = [
+    "橘貓代購收到新的前台集運登記",
+    "",
+    `登記編號：#${registerId}`,
+    `會員：${customerName}`,
+    `登記時間（台灣）：${taipeiTimeText()}`,
+    `中國快遞單號：${trackingNumber}`,
+    `內容物：${itemName}`,
+    `數量：${quantity}`,
+    `商品單價：¥${Number(unitPrice || 0).toFixed(2)}`,
+    `商品小計：¥${totalRmb.toFixed(2)}`,
+    `備註：${remarks || "—"}`
+  ].join("\n");
+
+  const html = `
+    <div style="font-family:Arial,'Microsoft JhengHei',sans-serif;color:#262626;line-height:1.7;">
+      <h2 style="margin:0 0 16px;color:#f08300;">新的前台集運登記</h2>
+      <table style="border-collapse:collapse;width:100%;max-width:680px;">
+        <tr><td style="padding:6px 0;color:#888;width:140px;">登記編號</td><td><strong>#${registerId}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#888;">會員</td><td>${escapeHtml(customerName)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">登記時間（台灣）</td><td>${escapeHtml(taipeiTimeText())}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">中國快遞單號</td><td><strong>${escapeHtml(trackingNumber)}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#888;">內容物</td><td>${escapeHtml(itemName)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">數量</td><td>${quantity}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">商品單價</td><td>¥${Number(unitPrice || 0).toFixed(2)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">商品小計</td><td>¥${totalRmb.toFixed(2)}</td></tr>
+        <tr><td style="padding:6px 0;color:#888;">備註</td><td>${escapeHtml(remarks || "—")}</td></tr>
+      </table>
+    </div>
+  `;
+
+  await config.transporter.sendMail({
+    from: `"橘貓代購" <${config.smtpUser}>`,
+    to: config.notifyEmail,
+    subject,
+    text,
+    html
+  });
+
+  return true;
 }
 
 export default async function handler(req, res) {
@@ -169,9 +293,28 @@ export default async function handler(req, res) {
 
     await conn.commit();
 
+    const registerId = Number(result.insertId);
+
+    try {
+      await sendForwardingNotification({
+        registerId,
+        customerName,
+        trackingNumber,
+        itemName,
+        quantity,
+        unitPrice,
+        remarks
+      });
+    } catch (mailError) {
+      console.error(
+        "forwarding email notification failed:",
+        mailError
+      );
+    }
+
     return res.status(200).json({
       success: true,
-      register_id: result.insertId,
+      register_id: registerId,
       status: "pending"
     });
 
