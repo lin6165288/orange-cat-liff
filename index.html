@@ -598,6 +598,11 @@
       align-items: flex-start;
     }
 
+    .promo-card .announcement-main {
+      min-width: 0;
+      overflow: hidden;
+    }
+
     .promo-badge,
     .vip-pill {
       display: inline-flex;
@@ -615,8 +620,16 @@
     }
 
     .promo-desc {
-      margin-top: 5px;
-      font-size: 11px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
     }
 
     .surface-card {
@@ -2437,9 +2450,9 @@
       position: relative;
       overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 19px;
       background: #fff;
-      padding: 15px 16px;
+      padding: 18px 17px 17px;
       box-shadow: var(--shadow-soft);
     }
 
@@ -2452,34 +2465,60 @@
     }
 
     .content-list-tag {
-      color: var(--accent-strong);
-      font-size: 9px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      color: var(--accent-deep);
+      padding: 5px 9px;
+      font-size: 10px;
       font-weight: 850;
-      letter-spacing: .09em;
+      letter-spacing: .08em;
     }
 
     .content-list-title {
-      margin-top: 5px;
+      margin-top: 10px;
       color: var(--text);
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 850;
-      line-height: 1.45;
+      line-height: 1.4;
+      letter-spacing: .01em;
     }
 
     .content-list-desc {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.65;
-      white-space: pre-line;
+      margin-top: 12px;
+      color: #747474;
+      font-size: 14px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .content-list-date {
-      margin-top: 10px;
-      padding-top: 9px;
+      margin-top: 16px;
+      padding-top: 11px;
       border-top: 1px solid #f1f1f1;
       color: #aaa;
-      font-size: 9px;
+      font-size: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .content-list-wrap {
+        gap: 14px;
+      }
+
+      .content-list-card {
+        padding: 18px 16px 16px;
+      }
+
+      .content-list-title {
+        font-size: 18px;
+      }
+
+      .content-list-desc {
+        font-size: 15px;
+        line-height: 1.9;
+      }
     }
 
   
